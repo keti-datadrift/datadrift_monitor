@@ -1,11 +1,12 @@
 # datadrift_monitor
 
-## 주소
-- https://github.com/keti-datadrift/datadrift_monitor.git
+## Links
+- [github](https://github.com/keti-datadrift/datadrift_monitor.git)
+- [NAS](https://datadoctor.re.kr:35001)
 
 ## 개요
 - 데이터 드리프트 관리 기술의 데이터 드리프트 모니터링(검출, 감시, 추적)기술 입니다.
-- 개발 및 유지 관리 기관 : __성균관대학교 산학협력단__
+- 개발 및 유지 관리 기관 : **성균관대학교 산학협력단**
 - 최종 검토 기관 : 한국전자기술연구원(KETI)
 
 ## Acknowledgements (사사)
