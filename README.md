@@ -2,7 +2,6 @@
 
 ## Links
 - [github](https://github.com/keti-datadrift/datadrift_monitor.git)
-- [NAS](https://datadoctor.re.kr:35001)
 
 ## 개요
 - 데이터 드리프트 관리 기술의 데이터 드리프트 모니터링(검출, 감시, 추적)기술 입니다.
