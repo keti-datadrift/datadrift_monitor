@@ -1,0 +1,40 @@
+main:
+  mode              : "drift_adaptation"
+  method            : "no_adapt" # "no_adapt" | "naive1" | "naive2" | "gmm"
+  seed              : 42
+
+trainer_args:
+  model             : "yolov8n.yaml"
+  task              : "detect"
+  pretrained        : false
+
+  imgsz             : 640
+  batch             : 4
+
+  optimizer         : "AdamW"
+  lr0               : 0.001
+  device            : "cuda"
+
+trainer_custom:
+  save_dir          : "./runs"
+  exp_name          : "drift_adaptation"
+  pretrained        : "./runs/pretrain/v1/weights/last.pt"
+  resume            : null
+
+  log_every_n_steps : 1
+  plot_period       : 1
+  save_period       : 0
+  temperature       : 3.0
+
+  pretrain_csv      : "./pretrain/pretrain.csv"
+  use_pretrain_data : false
+  segments_csv      : "./segments/segments.csv"
+  history0_csv      : "./runs/pretrain/v1/history0.csv"
+  nc                : 8
+  workers           : 2
+  subset_size       : 140
+
+  inner_loops       : 1
+  potential_ks      : [2, 3, 4, 5, 6, 7, 8, 9, 10]
+  gmm_fitness_fun   : "aic"  # "aic" | "bic" | "aicc"
+  sampling_method   : "prob" # "prob" | "descending"

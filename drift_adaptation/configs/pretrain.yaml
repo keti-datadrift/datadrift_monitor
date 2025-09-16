@@ -1,0 +1,32 @@
+main:
+  mode              : "pretrain"
+  seed              : 42
+
+trainer_args:
+  model             : "yolov8n.yaml"
+  task              : "detect"
+  pretrained        : false
+
+  data              : "./pretrain/data.yaml"
+  imgsz             : 640
+  save_dir          : "./runs"
+  
+  epochs            : 10
+  batch             : 4
+  workers           : 2
+  fraction          : 1.0
+
+  optimizer         : "AdamW"
+  lr0               : 0.001
+  device            : "cuda"
+
+trainer_custom:
+  exp_name          : "pretrain"
+  pretrain_csv      : "./pretrain/pretrain.csv"
+  resume            : null
+
+  log_every_n_steps : 5
+  plot_period       : 5
+  save_period       : 5
+  patience          : 10
+  min_improve       : 0.001
