@@ -13,8 +13,8 @@ import h5py
 GAUS_DATA_PATH = Path("drift_detection/gaus_data.mat")
 IMG_DIR = Path("D:/Datasets/tid2008/reference_images")
 NUM_IMAGES = 25
-ADD_NOISE_SIGMA = 30.0
-PATCH_M1 = 7
+ADD_NOISE_SIGMA = 10.0
+PATCH_M1 = 8
 DELTA = 0.8
 MAX_ITERS = 3
 DECIM = 0
@@ -187,6 +187,7 @@ def noise_lev_est(img, show, w, delta, decim, conf, itr):
             sig2 = float(d[0])
         p1 = np.arange(X0.shape[1])
         tau = sig2 * tau0
+        d1 = 0; d2 = 0; t1 = 0; t2 = 0
         for _i in range(2, (itr if itr is not None else 3) + 1):
             mask = (Xtr.flatten() < tau)
             Xtr = Xtr[:, mask]
@@ -215,7 +216,7 @@ def noise_lev_est(img, show, w, delta, decim, conf, itr):
                     diff0 = -1.0
                     break
                 diff0 = float(np.sum(SigSet[idx] - sigw) / num_v)
-            if idx.size == 0:
+            if diff0 == 0 or idx.size == 0:
                 break
             XX = X00[:, idx]
             LP = idx.size
@@ -253,17 +254,22 @@ def main():
     paths = sorted(paths)[:NUM_IMAGES]
     if len(paths) < NUM_IMAGES:
         raise RuntimeError(f"Found {len(paths)} images, need {NUM_IMAGES}")
-    true_sigma = ADD_NOISE_SIGMA
+
     est_sigmas = []
+    biases = []
     for p in paths:
+        # true_sigma = np.random.uniform(0.0, ADD_NOISE_SIGMA)
+        true_sigma = ADD_NOISE_SIGMA
         clean = np.array(Image.open(p).convert("RGB"), dtype=np.uint8)
         noisy = add_gaussian_noise_float(clean, true_sigma)
         nlevel, th, num = noise_lev_est(noisy, show=False, w=PATCH_M1, delta=DELTA, decim=DECIM, conf=1 - 1e-6, itr=MAX_ITERS)
         est_sigma = nlevel.mean()
         est_sigmas.append(est_sigma)
-        print(f"{os.path.basename(p):20s}  σ̂={est_sigma:6.3f}; bias={np.abs(est_sigma - true_sigma):6.3f}")
+        biases.append(np.abs(est_sigma - true_sigma))
+        print(f"{os.path.basename(p):20s}  σ={true_sigma:6.3f}  (σ̂={est_sigma:6.3f}; bias={np.abs(est_sigma - true_sigma):6.3f})")
     est_sigmas = np.array(est_sigmas, dtype=np.float64)
-    print(f"\nMean σ̂ over {len(paths)} images: {est_sigmas.mean():.4f}; bias={np.abs(est_sigmas.mean() - true_sigma):.4f}")
+    biases = np.array(biases, dtype=np.float64)
+    print(f"\nbias={biases.mean():.4f}")
 
 if __name__ == "__main__":
     main()
