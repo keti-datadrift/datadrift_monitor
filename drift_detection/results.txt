@@ -203,3 +203,123 @@ Bias (variance)            : +0.0044  [E(σ̂^2) - σ^2]
 Bias (sigma)               : +0.0001 [E(σ̂)   - σ]
 MAE (sigma)                : 0.0002
 RMSE (sigma)               : 0.0003
+
+
+
+
+
+#######################################################################################
+Noise level estimation on JPG vs. BMP on sigma=30.0 Gaussian noise
+
+-------------JPG-------------
+I01.BMP_30.0_noisy.jpg: noise=22.2239, threshold=10257190548.8930, patches=153195
+I02.BMP_30.0_noisy.jpg: noise=20.6739, threshold=6755397263.1358, patches=185456
+I03.BMP_30.0_noisy.jpg: noise=20.4678, threshold=6319504449.3630, patches=182171
+I04.BMP_30.0_noisy.jpg: noise=20.8215, threshold=6847155379.4881, patches=188165
+I05.BMP_30.0_noisy.jpg: noise=19.8123, threshold=5628796915.4736, patches=123699
+I06.BMP_30.0_noisy.jpg: noise=9.8104, threshold=372772414.3409, patches=149058
+I07.BMP_30.0_noisy.jpg: noise=21.1422, threshold=7453369829.8076, patches=173907
+I08.BMP_30.0_noisy.jpg: noise=20.2298, threshold=6431865111.2173, patches=124284
+I10.BMP_30.0_noisy.jpg: noise=21.5047, threshold=8393929261.6131, patches=177469
+I11.BMP_30.0_noisy.jpg: noise=19.7498, threshold=5666391105.0306, patches=158338
+I12.BMP_30.0_noisy.jpg: noise=16.8525, threshold=4753655712.5612, patches=180187
+I13.BMP_30.0_noisy.jpg: noise=12.2265, threshold=3445285374.2208, patches=139661
+I14.BMP_30.0_noisy.jpg: noise=21.0387, threshold=7645005040.4655, patches=158892
+I15.BMP_30.0_noisy.jpg: noise=13.1240, threshold=1397989157.5166, patches=178793
+I16.BMP_30.0_noisy.jpg: noise=21.1797, threshold=7620960871.0295, patches=182689
+I17.BMP_30.0_noisy.jpg: noise=15.4231, threshold=2133900390.1942, patches=173629
+I18.BMP_30.0_noisy.jpg: noise=20.5600, threshold=6912679547.5228, patches=163233
+I19.BMP_30.0_noisy.jpg: noise=21.3799, threshold=8244824461.1885, patches=141978
+I20.BMP_30.0_noisy.jpg: noise=8.4627, threshold=118513578.9741, patches=152303
+I21.BMP_30.0_noisy.jpg: noise=12.8550, threshold=2803260357.7358, patches=154058
+I22.BMP_30.0_noisy.jpg: noise=21.5838, threshold=8715504220.5684, patches=174139
+I23.BMP_30.0_noisy.jpg: noise=20.2905, threshold=6262374209.5281, patches=177951
+I24.BMP_30.0_noisy.jpg: noise=5.7532, threshold=151837844.7948, patches=114916
+i25.bmp_30.0_noisy.jpg: noise=20.1145, threshold=8603607179.0538, patches=115272
+
+
+-------------BMP-------------
+I01.BMP_30.0_noisy.bmp: noise=29.5002, threshold=54830183050.6360, patches=177053
+I02.BMP_30.0_noisy.bmp: noise=27.6776, threshold=39811727610.9520, patches=188235
+I03.BMP_30.0_noisy.bmp: noise=27.8831, threshold=40438956466.3588, patches=187454
+I04.BMP_30.0_noisy.bmp: noise=28.9287, threshold=48380877332.5209, patches=190328
+I05.BMP_30.0_noisy.bmp: noise=27.6542, threshold=38579156407.4337, patches=148650
+I06.BMP_30.0_noisy.bmp: noise=22.5698, threshold=22685154190.9614, patches=171868
+I07.BMP_30.0_noisy.bmp: noise=28.9834, threshold=49060018565.8350, patches=185921
+I08.BMP_30.0_noisy.bmp: noise=28.0818, threshold=41491133957.8255, patches=144656
+I09.BMP_30.0_noisy.bmp: noise=29.3724, threshold=52868612804.5416, patches=180607
+I10.BMP_30.0_noisy.bmp: noise=29.2687, threshold=51620111634.5213, patches=184582
+I11.BMP_30.0_noisy.bmp: noise=27.5181, threshold=37928236826.2084, patches=173490
+I12.BMP_30.0_noisy.bmp: noise=28.8697, threshold=47683344606.9313, patches=184877
+I13.BMP_30.0_noisy.bmp: noise=29.2482, threshold=54122473161.9888, patches=154139
+I14.BMP_30.0_noisy.bmp: noise=28.5724, threshold=45607479144.5909, patches=172774
+I15.BMP_30.0_noisy.bmp: noise=26.6053, threshold=30833264006.8086, patches=183567
+I16.BMP_30.0_noisy.bmp: noise=29.4967, threshold=54093556119.9451, patches=188987
+I17.BMP_30.0_noisy.bmp: noise=26.9956, threshold=33922878054.1111, patches=182557
+I18.BMP_30.0_noisy.bmp: noise=27.9296, threshold=41073657909.8151, patches=175271
+I19.BMP_30.0_noisy.bmp: noise=28.7808, threshold=46850040893.6297, patches=161112
+I20.BMP_30.0_noisy.bmp: noise=19.6304, threshold=9305651006.5993, patches=167418
+I21.BMP_30.0_noisy.bmp: noise=29.1442, threshold=50965395204.2247, patches=173734
+I22.BMP_30.0_noisy.bmp: noise=25.0689, threshold=36194229825.8568, patches=181940
+I23.BMP_30.0_noisy.bmp: noise=28.4617, threshold=43976210698.1004, patches=182410
+I24.BMP_30.0_noisy.bmp: noise=29.3924, threshold=53305571986.2198, patches=180840
+i25.bmp_30.0_noisy.bmp: noise=28.3118, threshold=51773523350.8057, patches=12741
+
+Conclusion: The model shows lower performance (doesn't seem to work at all) than uncompressed image.
+            Additionally, all the experiments they did on the model used Gaussian noise in float datatype, which is different with quantized digital images(0~255 uint8).
+
+
+#######################################################################################
+NLE on frames from compressed video
+
+20190829_123000.jpg: noise=0.0000, threshold=170.8974, patches=559141
+20190829_130000.jpg: noise=0.0000, threshold=150.1858, patches=664245
+20190829_133000.jpg: noise=0.0000, threshold=150.1306, patches=698670
+20190829_140000.jpg: noise=0.0000, threshold=143.5490, patches=828824
+20190829_143000.jpg: noise=0.0000, threshold=137.7774, patches=833943
+20190829_150000.jpg: noise=0.0000, threshold=158.8027, patches=877039
+20190829_153000.jpg: noise=0.0000, threshold=176.6839, patches=964846
+20190829_160000.jpg: noise=0.0000, threshold=220.4908, patches=998713
+20190829_163000.jpg: noise=0.0000, threshold=300.8203, patches=1062293
+20190829_170000.jpg: noise=0.0000, threshold=502.0675, patches=1090226
+20190829_173000.jpg: noise=0.0000, threshold=645.0209, patches=1082800
+20190829_180000.jpg: noise=0.0000, threshold=621.4345, patches=1083219
+20190829_183000.jpg: noise=0.0000, threshold=556.1041, patches=964276
+20190829_190000.jpg: noise=0.0000, threshold=706.2499, patches=1079568
+20190829_193000.jpg: noise=0.0000, threshold=392.0452, patches=912566
+20190829_200000.jpg: noise=0.0000, threshold=340.7215, patches=931807
+20190829_203000.jpg: noise=0.0000, threshold=108.1777, patches=1167253
+20190829_210000.jpg: noise=0.0000, threshold=38.6496, patches=76249
+20190829_213000.jpg: noise=0.0000, threshold=36.7818, patches=20920
+20190829_220000.jpg: noise=0.0000, threshold=30.6722, patches=149628
+20190829_223000.jpg: noise=0.0000, threshold=30.7499, patches=86185
+20190829_230000.jpg: noise=0.0000, threshold=34.8864, patches=84565
+20190829_233000.jpg: noise=0.0000, threshold=34.5990, patches=39531
+20190830_000000.jpg: noise=0.0000, threshold=36.6799, patches=115656
+20190830_003000.jpg: noise=0.0000, threshold=34.5599, patches=197725
+20190830_010000.jpg: noise=0.0000, threshold=31.4330, patches=204247
+20190830_013000.jpg: noise=0.0000, threshold=32.3600, patches=277797
+20190830_020000.jpg: noise=0.0000, threshold=32.4953, patches=422669
+20190830_023000.jpg: noise=0.0000, threshold=30.6348, patches=357811
+20190830_030000.jpg: noise=0.0000, threshold=33.5209, patches=390322
+20190830_033000.jpg: noise=0.0000, threshold=29.0804, patches=572600
+20190830_040000.jpg: noise=0.0000, threshold=30.8913, patches=642607
+20190830_043000.jpg: noise=0.0000, threshold=29.4455, patches=591821
+20190830_050000.jpg: noise=0.0000, threshold=30.1889, patches=574824
+20190830_053000.jpg: noise=0.0000, threshold=32.1036, patches=940085
+20190830_060000.jpg: noise=0.0000, threshold=46.6747, patches=642024
+20190830_063000.jpg: noise=0.0000, threshold=387.1621, patches=907108
+20190830_070000.jpg: noise=0.0000, threshold=412.2623, patches=923805
+20190830_073000.jpg: noise=0.0000, threshold=333.1360, patches=980617
+20190830_080000.jpg: noise=0.0000, threshold=455.5544, patches=1071662
+20190830_083000.jpg: noise=0.0000, threshold=427.2232, patches=791826
+20190830_090000.jpg: noise=0.0000, threshold=352.6490, patches=539144
+20190830_093000.jpg: noise=0.0000, threshold=314.2117, patches=524949
+20190830_100000.jpg: noise=0.0000, threshold=277.4724, patches=610735
+20190830_103000.jpg: noise=0.0000, threshold=236.0734, patches=493766
+20190830_110000.jpg: noise=0.0000, threshold=219.7404, patches=558684
+20190830_113000.jpg: noise=0.0000, threshold=208.7246, patches=594316
+20190830_120000.jpg: noise=0.0000, threshold=199.7591, patches=514910
+
+
+Conclusion: Compressed video has blocking artifact and prediction error, which can be a problem with 8*8 patch size window, leading to noise level 0 regardless of the actual noise level.
