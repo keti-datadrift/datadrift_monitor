@@ -13,7 +13,7 @@ import h5py
 GAUS_DATA_PATH = Path("drift_detection/gaus_data.mat")
 IMG_DIR = Path("D:/Datasets/tid2008/reference_images")
 NUM_IMAGES = 25
-ADD_NOISE_SIGMA = 10.0
+ADD_NOISE_SIGMA = 30.0
 PATCH_M1 = 8
 DELTA = 0.8
 MAX_ITERS = 3
@@ -262,6 +262,9 @@ def main():
         true_sigma = ADD_NOISE_SIGMA
         clean = np.array(Image.open(p).convert("RGB"), dtype=np.uint8)
         noisy = add_gaussian_noise_float(clean, true_sigma)
+        noisy_img = noisy.clip(0, 255).astype(np.uint8)
+        noisy_img = Image.fromarray(noisy_img.astype(np.uint8))
+        noisy_img.save(f"{p}_{ADD_NOISE_SIGMA}_noisy.bmp")
         nlevel, th, num = noise_lev_est(noisy, show=False, w=PATCH_M1, delta=DELTA, decim=DECIM, conf=1 - 1e-6, itr=MAX_ITERS)
         est_sigma = nlevel.mean()
         est_sigmas.append(est_sigma)
