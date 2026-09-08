@@ -1,4 +1,4 @@
 from .retinanet import (ALRetinaNet, RetinaDetectionFeatureExportHead,
-                        RetinaHeadECPAL, RetinaHeadMIAL, RetinaHeadPAL,
+                        RetinaHeadEPAL, RetinaHeadMIAL, RetinaHeadPAL,
                         RetinaHeadUncertainty, RetinaImageFeatureExportHead,
                         RetinaQualityEMAHead)

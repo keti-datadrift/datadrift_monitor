@@ -41,6 +41,7 @@ from methods.common.coco_pool import write_next_round_pool_split
 from methods.common.io import read_json, write_json as write_common_json
 from methods.common.results import acquisition_result, write_diagnostics
 from methods.entropy.sampler import sample as entropy_sample
+from methods.epal.components import COMPONENT_CHOICES, DEFAULT_COMPONENTS, normalize_components
 from methods.pal.acquisition import sample_pal_from_files
 from methods.ppal.acquisition import run_diversity_acquisition, run_uncertainty_acquisition
 from methods.random.sampler import sample as random_sample
@@ -85,6 +86,7 @@ class AcquisitionPlan:
     round_index: int
     ppal_stage: Optional[str] = None
     note: str = ''
+    epal_components: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         data = {
@@ -93,6 +95,8 @@ class AcquisitionPlan:
             'method': self.method,
             'round_index': self.round_index,
         }
+        if self.epal_components:
+            data['epal_components'] = self.epal_components
         if self.ppal_stage:
             data['ppal_stage'] = self.ppal_stage
         if self.note:
@@ -162,7 +166,7 @@ def validate_experiment_config_paths(cfg: Dict[str, Any]) -> None:
         'image_feature_infer_config',
         'detection_feature_infer_config',
         'pal_infer_config',
-        'ecpal_infer_config',
+        'epal_infer_config',
         'pal_embedding_path',
         'output_dir',
     )
@@ -812,10 +816,10 @@ def _json_prefix(path: Path) -> Path:
     return path
 
 
-def _ecpal_feature_json(cfg: Dict[str, Any], output_dir: Path, round_index: int, pool_name: str) -> Path:
+def _epal_feature_json(cfg: Dict[str, Any], output_dir: Path, round_index: int, pool_name: str) -> Path:
     round_work_dir = _round_dir(output_dir, round_index)
-    key = 'ecpal_%s_features' % pool_name
-    default = 'ecpal_%s_features.json' % pool_name
+    key = 'epal_%s_features' % pool_name
+    default = 'epal_%s_features.json' % pool_name
     path = _round_relative_file(round_work_dir, str(cfg.get(key, default)))
     text = str(path)
     if text.endswith('.json'):
@@ -823,30 +827,30 @@ def _ecpal_feature_json(cfg: Dict[str, Any], output_dir: Path, round_index: int,
     return Path(text + '.json')
 
 
-def _ecpal_infer_plan(
+def _epal_infer_plan(
     cfg: Dict[str, Any],
     output_dir: Path,
     round_index: int,
     input_paths: Dict[str, Path],
     pool_name: str,
 ) -> CommandPlan:
-    if 'ecpal_infer_config' not in cfg:
-        raise ValueError('ecpal_infer_config is required for ECPAL inference')
+    if 'epal_infer_config' not in cfg:
+        raise ValueError('epal_infer_config is required for EPAL inference')
 
     round_work_dir = _round_dir(output_dir, round_index)
     latest_ckpt = round_work_dir / 'latest.pth'
-    feature_json = _ecpal_feature_json(cfg, output_dir, round_index, pool_name)
+    feature_json = _epal_feature_json(cfg, output_dir, round_index, pool_name)
     prefix = _json_prefix(feature_json)
     options = {
         'data.test.ann_file': input_paths[pool_name],
     }
     options.update(cfg.get('mmdet_common_cfg_options', {}))
-    options.update(cfg.get('mmdet_ecpal_infer_cfg_options', {}))
+    options.update(cfg.get('mmdet_epal_infer_cfg_options', {}))
     argv = (
         _command_prefix(cfg)
         + [
             _internal_tool_script('infer_detector.py'),
-            str(cfg['ecpal_infer_config']),
+            str(cfg['epal_infer_config']),
             str(latest_ckpt),
             '--work-dir',
             str(round_work_dir),
@@ -860,7 +864,7 @@ def _ecpal_infer_plan(
         + _cfg_options(options)
     )
     return CommandPlan(
-        'ecpal_%s_inference_round_%02d' % (pool_name, round_index),
+        'epal_%s_inference_round_%02d' % (pool_name, round_index),
         argv,
         str(ROOT),
         round_index=round_index,
@@ -930,10 +934,12 @@ def build_round_plan(
         plan.append(_pal_infer_plan(cfg, output_dir, round_index, input_paths, 'labeled'))
         plan.append(_pal_infer_plan(cfg, output_dir, round_index, input_paths, 'unlabeled'))
         plan.append(AcquisitionPlan('pal_acquisition_round_%02d' % round_index, method, round_index))
-    elif method == 'ecpal':
-        plan.append(_ecpal_infer_plan(cfg, output_dir, round_index, input_paths, 'labeled'))
-        plan.append(_ecpal_infer_plan(cfg, output_dir, round_index, input_paths, 'unlabeled'))
-        plan.append(AcquisitionPlan('ecpal_acquisition_round_%02d' % round_index, method, round_index))
+    elif method == 'epal':
+        plan.append(_epal_infer_plan(cfg, output_dir, round_index, input_paths, 'labeled'))
+        plan.append(_epal_infer_plan(cfg, output_dir, round_index, input_paths, 'unlabeled'))
+        plan.append(AcquisitionPlan(
+            'epal_acquisition_round_%02d' % round_index, method, round_index,
+            epal_components=cfg['epal_components']))
     elif method == 'coreset':
         plan.append(_feature_infer_plan(
             cfg,
@@ -982,15 +988,15 @@ def _print_plan(plan: Iterable[PlanStep]) -> None:
 def _step_label(step: PlanStep) -> str:
     name = step.name
     labels = (
-        ('ecpal_labeled_inference', 'ecpal labeled inference'),
-        ('ecpal_unlabeled_inference', 'ecpal unlabeled inference'),
+        ('epal_labeled_inference', 'epal labeled inference'),
+        ('epal_unlabeled_inference', 'epal unlabeled inference'),
         ('coreset_labeled_feature_inference', 'coreset labeled feature inference'),
         ('coreset_unlabeled_feature_inference', 'coreset unlabeled feature inference'),
         ('ppal_feature_inference', 'ppal feature inference'),
         ('pal_labeled_inference', 'pal labeled inference'),
         ('pal_unlabeled_inference', 'pal unlabeled inference'),
         ('uncertainty_inference', 'uncertainty inference'),
-        ('ecpal_acquisition', 'ecpal acquisition'),
+        ('epal_acquisition', 'epal acquisition'),
         ('coreset_acquisition', 'coreset acquisition'),
         ('ppal_uncertainty_acquisition', 'ppal uncertainty acquisition'),
         ('ppal_diversity_acquisition', 'ppal diversity acquisition'),
@@ -1122,8 +1128,8 @@ def _progress_kind(step: CommandPlan) -> str:
         return 'train'
     if (
         step.name.startswith('eval')
-        or step.name.startswith('ecpal_labeled_inference')
-        or step.name.startswith('ecpal_unlabeled_inference')
+        or step.name.startswith('epal_labeled_inference')
+        or step.name.startswith('epal_unlabeled_inference')
         or step.name.startswith('pal_labeled_inference')
         or step.name.startswith('pal_unlabeled_inference')
         or step.name.startswith('uncertainty_inference')
@@ -1158,9 +1164,9 @@ def _progress_total_for_step(
         if ann_file:
             return _count_annotation_items(_runtime_read_path(str(ann_file)))
         return None
-    if step.name.startswith('ecpal_labeled_inference'):
+    if step.name.startswith('epal_labeled_inference'):
         return _count_annotation_items(input_paths['labeled'])
-    if step.name.startswith('ecpal_unlabeled_inference'):
+    if step.name.startswith('epal_unlabeled_inference'):
         return _count_annotation_items(input_paths['unlabeled'])
     if step.name.startswith('pal_labeled_inference'):
         return _count_annotation_items(input_paths['labeled'])
@@ -1514,31 +1520,28 @@ def _execute_lightweight_acquisition(
             **diagnostics_extra,
         )
         write_diagnostics(diagnostics_path, diagnostics_payload)
-    elif method == 'ecpal':
-        from methods.ecpal.acquisition import sample_ecpal_from_files
+    elif method == 'epal':
+        from methods.epal.acquisition import sample_epal_from_files
 
-        labeled_features = _ecpal_feature_json(cfg, output_dir, round_index, 'labeled')
-        unlabeled_features = _ecpal_feature_json(cfg, output_dir, round_index, 'unlabeled')
-        diagnostics = sample_ecpal_from_files(
+        labeled_features = _epal_feature_json(cfg, output_dir, round_index, 'labeled')
+        unlabeled_features = _epal_feature_json(cfg, output_dir, round_index, 'unlabeled')
+        diagnostics = sample_epal_from_files(
             labeled_pool_json=input_paths['labeled'],
             unlabeled_pool_json=input_paths['unlabeled'],
             labeled_features_json=labeled_features,
             unlabeled_features_json=unlabeled_features,
             budget=budget,
-            candidate_expand_ratio=float(cfg.get('ecpal_candidate_expand_ratio', 2)),
-            foreground_iou_threshold=float(cfg.get('ecpal_foreground_iou_threshold', 0.5)),
-            background_iou_threshold=float(cfg.get('ecpal_background_iou_threshold', 0.1)),
-            eps=float(cfg.get('ecpal_eps', 1e-12)),
-            weight_eps=float(cfg.get('ecpal_weight_eps', 1e-6)),
-            seed=seed,
-            mode=str(cfg.get('ecpal_mode', 'eca-full')),
+            foreground_iou_threshold=float(cfg.get('epal_foreground_iou_threshold', 0.5)),
+            background_iou_threshold=float(cfg.get('epal_background_iou_threshold', 0.1)),
+            weight_eps=float(cfg.get('epal_weight_eps', 1e-6)),
+            components=cfg['epal_components'],
         )
         selected = diagnostics['selected_image_ids']
         diagnostics_path = _round_relative_file(
             round_work_dir,
-            str(cfg.get('ecpal_diagnostics_file', 'ecpal_diagnostics.json')),
+            str(cfg.get('epal_diagnostics_file', 'epal_diagnostics.json')),
         )
-        diagnostics_stage = str(diagnostics.get('stage', cfg.get('ecpal_mode', 'eca-full')))
+        diagnostics_stage = diagnostics['stage']
         diagnostics_extra = dict(diagnostics)
         diagnostics_extra.pop('selected_image_ids', None)
         diagnostics_extra.pop('stage', None)
@@ -1546,13 +1549,13 @@ def _execute_lightweight_acquisition(
         diagnostics_extra.pop('candidate_scores', None)
         candidate_artifact_path = _round_relative_file(
             round_work_dir,
-            str(cfg.get('ecpal_candidates_file', 'ecpal_candidates.json')),
+            str(cfg.get('epal_candidates_file', 'epal_candidates.json')),
         )
         candidate_outputs = {
             'candidates_json': str(candidate_artifact_path),
         }
         candidate_artifact = build_candidate_artifact(
-            method='ecpal',
+            method='epal',
             stage=diagnostics_stage,
             round_index=round_index,
             budget=budget,
@@ -1561,7 +1564,7 @@ def _execute_lightweight_acquisition(
         )
         write_candidate_artifact(candidate_artifact_path, candidate_artifact)
         diagnostics_payload = acquisition_result(
-            method='ecpal',
+            method='epal',
             stage=diagnostics_stage,
             round_index=round_index,
             budget=budget,
@@ -1711,6 +1714,7 @@ def _execute_lightweight_acquisition(
         'selected_count': len(selected),
         'diagnostics_path': str(diagnostics_path) if diagnostics_path is not None else None,
         'stage': diagnostics_stage,
+        **({'epal_components': cfg['epal_components']} if method == 'epal' else {}),
         'outputs': {
             'labeled_pool_json': str(annotations['labeled']),
             'unlabeled_pool_json': str(annotations['unlabeled']),
@@ -1970,6 +1974,8 @@ def _round_summary_payload(
         'outputs': outputs,
         'steps': round_results,
     }
+    if 'epal_components' in cfg:
+        payload['epal_components'] = cfg['epal_components']
     if _skips_terminal_acquisition(cfg, round_index):
         payload['terminal_round'] = True
         payload['acquisition_status'] = 'skipped_terminal_round'
@@ -1983,7 +1989,7 @@ def _config_path_summary(cfg: Dict[str, Any]) -> Dict[str, Optional[str]]:
         'image_feature_infer_config',
         'detection_feature_infer_config',
         'pal_infer_config',
-        'ecpal_infer_config',
+        'epal_infer_config',
         'pal_embedding_path',
     )
     return {key: str(cfg.get(key)) if cfg.get(key) else None for key in keys}
@@ -2009,6 +2015,7 @@ def _run_summary_base(
         'status': 'running',
         'method': args.method,
         'method_arg': cfg.get('_method_arg'),
+        **({'epal_components': cfg['epal_components']} if args.method == 'epal' else {}),
         'detector': detector,
         'dataset': dataset,
         'preset': selection.get('preset_name'),
@@ -2082,6 +2089,8 @@ def _print_timestamp_run_header(
         'budget=%s' % int(cfg.get('budget', 0)),
         'gpus=%s' % int(cfg.get('gpus', 1)),
     ]
+    if args.method == 'epal':
+        header_parts.append('components=%s' % cfg['epal_components'])
     print(' '.join(header_parts))
     print('output=%s' % _display_path(run_dir))
 
@@ -2196,6 +2205,20 @@ def _write_round_tensorboard(
     if duration is not None:
         points.append(('runtime/round_duration_sec', duration, round_index))
 
+    if 'epal_components' in cfg:
+        writer.add_text('epal/components', cfg['epal_components'], round_index)
+        diagnostic_path = round_summary.get('outputs', {}).get('diagnostics_json')
+        if diagnostic_path:
+            details = read_json(Path(diagnostic_path))['diagnostics']
+            for group in ('mean_labeled_uncertainties', 'scale_weights'):
+                for key, value in details[group].items():
+                    points.append(('epal/%s/%s' % (group, key), value, round_index))
+            for name, predictor in details['predictors'].items():
+                if not predictor['enabled']:
+                    continue
+                points.append(('epal/%s/sample_count' % name, predictor['sample_count'], round_index))
+                if predictor['target_mean'] is not None:
+                    points.append(('epal/%s/target_mean' % name, predictor['target_mean'], round_index))
     _write_tensorboard_points(writer, points)
 
 
@@ -2328,6 +2351,7 @@ def _build_aggregate_summary(
         'run_dir': str(run_dir),
         'method': args.method,
         'method_arg': cfg.get('_method_arg'),
+        **({'epal_components': cfg['epal_components']} if args.method == 'epal' else {}),
         'detector': detector,
         'dataset': dataset,
         'preset': selection.get('preset_name'),
@@ -2413,6 +2437,9 @@ def _unsupported_catalog_message() -> str:
 
 
 def resolve_runner_selection(args: argparse.Namespace) -> Dict[str, Any]:
+    for value in (args.method, args.preset):
+        if value and (value.lower().startswith('ecpal') or value.lower().startswith(('epal:', 'epal/'))):
+            raise SystemExit('ECPAL and score modes were removed. Use --method epal --epal-components cecp+lecp+mocp and regenerate features.')
     if args.preset and args.config:
         raise SystemExit('Do not combine a positional config with --preset.')
     if args.preset and args.method:
@@ -2453,6 +2480,44 @@ def resolve_runner_selection(args: argparse.Namespace) -> Dict[str, Any]:
     }
 
 
+def resolve_epal_config(
+    cfg: Dict[str, Any], args: argparse.Namespace, selection: Dict[str, Any],
+) -> None:
+    legacy = [
+        key for key in cfg
+        if 'ecpal' in key.lower() or key in (
+            'epal_mode', 'epal_candidate_expand_ratio', 'epal_eps', 'epal_score_mode')
+    ]
+    if legacy:
+        raise ValueError(
+            'Removed ECPAL/mode settings: %s. Use epal_components and the new '
+            'EPAL inference config; regenerate feature files.' % ', '.join(legacy))
+    if args.method != 'epal':
+        if args.epal_components is not None or 'epal_components' in cfg:
+            raise ValueError('--epal-components is only supported with --method epal')
+        return
+    components = normalize_components(
+        args.epal_components if args.epal_components is not None
+        else cfg.get('epal_components', DEFAULT_COMPONENTS))
+    cfg['epal_components'] = components
+    token = 'epal_' + components.replace('+', '_')
+    catalog = selection['catalog_selection']
+    if catalog is not None:
+        cfg['output_dir'] = 'work_dirs/current_work/%s_%s_%s_%s' % (
+            catalog.detector_spec.name, catalog.dataset_spec.name,
+            token, catalog.dataset_spec.protocol_slug)
+    else:
+        output_root = cfg.get('output_dir', 'work_dirs/current_work')
+        cfg['output_dir'] = str(Path(output_root) / token)
+
+
+def _epal_components_arg(value: str) -> str:
+    try:
+        return normalize_components(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description='ALOD active learning runner',
@@ -2468,7 +2533,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         '--method',
         default=None,
-        help='Method or alias: ppal, pal, pal:guide, pal:lius, ecpal:eca-only, ecpal:eua-only, ecpal:eca-full, ecpal:eua-full, coreset, mial, random, entropy',
+        help='Method or alias: ppal, pal, pal:guide, pal:lius, epal, coreset, mial, random, entropy',
+    )
+    parser.add_argument(
+        '--epal-components', default=None, type=_epal_components_arg,
+        choices=COMPONENT_CHOICES,
+        help='EPAL predictors; default: cecp+lecp+mocp. EUA is always used.',
     )
     parser.add_argument('--detector', default=None, help='Catalog detector, e.g. retinanet')
     parser.add_argument('--dataset', default=None, help='Catalog dataset, e.g. voc or coco')
@@ -2650,8 +2720,6 @@ def main() -> None:
     if args.list_presets:
         _print_presets()
         return
-    _summary_writer_type()
-
     selection = resolve_runner_selection(args)
     args.method = selection['method']
     seeds = _selected_seeds(args)
@@ -2668,6 +2736,8 @@ def main() -> None:
     cfg.update(selection['cfg_overrides'])
     cfg['_method_arg'] = selection['method_arg']
     apply_cli_overrides(cfg, args)
+    resolve_epal_config(cfg, args, selection)
+    _summary_writer_type()
     initial_pool_policy = validate_initial_pool_config(cfg, seeds)
     validate_experiment_config_paths(cfg)
     total_rounds = int(args.rounds if args.rounds is not None else cfg.get('round_num', 1))

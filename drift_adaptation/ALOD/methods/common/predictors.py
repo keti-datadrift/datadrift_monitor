@@ -71,7 +71,7 @@ class BinaryLogisticModel:
             from sklearn.linear_model import LogisticRegression
         except ImportError as exc:
             raise ImportError(
-                'scikit-learn is required for PAL/ECPAL predictor fitting. '
+                'scikit-learn is required for PAL/EPAL predictor fitting. '
                 'Install it with `pip install -r requirements.txt`.'
             ) from exc
 
@@ -166,7 +166,7 @@ class PoissonCountModel:
             from sklearn.linear_model import PoissonRegressor
         except ImportError as exc:
             raise ImportError(
-                'scikit-learn is required for ECPAL Poisson predictor fitting. '
+                'scikit-learn is required for EPAL Poisson predictor fitting. '
                 'Install it with `pip install -r requirements.txt`.'
             ) from exc
 

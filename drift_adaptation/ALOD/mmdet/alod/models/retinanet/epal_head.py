@@ -9,9 +9,9 @@ from mmdet.models.dense_heads.retina_head import RetinaHead
 
 
 @HEADS.register_module()
-class RetinaHeadECPAL(RetinaHead):
+class RetinaHeadEPAL(RetinaHead):
     def __init__(self, **kwargs):
-        super(RetinaHeadECPAL, self).__init__(**kwargs)
+        super(RetinaHeadEPAL, self).__init__(**kwargs)
 
     def _get_bboxes_single(self,
                            cls_score_list,
@@ -111,7 +111,7 @@ class RetinaHeadECPAL(RetinaHead):
 
         if not with_nms:
             raise NotImplementedError(
-                'ECPAL feature export requires NMS so final detections can '
+                'EPAL feature export requires NMS so final detections can '
                 'be matched to pre-NMS candidates.')
 
         if mlvl_bboxes.numel() == 0:
@@ -121,57 +121,48 @@ class RetinaHeadECPAL(RetinaHead):
             return dict(
                 det_bboxes=det_bboxes,
                 det_labels=det_labels,
-                ecpal_features=empty_features,
-                ecpal_miss_features=det_bboxes.new_zeros((2, )))
+                epal_features=empty_features,
+                epal_miss_features=det_bboxes.new_zeros((2, )))
 
         det_bboxes, keep_idxs = batched_nms(
             mlvl_bboxes, mlvl_scores, mlvl_labels, cfg.nms)
         keep_idxs = keep_idxs[:cfg.max_per_img]
         det_bboxes = det_bboxes[:cfg.max_per_img]
         det_labels = mlvl_labels[keep_idxs]
-        det_class_scores = mlvl_class_scores[keep_idxs]
 
-        ecpal_features = self._compute_detection_features(
-            mlvl_bboxes, mlvl_labels, mlvl_class_scores,
-            det_bboxes[:, :4], det_labels, det_class_scores, cfg)
-        ecpal_miss_features = self._compute_miss_features(
-            mlvl_bboxes, mlvl_class_scores, det_bboxes[:, :4], cfg)
+        epal_features = self._compute_detection_features(
+            mlvl_bboxes, mlvl_class_scores,
+            det_bboxes[:, :4], det_labels, cfg)
+        epal_miss_features = self._compute_miss_features(
+            mlvl_bboxes, mlvl_scores, det_bboxes[:, :4])
 
         return dict(
             det_bboxes=det_bboxes,
             det_labels=det_labels,
-            ecpal_features=ecpal_features,
-            ecpal_miss_features=ecpal_miss_features)
+            epal_features=epal_features,
+            epal_miss_features=epal_miss_features)
 
     def _empty_detection_features(self, det_bboxes):
         return dict(
-            p_max=det_bboxes.new_zeros((0, )),
-            A_cls=det_bboxes.new_zeros((0, )),
-            n_sup=det_bboxes.new_zeros((0, )),
-            mu_iou=det_bboxes.new_zeros((0, )))
+            E_cls=det_bboxes.new_zeros((0, )),
+            E_loc=det_bboxes.new_zeros((0, )))
 
-    def _compute_detection_features(self, candidate_bboxes, candidate_labels,
+    def _compute_detection_features(self, candidate_bboxes,
                                     candidate_class_scores, det_bboxes,
-                                    det_labels, det_class_scores, cfg):
+                                    det_labels, cfg):
         if det_bboxes.numel() == 0:
             return self._empty_detection_features(det_bboxes)
-
-        p_max = det_class_scores.max(dim=1)[0]
         if candidate_bboxes.numel() == 0:
             return dict(
-                p_max=p_max,
-                A_cls=det_bboxes.new_zeros((det_bboxes.shape[0], )),
-                n_sup=det_bboxes.new_zeros((det_bboxes.shape[0], )),
-                mu_iou=det_bboxes.new_zeros((det_bboxes.shape[0], )))
+                E_cls=det_bboxes.new_zeros((det_bboxes.shape[0], )),
+                E_loc=det_bboxes.new_zeros((det_bboxes.shape[0], )))
 
         support_iou_thr = float(cfg.get('support_iou_thr', 0.5))
         box_equal_tol = float(cfg.get('support_box_equal_tol', 1e-6))
-
         overlaps = bbox_overlaps(candidate_bboxes, det_bboxes)
         max_overlaps, assigned_det_inds = overlaps.max(dim=1)
         same_box = (det_bboxes[:, None, :] - candidate_bboxes[None, :, :])
         same_box = same_box.abs().max(dim=2)[0].transpose(0, 1) <= box_equal_tol
-
         det_indices = torch.arange(
             det_bboxes.shape[0], device=det_bboxes.device)
         support_mask = (
@@ -179,37 +170,24 @@ class RetinaHeadECPAL(RetinaHead):
             & (max_overlaps[:, None] >= support_iou_thr)
             & (~same_box)
         ).transpose(0, 1)
-        support_counts = support_mask.sum(dim=1).to(dtype=det_bboxes.dtype)
-
-        label_matches = det_labels[:, None] == candidate_labels[None, :]
-        same_class_counts = (support_mask & label_matches).sum(dim=1)
-        same_class_counts = same_class_counts.to(dtype=det_bboxes.dtype)
-
-        denom = support_counts.clamp(min=1.0)
-        A_cls = same_class_counts / denom
-        det_candidate_overlaps = overlaps.transpose(0, 1)
-        mu_iou = (
-            det_candidate_overlaps * support_mask.to(dtype=overlaps.dtype)
+        # Each support contributes probability for the final detection's class.
+        class_support = candidate_class_scores[:, det_labels].transpose(0, 1)
+        E_cls = (class_support * support_mask.to(class_support.dtype)).sum(dim=1)
+        E_loc = (
+            overlaps.transpose(0, 1) * support_mask.to(overlaps.dtype)
         ).sum(dim=1)
-        mu_iou = mu_iou / denom
-        return dict(
-            p_max=p_max,
-            A_cls=A_cls,
-            n_sup=support_counts,
-            mu_iou=mu_iou)
+        return dict(E_cls=E_cls, E_loc=E_loc)
 
-    def _compute_miss_features(self, candidate_bboxes, candidate_class_scores,
-                               det_bboxes, cfg):
+    def _compute_miss_features(self, candidate_bboxes, candidate_scores,
+                               det_bboxes):
         if candidate_bboxes.numel() == 0:
             return det_bboxes.new_zeros((2, ))
-
-        candidate_scores = candidate_class_scores.max(dim=1)[0]
         if det_bboxes.numel() == 0:
             rho = candidate_scores.new_zeros((candidate_bboxes.shape[0], ))
         else:
             rho = bbox_overlaps(candidate_bboxes, det_bboxes).max(dim=1)[0]
         residual = 1.0 - rho
         R_amt = residual.sum()
-        eps = float(cfg.get('miss_eps', 1e-12))
-        R_prob = (residual * candidate_scores).sum() / (R_amt + eps)
-        return torch.stack([R_amt, R_prob])
+        # Use native candidate confidence, including existing score factors.
+        R_conf = (residual * candidate_scores).sum()
+        return torch.stack([R_amt, R_conf])
