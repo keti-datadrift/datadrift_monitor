@@ -6,15 +6,13 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
 from .datasets import DatasetSpec, normalize_token
+from methods.epal.components import DEFAULT_COMPONENTS
 
 
 PAL_FULL_ALIASES = ('pal', 'pal:full', 'pal/full', 'pal:guide', 'pal/guide')
 PAL_LIUS_ALIASES = ('pal:lius', 'pal/lius')
 PPAL_ALIASES = ('ppal', 'ppal:dcus-ccms', 'ppal/dcus-ccms', 'ppal:full', 'ppal/full')
-ECPAL_ECA_ONLY_ALIASES = ('ecpal:eca-only', 'ecpal/eca-only')
-ECPAL_EUA_ONLY_ALIASES = ('ecpal:eua-only', 'ecpal/eua-only')
-ECPAL_ECA_FULL_ALIASES = ('ecpal:eca-full', 'ecpal/eca-full')
-ECPAL_EUA_FULL_ALIASES = ('ecpal:eua-full', 'ecpal/eua-full')
+EPAL_ALIASES = ('epal',)
 CORESET_ALIASES = ('coreset', 'core-set', 'core_set', 'kcenter', 'k-center')
 MIAL_ALIASES = ('mial', 'mi-aod', 'miaod')
 
@@ -40,8 +38,6 @@ class MethodSpec:
     def default_alias(self) -> str:
         if self.method == 'pal' and self.cfg_overrides.get('pal_mode') == 'lius':
             return 'pal:lius'
-        if self.method == 'ecpal':
-            return 'ecpal:%s' % self.cfg_overrides.get('ecpal_mode')
         return self.method
 
     def output_dir(self, dataset: DatasetSpec, detector_name: str) -> str:
@@ -68,8 +64,8 @@ class MethodSpec:
             cfg.update(_pal_config(mode='full', dataset=dataset))
         elif self.key == 'pal_lius':
             cfg.update(_pal_config(mode='lius', dataset=dataset))
-        elif self.key.startswith('ecpal_'):
-            cfg.update(_ecpal_config(str(self.cfg_overrides['ecpal_mode'])))
+        elif self.key == 'epal':
+            cfg.update(_epal_config())
         elif self.key == 'coreset':
             cfg.update(_coreset_config())
         elif self.key == 'mial':
@@ -140,21 +136,16 @@ def _pal_config(mode: str, dataset: DatasetSpec) -> Dict[str, object]:
     return cfg
 
 
-def _ecpal_config(mode: str) -> Dict[str, object]:
-    normalized_mode = mode.lower().replace('_', '-')
-    candidate_expand_ratio = 1 if normalized_mode.endswith('-only') else 2
-    file_stem = 'ecpal_%s' % normalized_mode.replace('-', '_')
+def _epal_config() -> Dict[str, object]:
     return {
-        'ecpal_mode': normalized_mode,
-        'ecpal_candidate_expand_ratio': candidate_expand_ratio,
-        'ecpal_foreground_iou_threshold': 0.5,
-        'ecpal_background_iou_threshold': 0.1,
-        'ecpal_eps': 1e-12,
-        'ecpal_weight_eps': 1e-6,
-        'ecpal_diagnostics_file': '%s_diagnostics.json' % file_stem,
-        'ecpal_candidates_file': '%s_candidates.json' % file_stem,
-        'ecpal_labeled_features': 'ecpal_labeled_features.json',
-        'ecpal_unlabeled_features': 'ecpal_unlabeled_features.json',
+        'epal_components': DEFAULT_COMPONENTS,
+        'epal_foreground_iou_threshold': 0.5,
+        'epal_background_iou_threshold': 0.1,
+        'epal_weight_eps': 1e-6,
+        'epal_diagnostics_file': 'epal_diagnostics.json',
+        'epal_candidates_file': 'epal_candidates.json',
+        'epal_labeled_features': 'epal_labeled_features.json',
+        'epal_unlabeled_features': 'epal_unlabeled_features.json',
     }
 
 
@@ -205,44 +196,11 @@ METHODS = (
         cfg_overrides={'pal_mode': 'lius'},
     ),
     MethodSpec(
-        key='ecpal_eca_only',
-        method='ecpal',
-        aliases=ECPAL_ECA_ONLY_ALIASES,
-        description='ECPAL ECA-only uncertainty acquisition.',
-        output_token='ecpal_eca_only',
-        cfg_overrides={
-            'ecpal_mode': 'eca-only',
-        },
-    ),
-    MethodSpec(
-        key='ecpal_eua_only',
-        method='ecpal',
-        aliases=ECPAL_EUA_ONLY_ALIASES,
-        description='ECPAL EUA-only uncertainty acquisition.',
-        output_token='ecpal_eua_only',
-        cfg_overrides={
-            'ecpal_mode': 'eua-only',
-        },
-    ),
-    MethodSpec(
-        key='ecpal_eca_full',
-        method='ecpal',
-        aliases=ECPAL_ECA_FULL_ALIASES,
-        description='ECPAL ECA candidate acquisition with ECA-profile diversity.',
-        output_token='ecpal_eca_full',
-        cfg_overrides={
-            'ecpal_mode': 'eca-full',
-        },
-    ),
-    MethodSpec(
-        key='ecpal_eua_full',
-        method='ecpal',
-        aliases=ECPAL_EUA_FULL_ALIASES,
-        description='ECPAL EUA candidate acquisition with EUA-profile diversity.',
-        output_token='ecpal_eua_full',
-        cfg_overrides={
-            'ecpal_mode': 'eua-full',
-        },
+        key='epal',
+        method='epal',
+        aliases=EPAL_ALIASES,
+        description='Error Prediction-based Active Learning with EUA acquisition.',
+        output_token='epal_' + DEFAULT_COMPONENTS.replace('+', '_'),
     ),
     MethodSpec(
         key='coreset',

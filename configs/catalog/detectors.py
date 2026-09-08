@@ -45,7 +45,7 @@ RETINANET = DetectorSpec(
             image_feature_infer_config='configs/alod_mmdet/retinanet_voc_infer_image_features.py',
             detection_feature_infer_config='configs/alod_mmdet/retinanet_voc_infer_detection_features.py',
             pal_infer_config='configs/alod_mmdet/retinanet_voc_infer_pal_detections.py',
-            ecpal_infer_config='configs/alod_mmdet/retinanet_voc_infer_ecpal_detections.py',
+            epal_infer_config='configs/alod_mmdet/retinanet_voc_infer_epal_detections.py',
             mial_train_config='configs/alod_mmdet/retinanet_voc_train_mial.py',
         ),
         'coco': dict(
@@ -54,7 +54,7 @@ RETINANET = DetectorSpec(
             image_feature_infer_config='configs/alod_mmdet/retinanet_coco_infer_image_features.py',
             detection_feature_infer_config='configs/alod_mmdet/retinanet_coco_infer_detection_features.py',
             pal_infer_config='configs/alod_mmdet/retinanet_coco_infer_pal_detections.py',
-            ecpal_infer_config='configs/alod_mmdet/retinanet_coco_infer_ecpal_detections.py',
+            epal_infer_config='configs/alod_mmdet/retinanet_coco_infer_epal_detections.py',
             mial_train_config='configs/alod_mmdet/retinanet_coco_train_mial.py',
         ),
     },

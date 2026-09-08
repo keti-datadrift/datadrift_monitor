@@ -1,4 +1,4 @@
-"""ECPAL compact feature artifact parsing."""
+"""EPAL compact feature artifact parsing."""
 
 from __future__ import annotations
 
@@ -10,32 +10,28 @@ import numpy as np
 from methods.common.image_identity import normalize_image_id, validate_image_ids_subset
 from methods.common.io import read_json
 from methods.common.selection import image_id_sort_key
+from methods.epal.features import FEATURE_SCHEMA, FEATURE_SCHEMA_VERSION, MISS_FEATURE_KEYS
 
 
-IMAGE_RECORD_KEYS = ('images', 'records', 'features', 'results', 'detections')
-DETECTION_FEATURE_KEYS = ('p_max', 'A_cls', 'n_sup', 'mu_iou')
-MISS_FEATURE_KEYS = ('R_amt', 'R_prob')
+DETECTION_FEATURE_KEYS = ('score', 'E_cls', 'E_loc')
 
 
 def _load_image_records(path: Path) -> List[Mapping[str, Any]]:
     payload = read_json(Path(path))
-    if isinstance(payload, list):
-        records = payload
-    elif isinstance(payload, dict):
-        records = None
-        for key in IMAGE_RECORD_KEYS:
-            if isinstance(payload.get(key), list):
-                records = payload[key]
-                break
-        if records is None:
-            raise ValueError('Unsupported ECPAL feature JSON schema: %s' % path)
-    else:
-        raise ValueError('Unsupported ECPAL feature JSON schema: %s' % path)
+    if (not isinstance(payload, dict)
+            or payload.get('schema') != FEATURE_SCHEMA
+            or payload.get('schema_version') != FEATURE_SCHEMA_VERSION):
+        raise ValueError(
+            'Incompatible EPAL feature schema in %s. Run EPAL feature inference '
+            'again; legacy ECPAL features cannot be converted exactly.' % path)
+    records = payload.get('images')
+    if not isinstance(records, list):
+        raise ValueError('EPAL feature images must be a list: %s' % path)
 
     normalized = []
     for index, record in enumerate(records):
         if not isinstance(record, Mapping):
-            raise ValueError('ECPAL image record %d in %s must be an object' % (index, path))
+            raise ValueError('EPAL image record %d in %s must be an object' % (index, path))
         normalized.append(record)
     return normalized
 
@@ -43,23 +39,25 @@ def _load_image_records(path: Path) -> List[Mapping[str, Any]]:
 def _finite_float(value: Any, field: str, path: Path) -> float:
     result = float(value)
     if not np.isfinite(result):
-        raise ValueError('ECPAL feature %s must be finite in %s' % (field, path))
+        raise ValueError('EPAL feature %s must be finite in %s' % (field, path))
     return result
 
 
 def _normalize_bbox(value: Any, field: str, path: Path) -> List[float]:
     if not isinstance(value, Sequence) or isinstance(value, (str, bytes)):
-        raise ValueError('ECPAL %s must be a bbox sequence in %s' % (field, path))
-    if len(value) < 4:
-        raise ValueError('ECPAL %s must contain at least four values in %s' % (field, path))
+        raise ValueError('EPAL %s must be a bbox sequence in %s' % (field, path))
+    if len(value) != 4:
+        raise ValueError('EPAL %s must contain exactly four values in %s' % (field, path))
     return [_finite_float(item, field, path) for item in value[:4]]
 
 
 def _normalize_detection(det: Mapping[str, Any], image_id: Any, path: Path) -> Dict[str, Any]:
+    if not isinstance(det, Mapping):
+        raise ValueError('EPAL detection must be an object in %s' % path)
     missing = [key for key in ('bbox', 'category_id') if key not in det]
     if missing:
         raise KeyError(
-            'ECPAL final detection for image %s in %s is missing keys: %s'
+            'EPAL final detection for image %s in %s is missing keys: %s'
             % (image_id, path, ', '.join(missing)))
 
     record = dict(det)
@@ -67,44 +65,36 @@ def _normalize_detection(det: Mapping[str, Any], image_id: Any, path: Path) -> D
     record['bbox'] = _normalize_bbox(record['bbox'], 'bbox', path)
     record['category_id'] = normalize_image_id(record['category_id'])
 
-    if 'p_max' not in record and 'score' in record:
-        record['p_max'] = record['score']
-    if 'score' not in record and 'p_max' in record:
-        record['score'] = record['p_max']
-
     missing_features = [key for key in DETECTION_FEATURE_KEYS if key not in record]
     if missing_features:
         raise KeyError(
-            'ECPAL final detection for image %s in %s is missing features: %s'
+            'EPAL final detection for image %s in %s is missing features: %s'
             % (image_id, path, ', '.join(missing_features)))
 
     for key in DETECTION_FEATURE_KEYS:
         record[key] = _finite_float(record[key], key, path)
-    record['score'] = _finite_float(record.get('score', record['p_max']), 'score', path)
     return record
 
 
 def _normalize_miss_features(value: Any, image_id: Any, path: Path) -> Dict[str, float]:
     if not isinstance(value, Mapping):
-        raise ValueError('ECPAL miss_features for image %s in %s must be an object' % (image_id, path))
+        raise ValueError('EPAL miss_features for image %s in %s must be an object' % (image_id, path))
     missing = [key for key in MISS_FEATURE_KEYS if key not in value]
     if missing:
         raise KeyError(
-            'ECPAL miss_features for image %s in %s is missing keys: %s'
+            'EPAL miss_features for image %s in %s is missing keys: %s'
             % (image_id, path, ', '.join(missing)))
     return {key: _finite_float(value[key], key, path) for key in MISS_FEATURE_KEYS}
 
 
 def normalize_feature_record(record: Mapping[str, Any], path: Path) -> Dict[str, Any]:
     if 'image_id' not in record:
-        raise KeyError('ECPAL image record in %s is missing image_id' % path)
+        raise KeyError('EPAL image record in %s is missing image_id' % path)
     image_id = normalize_image_id(record['image_id'])
 
-    detections = record.get('final_detections', record.get('detections', []))
-    if detections is None:
-        detections = []
+    detections = record.get('final_detections')
     if not isinstance(detections, list):
-        raise ValueError('ECPAL final_detections for image %s in %s must be a list' % (image_id, path))
+        raise ValueError('EPAL final_detections for image %s in %s must be a list' % (image_id, path))
 
     return {
         'image_id': image_id,
@@ -117,7 +107,7 @@ def normalize_feature_record(record: Mapping[str, Any], path: Path) -> Dict[str,
 
 
 def load_feature_records(path: Path) -> List[Dict[str, Any]]:
-    """Load image-level ECPAL feature records from JSON."""
+    """Load image-level EPAL feature records from JSON."""
 
     feature_path = Path(path)
     records = [
@@ -133,7 +123,7 @@ def load_feature_records(path: Path) -> List[Dict[str, Any]]:
         seen.add(image_id)
     if duplicates:
         raise ValueError(
-            'ECPAL feature JSON contains duplicate image ids: %s'
+            'EPAL feature JSON contains duplicate image ids: %s'
             % sorted(set(duplicates), key=str)[:10])
     return sorted(records, key=lambda record: image_id_sort_key(record['image_id']))
 
@@ -145,7 +135,7 @@ def records_by_image(records: Iterable[Mapping[str, Any]]) -> Dict[Any, Dict[str
 def filter_feature_records(
     records: Iterable[Mapping[str, Any]],
     image_ids: Iterable[Any],
-    artifact_name: str = 'ECPAL feature records',
+    artifact_name: str = 'EPAL feature records',
     require_all: bool = True,
 ) -> List[Dict[str, Any]]:
     """Return records for ``image_ids`` and validate image-id coverage."""

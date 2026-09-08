@@ -19,7 +19,7 @@ Current implemented targets:
 | --- | --- | --- | --- |
 | PPAL | RetinaNet | PASCAL VOC, COCO | DCUS + CCMS reproduction path |
 | PAL | RetinaNet | PASCAL VOC, COCO | LIUS + GUIDE reproduction path |
-| ECPAL | RetinaNet | PASCAL VOC, COCO | ECA/EUA acquisition variants |
+| EPAL | RetinaNet | PASCAL VOC, COCO | Error Prediction-based Active Learning (EUA) |
 | Core-set | RetinaNet | PASCAL VOC, COCO | Greedy k-center acquisition |
 | MIAL | RetinaNet | PASCAL VOC, COCO | MI-AOD training and acquisition path |
 | Random | RetinaNet | PASCAL VOC, COCO | Baseline acquisition |
@@ -40,7 +40,7 @@ source tree, not from `code_refs/`.
 - `configs/alod_mmdet/`: minimal MMDetection configs used by ALOD runs.
 - `methods/ppal/`: PPAL method implementation.
 - `methods/pal/`: PAL method implementation.
-- `methods/ecpal/`: ECPAL method implementation.
+- `methods/epal/`: EPAL method implementation.
 - `methods/coreset/`: Core-set method implementation.
 - `mmdet/`: local MMDetection backend used by the private detector entrypoints;
   method code consumes saved artifacts instead of importing it.
@@ -135,12 +135,54 @@ Run PAL with a specific seed:
 python -B tools/run_active_learning.py --method pal --detector retinanet --dataset voc --gpus 1 --seed 0
 ```
 
-Run the current EUA-only VOC experiment with the default seed 0 and all seven
-rounds:
+Run EPAL with all three error predictors, the default seed 0, and all seven
+VOC rounds:
 
 ```powershell
-python -B tools/run_active_learning.py --method ecpal:eua-only --detector retinanet --dataset voc --gpus 1
+python -B tools/run_active_learning.py --method epal --detector retinanet --dataset voc --gpus 1
 ```
+
+EPAL selects images directly by error-prediction entropy. Choose the predictors
+with `--epal-components`:
+
+| Variant | Option |
+|---|---|
+| CECP only | `--epal-components cecp` |
+| LECP only | `--epal-components lecp` |
+| MOCP only | `--epal-components mocp` |
+| CECP + LECP | `--epal-components cecp+lecp` |
+| All three (default) | `--epal-components cecp+lecp+mocp` |
+
+For example:
+
+```powershell
+python -B tools/run_active_learning.py --method epal --epal-components cecp+lecp --detector retinanet --dataset voc --gpus 1
+```
+
+Only selected predictors are fitted and scored. Their inverse-mean entropy
+weights sum to the number of active components; a single component has weight
+one. EPAL has no FDP, ECA mode, or diversity reranking.
+
+All predictors have two inputs: CECP uses detection score and the sum of support
+probabilities for the final predicted class; LECP uses detection score and the
+sum of support IoUs; MOCP uses residual amount and the sum of residual-weighted
+native candidate confidence. CECP/LECP retain the existing foreground training
+eligibility mask (GT IoU >= 0.1), but their entropy is applied to all retained
+detections without a foreground-probability gate.
+
+Feature JSON uses `schema=epal`, `schema_version=1`, and an `images` list.
+Legacy ECPAL features cannot reconstruct the new evidence exactly and are
+rejected: rerun EPAL feature inference using a compatible detector checkpoint.
+Old method aliases and mode/config keys are rejected with migration guidance.
+
+Generated run names include the canonical component combination, such as
+`retinanet_voc_epal_cecp_lecp_7rounds_5percent_to_20percent`. Custom config
+output roots receive an `epal_<components>` subdirectory. The resolved
+combination appears in acquisition plans, run/round/aggregate summaries and
+the seed TensorBoard stream. Predictor coefficients, scaler parameters,
+sample counts, fallback reasons and entropy weights are saved in
+`epal_diagnostics.json`; disabled predictors are marked explicitly.
+Historical ECPAL results and documentation retain their original names.
 
 Run the three reporting seeds sequentially:
 
@@ -267,10 +309,7 @@ Useful method aliases:
 - `ppal`: PPAL DCUS + CCMS.
 - `pal`, `pal:guide`, `pal/full`: PAL LIUS + GUIDE.
 - `pal:lius`: PAL LIUS only.
-- `ecpal:eca-only`: ECPAL ECA score only.
-- `ecpal:eua-only`: ECPAL EUA score only.
-- `ecpal:eca-full`: ECPAL ECA candidate pool + ECA-profile JS diversity.
-- `ecpal:eua-full`: ECPAL EUA candidate pool + EUA-profile JS diversity.
+- `epal`: EUA acquisition with configurable CECP/LECP/MOCP components.
 - `coreset`, `core-set`, `kcenter`: Core-set greedy k-center.
 - `mial`, `mi-aod`, `miaod`: MIAL/MI-AOD instance-discrepancy acquisition.
 - `random`: random acquisition baseline.

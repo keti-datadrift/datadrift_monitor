@@ -1,4 +1,4 @@
-"""TIDE-style training labels for ECPAL predictors."""
+"""TIDE-style training labels for EPAL predictors."""
 
 from __future__ import annotations
 
@@ -6,9 +6,8 @@ from collections import defaultdict
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
 from methods.common.matching import bbox_iou_xywh
-from methods.ecpal.features import (
+from methods.epal.features import (
     classification_feature_vector,
-    common_feature_vector,
     localization_feature_vector,
     miss_feature_vector,
 )
@@ -70,25 +69,23 @@ def build_training_labels(
 
         for detection in detections:
             u_same, u_diff, u_max, best_gt_id = _best_gt_overlaps(detection, ground_truth)
-            y_fg = int(u_max >= background_iou_threshold)
-            y_cls = int(u_diff > u_same) if y_fg else 0
-            y_loc = int(u_max < foreground_iou_threshold) if y_fg else 0
-            if y_fg and best_gt_id is not None:
+            is_foreground = u_max >= background_iou_threshold
+            y_cls = int(u_diff > u_same) if is_foreground else 0
+            y_loc = int(u_max < foreground_iou_threshold) if is_foreground else 0
+            if is_foreground and best_gt_id is not None:
                 explained_gt_ids.add(best_gt_id)
-            if y_fg:
+            if is_foreground:
                 n_cls += y_cls
                 n_loc += y_loc
 
             detection_examples.append({
                 'image_id': image_id,
                 'category_id': detection.get('category_id'),
-                'common_feature': common_feature_vector(detection),
                 'classification_feature': classification_feature_vector(detection),
                 'localization_feature': localization_feature_vector(detection),
-                'y_fg': y_fg,
                 'y_cls': y_cls,
                 'y_loc': y_loc,
-                'is_foreground': bool(y_fg),
+                'is_foreground': bool(is_foreground),
                 'u_same': float(u_same),
                 'u_diff': float(u_diff),
                 'u_max': float(u_max),
