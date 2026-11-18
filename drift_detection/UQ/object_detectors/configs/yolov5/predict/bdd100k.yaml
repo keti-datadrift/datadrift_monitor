@@ -1,0 +1,115 @@
+mode: predict
+
+model:
+  type: yolov5
+  weights: object_detectors/models/yolov5/weights/bdd100k/yolov5x.pt
+  img_size: 640
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  device: cuda
+
+dataset:
+  used_dataset:
+    - bdd100k
+  split:
+    - val
+  used_ratio:
+    - 1.0
+
+  bdd100k:
+    root: D:/SEONGJIN/datasets/BDD100K
+    train_split: train
+    val_split: val
+    train_image_dir: bdd100k/bdd100k/images/100k/train
+    val_image_dir: bdd100k/bdd100k/images/100k/val
+    train_annotation_file: bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_train.json
+    val_annotation_file: bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_val.json
+
+dataloader:
+  batch_size: 8
+  num_workers: 4
+  pin_memory: false
+  shuffle_train: false
+  shuffle_eval: false
+
+output:
+  uncertainty: gt
+
+  gt:
+    iou_match_threshold: 0.45
+    save_csv:
+      enabled: true
+    save_image:
+      enabled: false
+      step: 10
+      max_num: 10
+
+  score:
+    save_csv:
+      enabled: false
+
+  class_probability:
+    save_csv:
+      enabled: false
+
+  entropy:
+    save_csv:
+      enabled: false
+
+  energy:
+    save_csv:
+      enabled: false
+
+  mc_dropout:
+    num_runs: 30
+    dropout_rate: 0.5
+    save_csv:
+      enabled: false
+
+  ensemble:
+    weights: []
+    save_csv:
+      enabled: false
+
+  meta_detect:
+    score_threshold: 0.0
+    iou_threshold: 0.45
+    save_csv:
+      enabled: false
+
+  null_detect:
+    bbox_loss: box_l1  # box_l1 | box_l2 | offset_l1 | offset_l2
+    cls_loss: bcewithlogits  # bcewithlogits | kl
+    obj_loss: bcewithlogits  # bcewithlogits | abs_diff | signed_diff
+    bbox_direction: pred_to_target  # fixed; reverse is redundant for box_l1/box_l2/offset_l1/offset_l2
+    cls_direction: pred_to_target  # pred_to_target | target_to_pred, only for cls_loss: kl
+    obj_direction: pred_to_target  # pred_to_target | target_to_pred, only for obj_loss: signed_diff
+    feature_set: full  # full | losses_only
+    save_csv:
+      enabled: false
+
+  layer_grad:
+    gradient:
+      # cand_target:
+      #   bbox_loss box_l1/box_l2: sum over candidates of bbox_loss(decoded candidate box, final detection box)
+      #   bbox_loss offset_l1/offset_l2: sum over candidates of bbox_loss(candidate raw bbox offset, final detection raw bbox offset)
+      #   obj_loss: sum over candidates of obj_loss(candidate raw objectness logit, final detection objectness)
+      #   cls_loss: sum over candidates of cls_loss(candidate raw class logits, final detection class target)
+      # null_target:
+      #   bbox_loss box_l1/box_l2: bbox_loss(decoded final detection box, source anchor box)
+      #   bbox_loss offset_l1/offset_l2: bbox_loss(final detection raw bbox offset, zero offset)
+      #   obj_loss: obj_loss(final raw objectness logit, target 0.5)
+      #   cls_loss: cls_loss(final raw class logits, uniform class target)
+      scalar: [loss]
+      layer: ["model.24.m.0", "model.24.m.1", "model.24.m.2"]
+      reduction: [l1_norm, l2_norm, min, max, mean, std]
+      target: cand_target
+      cand_score_threshold: 0.0
+      bbox_loss: box_l1  # box_l1 | box_l2 | offset_l1 | offset_l2
+      cls_loss: bcewithlogits  # bcewithlogits | kl
+      obj_loss: bcewithlogits  # bcewithlogits | abs_diff | signed_diff
+      bbox_direction: pred_to_target  # fixed; reverse is redundant for box_l1/box_l2/offset_l1/offset_l2
+      cls_direction: pred_to_target  # pred_to_target | target_to_pred, only for cls_loss: kl
+      obj_direction: pred_to_target  # pred_to_target | target_to_pred, only for obj_loss: signed_diff
+    save_csv:
+      enabled: false

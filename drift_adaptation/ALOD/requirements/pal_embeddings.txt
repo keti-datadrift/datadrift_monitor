@@ -1,0 +1,2 @@
+# Optional dependency for Google ViT PAL embedding extraction.
+transformers

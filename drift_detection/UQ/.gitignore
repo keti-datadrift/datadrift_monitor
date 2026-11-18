@@ -1,0 +1,14 @@
+*.log
+.agents/
+.texlive-cache/
+code_references/
+codex_plans/
+documents/
+object_detectors/runs/
+meta_models/runs/
+visualizers/runs/
+__pycache__/
+*.pt
+*.pth
+*.xlsx
+*.csv

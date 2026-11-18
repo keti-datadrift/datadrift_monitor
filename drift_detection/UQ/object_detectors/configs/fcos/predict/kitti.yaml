@@ -1,0 +1,117 @@
+mode: predict
+
+model:
+  type: fcos
+  backbone: resnet50_fpn
+  weights: object_detectors/models/fcos/weights/coco/FCOS_R_50_FPN_1x.pth
+  confidence_threshold: 0.05
+  iou_threshold: 0.6
+  device: cuda
+
+dataset:
+  used_dataset:
+    - kitti
+  split:
+    - val
+  used_ratio:
+    - 1.0
+  kitti:
+    root: D:/SEONGJIN/datasets/KITTI
+    train_split: train
+    val_split: val
+    test_split: test
+    train_image_dir: training/image_2
+    val_image_dir: training/image_2
+    test_image_dir: testing/image_2
+    train_label_dir: training/label_2
+    val_label_dir: training/label_2
+    train_split_file: ImageSets/train.txt
+    val_split_file: ImageSets/val.txt
+    trainval_split_ratio: 0.8
+
+dataloader:
+  batch_size: 2
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: false
+  shuffle_eval: false
+  aspect_ratio_grouping: true
+
+output:
+  # gt | deterministic | score | class_probability | entropy | energy | mc_dropout | ensemble | meta_detect | null_detect | layer_grad
+  uncertainty: gt
+  gt:
+    iou_match_threshold: 0.5
+    save_csv:
+      enabled: true
+    save_image:
+      enabled: false
+      step: 100
+      max_num: 10
+  score:
+    save_csv:
+      enabled: true
+  class_probability:
+    save_csv:
+      enabled: true
+  entropy:
+    save_csv:
+      enabled: true
+  energy:
+    save_csv:
+      enabled: true
+  mc_dropout:
+    num_runs: 30
+    dropout_rate: 0.5
+    save_csv:
+      enabled: true
+  ensemble:
+    weights: []
+    save_csv:
+      enabled: true
+  meta_detect:
+    score_threshold: 0.0
+    iou_threshold: 0.45
+    save_csv:
+      enabled: true
+
+  null_detect:
+    feature_set: full  # full | losses_only
+    # bbox_loss: loss(final/source l,t,r,b, zero l,t,r,b)
+    # cls_loss: loss(final/source class logits, null class target: 0.5 vector for BCE, 1/C uniform for KL)
+    # cnt_loss: loss(final/source centerness logit, target 0.5)
+    bbox_loss: l1  # l1 | l2
+    cls_loss: bcewithlogits  # bcewithlogits | kl
+    cnt_loss: bcewithlogits  # bcewithlogits | abs_diff | signed_diff
+    bbox_direction: pred_to_target
+    cls_direction: pred_to_target  # pred_to_target | target_to_pred, only for cls_loss: kl
+    cnt_direction: pred_to_target  # pred_to_target | target_to_pred, only for cnt_loss: signed_diff
+    save_csv:
+      enabled: true
+
+  layer_grad:
+    gradient:
+      # cand_target:
+      #   bbox_loss: sum over candidates of loss(candidate l,t,r,b, final detection box encoded as l,t,r,b at each candidate location)
+      #   cls_loss: sum over candidates of loss(candidate class logits, final detection class target)
+      #   cnt_loss: sum over candidates of loss(candidate centerness logit, target 1)
+      # null_target:
+      #   bbox_loss: loss(final/source l,t,r,b, zero l,t,r,b)
+      #   cls_loss: loss(final/source class logits, uniform class target)
+      #   cnt_loss: loss(final/source centerness logit, target 0.5)
+      scalar: [bbox_loss, cls_loss, cnt_loss]
+      layer:
+        bbox_loss: ["detector_model.rpn.head.bbox_pred"]
+        cls_loss: ["detector_model.rpn.head.cls_logits"]
+        cnt_loss: ["detector_model.rpn.head.centerness"]
+      reduction: [l1_norm, l2_norm, min, max, mean, std]
+      target: cand_target  # cand_target | null_target
+      cand_score_threshold: 0.05
+      bbox_loss: l1  # l1 | l2
+      cls_loss: bcewithlogits  # bcewithlogits | kl
+      cnt_loss: bcewithlogits  # bcewithlogits | abs_diff | signed_diff
+      bbox_direction: pred_to_target
+      cls_direction: pred_to_target  # pred_to_target | target_to_pred, only for cls_loss: kl
+      cnt_direction: pred_to_target  # pred_to_target | target_to_pred, only for cnt_loss: signed_diff
+    save_csv:
+      enabled: true

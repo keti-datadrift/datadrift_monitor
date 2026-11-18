@@ -1,0 +1,10 @@
+.agents/
+code_refs/
+data/
+work_dirs/
+__pycache__/
+*.pyc
+*.egg-info/
+mmdet/.mim/
+*.sh
+*.zip
