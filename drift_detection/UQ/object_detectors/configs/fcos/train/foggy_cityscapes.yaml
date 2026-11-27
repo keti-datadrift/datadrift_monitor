@@ -1,0 +1,48 @@
+﻿mode: train
+
+model:
+  type: fcos
+  backbone: resnet50_fpn
+  weights: object_detectors/models/fcos/weights/coco/FCOS_R_50_FPN_1x.pth
+  confidence_threshold: 0.05
+  iou_threshold: 0.6
+  device: cuda
+
+dataset:
+  used_dataset: foggy_cityscapes
+  used_ratio: 1.0
+  foggy_cityscapes:
+    root: D:/SEONGJIN/datasets/Cityscapes
+    train_split: train
+    val_split: val
+    train_image_dir: leftImg8bit_foggy/train
+    val_image_dir: leftImg8bit_foggy/val
+    train_annotation_dir: gtFine/train
+    val_annotation_dir: gtFine/val
+
+dataloader:
+  batch_size: 2
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+  shuffle_eval: false
+  aspect_ratio_grouping: true
+  persistent_workers: true
+  prefetch_factor: 2
+
+training:
+  epochs: 10
+  lr: 0.0001
+  weight_decay: 0.0001
+  seed: 42
+  amp: false
+  grad_clip_norm: 0.0
+  val_interval: 1
+  save_last_interval: 1
+  save_best: true
+  save_optimizer: true
+  freeze_feature_extractor: false
+  log_timing: false
+
+
+

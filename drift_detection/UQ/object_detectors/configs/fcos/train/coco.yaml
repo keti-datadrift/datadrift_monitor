@@ -1,0 +1,48 @@
+﻿mode: train
+
+model:
+  type: fcos
+  backbone: resnet50_fpn
+  weights: object_detectors/models/fcos/weights/coco/FCOS_R_50_FPN_1x.pth
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  device: cuda
+
+dataset:
+  used_dataset: coco
+  used_ratio: 1.0
+  coco:
+    root: D:/SEONGJIN/datasets/COCO
+    train_split: train2017
+    val_split: val2017
+    image_dir: images
+    annotation_dir: annotations
+    train_annotation_file: instances_train2017.json
+    val_annotation_file: instances_val2017.json
+
+dataloader:
+  batch_size: 4
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+  shuffle_eval: false
+  aspect_ratio_grouping: true
+  persistent_workers: true
+  prefetch_factor: 2
+
+training:
+  epochs: 5
+  lr: 0.0001
+  weight_decay: 0.0001
+  seed: [42, 43, 44, 45, 46]
+  amp: false
+  grad_clip_norm: 0.0
+  val_interval: 1
+  save_last_interval: 1
+  save_best: true
+  save_optimizer: true
+  freeze_feature_extractor: false
+  log_timing: false
+
+
+

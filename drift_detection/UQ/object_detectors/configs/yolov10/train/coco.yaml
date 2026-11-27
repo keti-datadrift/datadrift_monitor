@@ -1,0 +1,66 @@
+﻿mode: train
+
+model:
+  type: yolov10
+  weights: object_detectors/models/yolov10/weights/coco/yolov10x.pt
+  img_size: 640
+  max_det: 300
+  confidence_threshold: 0.25
+  device: cuda
+
+dataset:
+  used_dataset: coco
+  used_ratio: 1.0
+  
+  coco:
+    root: D:/SEONGJIN/datasets/COCO
+    train_split: train2017
+    val_split: val2017
+    image_dir: images
+    annotation_dir: annotations
+    train_annotation_file: instances_train2017.json
+    val_annotation_file: instances_val2017.json
+  
+  voc:
+    root: D:/SEONGJIN/datasets/VOC/VOCdevkit/VOC2012
+    train_split: train
+    val_split: val
+  
+  openimages:
+    root: object_detectors/datasets/openimages
+    train_split: train
+    val_split: validation
+    test_split: validation
+    min_gt_boxes: 1  # keep only images with at least this many GT boxes
+
+dataloader:
+  batch_size: 16
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+  shuffle_eval: false
+  persistent_workers: true
+  prefetch_factor: 2
+
+loss:
+  box: 7.5
+  cls: 0.5
+  dfl: 1.5
+
+training:
+  epochs: 5
+  lr: 0.0001
+  weight_decay: 0.0001
+  seed: [42, 43, 44, 45]
+  amp: true
+  val_interval: 1
+  save_last_interval: 1
+  save_best: true
+  save_optimizer: true
+  freeze_feature_extractor: false
+  log_timing: false
+
+
+
+
+

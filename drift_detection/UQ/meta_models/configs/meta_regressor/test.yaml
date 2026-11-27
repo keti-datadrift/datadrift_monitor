@@ -1,0 +1,10 @@
+task: meta_regressor
+mode: test
+
+model:
+  model_root: meta_models/runs/meta_regressor/yolov5/train/coco/00-00-0000_00;00_layer_grad_cand_target_loss
+
+dataset:
+  input_root:
+    - object_detectors/runs/yolov5/predict/coco/00-00-0000_00;00_layer_grad_cand_target_loss
+  gt_root: object_detectors/runs/yolov5/predict/coco/00-00-0000_00;00_gt

@@ -1,0 +1,19 @@
+# Core runtime for ALOD's local MMDetection 2.x + PPAL/PAL code.
+#
+# PyTorch, torchvision, and mmcv-full are intentionally not installed here;
+# install versions matching the CUDA environment before using train/test.
+matplotlib
+numpy==1.23.5
+opencv-python<4.12
+Pillow
+pycocotools
+scipy==1.10.1
+scikit-learn==1.3.2
+six
+# PyTorch 1.10 TensorBoard imports the legacy distutils.version module.
+setuptools==59.5.0
+# Required by the runner for direct event writing.
+tensorboard==2.10.1
+terminaltables
+tqdm
+yapf<0.40.2

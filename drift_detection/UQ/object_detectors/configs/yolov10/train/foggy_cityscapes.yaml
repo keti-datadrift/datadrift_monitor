@@ -1,0 +1,54 @@
+﻿mode: train
+
+model:
+  type: yolov10
+  weights: object_detectors/models/yolov10/weights/coco/yolov10x.pt
+  img_size: 640
+  max_det: 300
+  confidence_threshold: 0.25
+  device: cuda
+
+dataset:
+  used_dataset: foggy_cityscapes
+  used_ratio: 1.0
+
+  foggy_cityscapes:
+    root: D:/SEONGJIN/datasets/Cityscapes
+    train_split: train
+    val_split: val
+    train_image_dir: leftImg8bit_foggy/train
+    val_image_dir: leftImg8bit_foggy/val
+    train_annotation_dir: gtFine/train
+    val_annotation_dir: gtFine/val
+
+dataloader:
+  batch_size: 12
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+  shuffle_eval: false
+  persistent_workers: true
+  prefetch_factor: 2
+
+loss:
+  box: 7.5
+  cls: 0.5
+  dfl: 1.5
+
+training:
+  epochs: 10
+  lr: 0.0001
+  weight_decay: 0.0001
+  seed: 42
+  amp: true
+  val_interval: 1
+  save_last_interval: 1
+  save_best: true
+  save_optimizer: true
+  freeze_feature_extractor: false
+  log_timing: false
+
+
+
+
+

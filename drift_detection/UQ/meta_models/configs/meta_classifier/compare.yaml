@@ -1,0 +1,9 @@
+task: meta_classifier
+mode: compare
+
+compare:
+  run_roots:
+    - meta_models/runs/meta_classifier/yolov5/train/coco/00-00-0000_00;00_layer_grad_cand_target_loss
+    - meta_models/runs/meta_classifier/yolov5/train/coco/00-00-0000_00;00_class_probability
+  name_a: layer_grad
+  name_b: class_probability

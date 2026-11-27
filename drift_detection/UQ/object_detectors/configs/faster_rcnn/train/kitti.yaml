@@ -1,0 +1,50 @@
+﻿mode: train
+
+model:
+  type: faster_rcnn
+  backbone: resnet50_fpn
+  weights: object_detectors/models/faster_rcnn/weights/coco/fasterrcnn_resnet50_fpn_coco.pth
+  pretrained: true
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  device: cuda
+
+dataset:
+  used_dataset: kitti
+  used_ratio: 1.0
+  kitti:
+    root: D:/SEONGJIN/datasets/KITTI
+    train_split: train
+    val_split: val
+    test_split: test
+    train_image_dir: training/image_2
+    val_image_dir: training/image_2
+    test_image_dir: testing/image_2
+    train_label_dir: training/label_2
+    val_label_dir: training/label_2
+    train_split_file: ImageSets/train.txt
+    val_split_file: ImageSets/val.txt
+    trainval_split_ratio: 0.8
+
+dataloader:
+  batch_size: 4
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+  shuffle_eval: false
+  aspect_ratio_grouping: true
+
+training:
+  epochs: 10
+  lr: 0.0001
+  weight_decay: 0.0001
+  seed: 42
+  amp: true
+  grad_clip_norm: 0.0
+  val_interval: 1
+  save_last_interval: 1
+  save_best: true
+  save_optimizer: true
+  freeze_feature_extractor: false
+  log_timing: false
+

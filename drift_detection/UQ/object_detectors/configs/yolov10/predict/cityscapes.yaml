@@ -1,0 +1,107 @@
+﻿mode: predict
+
+model:
+  type: yolov10
+  weights: object_detectors/models/yolov10/weights/cityscapes/yolov10x.pt
+  img_size: 640
+  max_det: 300
+  confidence_threshold: 0.25
+  device: cuda
+
+dataset:
+  used_dataset:
+    - cityscapes
+  split:
+    - val
+  used_ratio:
+    - 1.0
+
+  cityscapes:
+    root: D:/SEONGJIN/datasets/Cityscapes
+    train_split: train
+    val_split: val
+    train_image_dir: leftImg8bit/train
+    val_image_dir: leftImg8bit/val
+    train_annotation_dir: gtFine/train
+    val_annotation_dir: gtFine/val
+
+dataloader:
+  batch_size: 8
+  num_workers: 4
+  pin_memory: false
+  shuffle_train: false
+  shuffle_eval: false
+
+output:
+  uncertainty: gt
+
+  gt:
+    iou_match_threshold: 0.45
+    save_csv:
+      enabled: true
+    save_image:
+      enabled: false
+      step: 10
+      max_num: 10
+
+  score:
+    save_csv:
+      enabled: false
+
+  class_probability:
+    save_csv:
+      enabled: false
+
+  entropy:
+    save_csv:
+      enabled: false
+
+  energy:
+    save_csv:
+      enabled: false
+
+  mc_dropout:
+    num_runs: 30
+    dropout_rate: 0.5
+    save_csv:
+      enabled: false
+
+  ensemble:
+    weights:
+      - object_detectors/models/yolov10/weights/cityscapes/yolov10x.pt
+    save_csv:
+      enabled: false
+
+  meta_detect:
+    score_threshold: 0.0
+    iou_threshold: 0.45
+    save_csv:
+      enabled: true
+
+  null_detect:
+    cls_loss: kl  # bcewithlogits | kl
+    cls_direction: pred_to_target  # pred_to_target | target_to_pred, only for cls_loss: kl
+    feature_set: full  # full | losses_only
+    save_csv:
+      enabled: true
+
+  layer_grad:
+    gradient:
+      # null_target:
+      #   bbox_loss l1/l2: loss(final detection box source-point offset, zero offset)
+      #   cls_loss: loss(source class logits, uniform/null class target)
+      # cand_target:
+      #   bbox_loss l1/l2: loss(candidate box source-point offset, final box source-point offset)
+      #   cls_loss: loss(candidate class logits, final class target)
+      scalar: [bbox_loss, cls_loss]
+      bbox_layer: ["model.23.one2one_cv2.0.2"]
+      cls_layer: ["model.23.one2one_cv3.0.2"]
+      reduction: [l1_norm, l2_norm, min, max, mean, std]
+      target: null_target  # cand_target | null_target
+      cand_score_threshold: 0.0
+      cand_iou_threshold: 0.45
+      bbox_loss: l1  # l1 | l2
+      cls_loss: bcewithlogits  # bcewithlogits | kl
+      cls_direction: pred_to_target
+    save_csv:
+      enabled: true
