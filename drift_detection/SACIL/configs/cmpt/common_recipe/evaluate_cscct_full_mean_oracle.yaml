@@ -1,0 +1,10 @@
+extends: evaluate_cscct_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: CSCCT-full-training-mean-oracle
+  output: outputs/cmpt/full_mean_oracle/cifar100/cscct/seed_1/results.json
+
+cmpt:
+  oracle_diagnostics:
+    full_mean: true

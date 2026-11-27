@@ -1,0 +1,28 @@
+extends: icarl_kdoff_control.yaml
+
+# Equation-level CVPR 2021 GeoDL control.  This is not claimed as an exact
+# execution of the authors' repository, whose public README exposes the
+# ImageNet/LUCIR path rather than a complete CIFAR command.
+method:
+  name: icarl
+  kd_weight: 0.0
+  geodesic_distillation:
+    enabled: true
+    lambda: 6.0
+    subspace_rank: 32
+    adaptive_new_over_old: true
+    epsilon: 1.0e-7
+
+training:
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+
+output:
+  directory: outputs/explore/geodesic_distillation
+  run_name: icarl_geodl_equation_b6_r32_c100_b50_inc5

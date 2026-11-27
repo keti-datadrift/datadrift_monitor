@@ -1,0 +1,14 @@
+/mds
+/ref_codes
+/ref_papers
+/datasets
+/outputs
+/.pytest*/
+/.tmp_pytest*/
+/test_tmp_current_*/
+/tmp_config_validation*/
+/outputs/pytest_tmp/
+/src/*.egg-info
+**/__pycache__/
+*.py[cod]
+/iwait2027

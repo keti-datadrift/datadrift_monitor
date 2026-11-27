@@ -1,0 +1,5 @@
+extends: _icarl_absolute_local_common.yaml
+method:
+  lambda_geo: 4.0
+output:
+  run_name: icarl_absolute_local_l4_c100_b50_inc5_r32

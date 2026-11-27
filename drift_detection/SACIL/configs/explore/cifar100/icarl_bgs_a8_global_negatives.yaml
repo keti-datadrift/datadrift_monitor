@@ -1,0 +1,7 @@
+extends: icarl_bgs_a7.yaml
+method:
+  boundary_graph_surgery:
+    insertion:
+      negative_scope: all_old
+output:
+  run_name: icarl_bgs_a8_all_old_negatives

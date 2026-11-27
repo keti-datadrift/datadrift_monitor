@@ -1,0 +1,41 @@
+extends: _common_b50_inc5.yaml
+
+# Controlled topology-regularizer comparison.  This deliberately keeps the
+# complete iCaRL optimization recipe (S0=200 epochs, S1-S10=170 epochs) and
+# adds only the author CaSpeR spectral objective during incremental sessions.
+method:
+  name: icarl
+  kd_temperature: 2.0
+  geometry_mode: none
+  casper:
+    enabled: true
+    weight: 0.001
+    knn: 8
+    classes_per_graph: 8
+    replay_batch_size: 64
+    solver: xitorch
+    # The iCaRL substrate already uses optimizer weight decay.  Keeping this
+    # at zero ensures S0 and every non-spectral objective match iCaRL exactly.
+    wd_reg: 0.0
+
+training:
+  batch_size: 128
+  base:
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [60, 120, 170]
+    lr_decay: 0.1
+  incremental:
+    epochs: 170
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+
+output:
+  run_name: icarl_casper_nme_c100_b50_inc5_r32

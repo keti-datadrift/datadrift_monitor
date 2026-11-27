@@ -1,0 +1,8 @@
+base_config: ../16_probabilistic_support/fgvc_aircraft_metric_gpu0.yaml
+
+experiment:
+  name: probabilistic-mixture-image-metric
+
+probabilistic_support_likelihood:
+  posterior_form: categorical_mixture
+

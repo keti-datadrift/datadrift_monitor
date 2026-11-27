@@ -1,0 +1,7 @@
+extends: _sacil_ablation_common.yaml
+method:
+  geometry_mode: flat
+  local_relaxation: true
+  use_internal_anchors: false
+output:
+  run_name: flat_lrhap_c100_b50_inc5_r32

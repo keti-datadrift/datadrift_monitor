@@ -1,0 +1,12 @@
+base_config: fgvc_aircraft_reference_only_last_seed0_categorical_gpu0.yaml
+
+experiment:
+  name: probabilistic-support-categorical-reference-only-last-seed1
+
+runtime:
+  gpu_id: 1
+  seed: 1
+
+probabilistic_support_likelihood:
+  support_checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed1/checkpoints/image-metric-last.pt
+  split_metadata_checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed1/checkpoints/image-metric.pt

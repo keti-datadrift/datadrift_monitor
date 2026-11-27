@@ -1,0 +1,11 @@
+base_config: fgvc_aircraft_metric_gpu0.yaml
+
+experiment:
+  name: multidepth-heads-base-clip-seed0
+
+runtime:
+  gpu_id: 0
+  seed: 0
+
+multidepth_heads:
+  support_lora_enabled: false

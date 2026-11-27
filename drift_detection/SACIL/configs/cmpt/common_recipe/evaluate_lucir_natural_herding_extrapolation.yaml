@@ -1,0 +1,12 @@
+extends: evaluate_lucir_natural_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: LUCIR-natural-herding-extrapolation
+  output: outputs/cmpt/herding_extrapolation/cifar100/lucir_natural/seed_1/results.json
+
+cmpt:
+  herding_extrapolation:
+    enabled: true
+    full_prefix: 20
+    reference_prefix: 10

@@ -1,0 +1,11 @@
+extends: train_lucir.yaml
+
+# Exact bridge to the earlier +2.138 pp LUCIR-like training recipe. This is
+# not the complete LUCIR method because margin ranking is intentionally off.
+method:
+  feature_cosine_distillation:
+    margin_ranking:
+      enabled: false
+
+output:
+  run_name: lucir_like_legacy_common_c100_b50_inc5_r32

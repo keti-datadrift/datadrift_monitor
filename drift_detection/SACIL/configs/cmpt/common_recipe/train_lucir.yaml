@@ -1,0 +1,39 @@
+extends: _training_common.yaml
+
+# Common-recipe adaptation of LUCIR. The official method-specific LF cosine
+# feature term and margin-ranking term are retained. The shared canonical
+# linear-head S0 is supplied by --base-checkpoint, matching the earlier
+# LUCIR-like exploration's session-0 convention.
+method:
+  name: icarl
+  # Retained in the resolved config so the shared canonical iCaRL S0 recipe
+  # signature is identical, although old-logit KD is disabled after S0.
+  kd_temperature: 2.0
+  kd_weight: 0.0
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 5.0
+    adaptive_mode: old_over_new
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+    sample_scope: all
+    combine_old_logit_kd: false
+    margin_ranking:
+      enabled: true
+      margin: 0.5
+      top_k: 2
+      weight: 1.0
+
+# LUCIR's released CIFAR-100 code uses an initial LR of 0.1. The 40/70
+# milestones retain the validated 80-epoch LUCIR-like adaptation used here.
+training:
+  incremental:
+    lr: 0.1
+    milestones: [40, 70]
+    lr_decay: 0.1
+
+output:
+  run_name: lucir_common_c100_b50_inc5_r32

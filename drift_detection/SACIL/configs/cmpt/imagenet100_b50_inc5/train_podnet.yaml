@@ -1,0 +1,38 @@
+extends: _training_common.yaml
+
+# PODNet ImageNet-100 optimizer/loss weights from the author release, with
+# the unified runner's PyCIL multi-proxy classifier implementation.
+model:
+  backbone: resnet18_imagenet
+  proxies_per_class: 10
+
+method:
+  name: podnet
+  podnet:
+    flat_weight: 10.0
+    spatial_weight: 8.0
+    finetuning:
+      epochs: 20
+      lr: 0.01
+      momentum: 0.9
+      weight_decay: 0.0005
+
+training:
+  batch_size: 64
+  base:
+    epochs: 90
+    lr: 0.05
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 90
+    lr: 0.05
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+
+output:
+  run_name: podnet_imagenet100_b50_inc5_r18

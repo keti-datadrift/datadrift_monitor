@@ -1,0 +1,72 @@
+experiment:
+  name: paper-negprompt-p64k4-base
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+  seed: 0
+  deterministic: true
+
+dataset:
+  name: fgvc-aircraft
+  datadir: D:/HY_Data/HierOOD/fgvc-aircraft
+  hierarchy: hierarchies/fgvc-aircraft.json
+  id_split: data/fgvc-aircraft-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch16
+  tokenizer_model: openai/clip-vit-base-patch16
+  local_files_only: true
+
+dataloader:
+  num_workers: 4
+
+augmentation:
+  image_size: 224
+  eval_resize: 224
+  random_resized_crop_scale:
+    - 0.7
+    - 1.0
+  horizontal_flip_probability: 0.5
+  color_jitter:
+    probability: 0.5
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.1
+    hue: 0.0
+
+positive:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive.pt
+
+negative_training:
+  epochs: 15
+  batch_size: 64
+  shots_per_class: 16
+  lr: 0.1
+  precision: fp16
+  gradient_clip_norm: 1.0
+  text_gradient_checkpointing: true
+
+  prompt:
+    count: 2
+    init_noise: 0.01
+
+  loss:
+    distance_mode: attractive
+    beta: 0.1
+    gamma: 0.05
+    logit_scale: clip
+
+  resume:
+    automatic: true
+
+inference:
+  batch_size: 128
+  temperature: 1.0
+  id_acceptance: 0.95
+  id_acceptance_grid:
+    - 0.95
+    - 0.90
+    - 0.80
+    - 0.70

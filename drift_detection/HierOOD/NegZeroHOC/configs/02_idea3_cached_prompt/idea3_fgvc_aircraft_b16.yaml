@@ -1,0 +1,112 @@
+experiment:
+  name: idea3-fgvc-aircraft-b16
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 1
+  seed: 0
+
+dataset:
+  name: fgvc-aircraft
+  datadir: D:/HY_Data/HierOOD/fgvc-aircraft
+  hierarchy: hierarchies/fgvc-aircraft.json
+  id_split: data/fgvc-aircraft-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch16
+  local_files_only: true
+  freeze_text_encoder: true
+  freeze_image_encoder: true
+
+dataloader:
+  batch_size: 128
+  num_workers: 4
+
+feature_extraction:
+  skip_train: false
+
+features:
+  dir: outputs/shared/features/fgvc-aircraft/clip_openai_clip-vit-base-patch16
+
+prompt_inspection:
+  nodes:
+    - m-Boeing
+    - f-Boeing_737
+    - v-737-300
+  parents:
+    - root
+    - m-Boeing
+    - f-Boeing_737
+
+prompt:
+  max_length: 77
+  global_ctx_tokens: 4
+  depth_ctx_tokens: 4
+  parent_ctx_tokens: 4
+  depth_embed_dim: 64
+  parent_generator_hidden_dim: 512
+  init_std: 0.02
+  ablation: global_depth_parent
+  unknown_prompts: 1
+
+image_adapter:
+  mode: none
+  output_dim:
+  hidden_dim: 1024
+  dropout: 0.1
+  rank: 16
+  alpha: 16.0
+  residual: true
+  normalize_output: true
+
+positive_training:
+  enabled: true
+  epochs: 100
+  batch_size: 1024
+  parents_per_step: 4
+  lr: 0.001
+  weight_decay: 0.0001
+  tau: 0.07
+  loss:
+    name: weihims
+    prompt_scope: depth_global
+    alpha: 2.0
+    beta: 50.0
+    lam: 0.5
+    mining_margin: 0.1
+    minimum_mode: sample
+    dist_scale: 2.0
+    dist_pow: 1.0
+    ce_weight: 1.0
+    metric_weight: 1.0
+  eval_after_training: true
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16/checkpoints/idea3-fgvc-aircraft-b16-positive.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16/results/idea3-fgvc-aircraft-b16-positive_child_only.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16/diagnostics/idea3-fgvc-aircraft-b16-positive-diagnostics.json
+
+unknown_training:
+  enabled: true
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16/checkpoints/idea3-fgvc-aircraft-b16-positive.pt
+  epochs: 20
+  batch_size: 1024
+  parents_per_step: 4
+  lr: 0.001
+  weight_decay: 0.0001
+  tau: 0.07
+  hide_strategy: hide_one_child
+  lambda_anchor: 0.1
+  lambda_child_sep: 0.1
+  eval_after_training: true
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16/checkpoints/idea3-fgvc-aircraft-b16-parent_unknown.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16/results/idea3-fgvc-aircraft-b16-parent_unknown.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16/diagnostics/idea3-fgvc-aircraft-b16-unknown-diagnostics.json
+
+inference:
+  mode: positive_child_only
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16/checkpoints/idea3-fgvc-aircraft-b16-positive.pt
+  unknown_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16/checkpoints/idea3-fgvc-aircraft-b16-parent_unknown.pt
+  batch_size: 1024
+  allow_root_unknown: false
+  tau: 1.0
+  save_trace: false

@@ -1,0 +1,74 @@
+base_config: idea8_fgvc_aircraft_b16_image_metric_lora.yaml
+
+experiment:
+  name: idea8-fgvc-aircraft-b16-metric-lora-joint-prompts
+
+runtime:
+  gpu_id: 1
+  seed: 0
+
+prompt:
+  max_length: 77
+  global_ctx_tokens: 4
+  depth_ctx_tokens: 4
+  parent_ctx_tokens: 4
+  depth_embed_dim: 64
+  parent_generator_hidden_dim: 512
+  init_std: 0.02
+  ablation: global_depth_parent
+  unknown_prompts: 4
+  unknown_prototype_ctx_tokens: 2
+
+joint_prompt_training:
+  metric_checkpoint: outputs/experiments/idea8-fgvc-aircraft-b16-image-metric-lora/checkpoints/idea8-fgvc-aircraft-b16-image-metric-lora.pt
+  epochs: 30
+  parents_per_step: 4
+  max_examples_per_parent: 64
+  vision_batch_size: 16
+  positive_lr: 0.0001
+  negative_lr: 0.0003
+  weight_decay: 0.0001
+  tau: 0.07
+  precision: fp16
+  gradient_clip_norm: 1.0
+
+  virtual_features:
+    samples_per_parent: 32
+    mix_min: 0.35
+    mix_max: 0.65
+    refinement_steps: 0
+    refinement_step_size: 0.05
+    child_temperature: 0.07
+    parent_weight: 0.5
+    anchor_weight: 0.25
+
+  loss:
+    lambda_id: 1.0
+    lambda_virtual: 1.0
+    lambda_coverage: 0.2
+    lambda_diversity: 0.05
+    lambda_separation: 0.1
+    diversity_margin: 0.2
+    separation_margin: 0.5
+    depth_balanced: true
+
+  validation:
+    every_n_epochs: 1
+    batch_size: 64
+    max_id_bacc_drop: 0.08
+    min_id_bacc: 0.70
+
+  checkpoint: outputs/experiments/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts/checkpoints/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts.pt
+  result_path: outputs/experiments/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts/results/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts-global-path.result
+  diagnostics_path: outputs/experiments/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts/diagnostics/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts-diagnostics.json
+
+inference:
+  mode: parent_unknown_global_path
+  unknown_aggregation: logmeanexp
+  batch_size: 64
+  tau: 14.285714
+  allow_root_unknown: false
+  greedy_ablation: true
+
+oracle_diagnostics:
+  path: outputs/experiments/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts/diagnostics/idea8-fgvc-aircraft-b16-metric-lora-joint-prompts-oracle-parent.json

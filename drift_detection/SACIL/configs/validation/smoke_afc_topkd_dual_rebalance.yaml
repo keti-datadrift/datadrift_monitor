@@ -1,0 +1,63 @@
+seed: 1
+deterministic: true
+device: cuda:0
+
+data:
+  name: cifar100
+  root: datasets
+  protocol: experiment_configs/class_orders/cifar100_b50_t10_afc_order1.json
+  download: false
+  color_jitter: true
+
+model:
+  backbone: afc_resnet32
+  proxies_per_class: 10
+  classifier_scale: 1.0
+
+memory:
+  exemplars_per_class: 20
+  selection: icarl_herding
+
+method:
+  name: afc_topkd_dual_rebalance
+  lambda_geo: 0.0
+  topology:
+    ripsnet_checkpoint: outputs/ripsnet_cifar100_afc_resnet32_h0_cloud64/seed_1/best.pt
+    cloud_size: 64
+    weight: 64.0
+  afc:
+    nca_margin: 0.6
+    pod_base_factor: 4.0
+    finetuning:
+      epochs: 1
+      lr: 0.05
+      momentum: 0.9
+      weight_decay: 0.0005
+      nesterov: false
+
+training:
+  batch_size: 128
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+  base:
+    epochs: 1
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 1
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+
+debug:
+  max_batches_per_epoch: 2
+
+output:
+  directory: outputs/validation
+  run_name: smoke_afc_topkd_dual_rebalance

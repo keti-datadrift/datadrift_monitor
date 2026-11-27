@@ -1,0 +1,9 @@
+extends: evaluate_lucir_natural_affine.yaml
+
+experiment:
+  learner: LUCIR-natural-CMPT-component-ablation
+  output: outputs/cmpt/component_ablation/cifar100/lucir_natural/seed_1/results.json
+
+cmpt:
+  component_ablation:
+    enabled: true

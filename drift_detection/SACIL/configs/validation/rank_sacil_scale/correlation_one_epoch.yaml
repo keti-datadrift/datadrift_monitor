@@ -1,0 +1,13 @@
+extends: ../../ablations/cifar100/icarl_sacil_rank_correlation.yaml
+
+training:
+  incremental:
+    epochs: 1
+    milestones: []
+
+debug:
+  max_sessions: 2
+
+output:
+  directory: outputs/validation/rank_sacil_scale
+  run_name: correlation_l1_one_epoch

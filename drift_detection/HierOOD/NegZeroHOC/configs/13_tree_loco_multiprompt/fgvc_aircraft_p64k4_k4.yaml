@@ -1,0 +1,95 @@
+experiment:
+  name: tree-loco-multiprompt-p64k4-k4
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+  seed: 0
+  deterministic: true
+
+dataset:
+  name: fgvc-aircraft
+  datadir: D:/HY_Data/HierOOD/fgvc-aircraft
+  hierarchy: hierarchies/fgvc-aircraft.json
+  id_split: data/fgvc-aircraft-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch16
+  tokenizer_model: openai/clip-vit-base-patch16
+  local_files_only: true
+
+dataloader:
+  num_workers: 4
+
+augmentation:
+  image_size: 224
+  eval_resize: 224
+  random_resized_crop_scale:
+    - 0.7
+    - 1.0
+  horizontal_flip_probability: 0.5
+  color_jitter:
+    probability: 0.5
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.1
+    hue: 0.0
+
+positive:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive.pt
+
+unknown_training:
+  epochs: 30
+  batch_size: 64
+  shots_per_class: 16
+  lr: 0.001
+  weight_decay: 0.0001
+  precision: fp16
+  gradient_clip_norm: 1.0
+  text_gradient_checkpointing: true
+
+  prompt:
+    count: 4
+
+  loss:
+    lambda_id: 1.0
+    lambda_tree: 0.25
+    lambda_shell: 0.25
+    local_margin: 0.05
+    distance_margin: 0.02
+    id_temperature: 0.05
+    ordinal_margin_per_step: 0.02
+    ordinal_temperature: 0.05
+
+  resume:
+    automatic: true
+
+loco_training:
+  parents_per_step: 4
+  max_examples_per_parent: 64
+  vision_batch_size: 128
+  hide_strategy: hide_one_child
+
+  prompt:
+    count: 4
+    shared_init_noise: 0.01
+    parent_init_noise: 0.001
+
+  loss:
+    lambda_pseudo: 1.0
+    lambda_slot: 0.1
+    lambda_parent_offset: 0.0001
+    pseudo_local_margin: 0.05
+    pseudo_distance_margin: 0.02
+    pseudo_temperature: 0.05
+    slot_temperature: 0.05
+
+inference:
+  batch_size: 128
+  id_acceptance: 0.95
+  terminal_weight: 0.75
+  bottleneck_temperature: 0.1
+  unknown_temperature: 0.07
+  child_temperature: 0.07
+  complement_weight: 0.5

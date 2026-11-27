@@ -1,0 +1,7 @@
+extends: _icarl_bgs_a4_common.yaml
+method:
+  boundary_graph_surgery:
+    geometry:
+      mask_mode: random_pair
+output:
+  run_name: icarl_bgs_a3_random_pair_l16

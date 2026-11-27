@@ -1,0 +1,15 @@
+extends: icarl_feature_cosine_lucir_hierarchy_stable_replay.yaml
+
+# SACIL paired candidate for class-uniform replay. Total old/new mass follows
+# the number of seen classes; within old replay, conflict branches receive half
+# probability and stable outside branches receive the conserved mass.
+method:
+  replay_batching:
+    enabled: true
+    fraction_mode: class_uniform
+    replay_fraction: 0.50
+    conflict_multiplier: 0.50
+
+output:
+  directory: outputs/explore/class_uniform_replay
+  run_name: icarl_feature_cosine_lucir_hierarchy_class_uniform_replay_c100_b50_inc5_r32

@@ -1,0 +1,3 @@
+extends: sacil_full.yaml
+output:
+  run_name: shared_base_sacil_c100_b50_inc5_r32

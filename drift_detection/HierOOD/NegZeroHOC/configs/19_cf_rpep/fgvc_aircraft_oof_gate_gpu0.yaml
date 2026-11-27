@@ -1,0 +1,30 @@
+base_config: ../18_crossfit_class_holdout/fgvc_aircraft_loco_common.yaml
+
+experiment:
+  name: ideaO-fgvc-aircraft-cf-rpep-oof
+  output_root: outputs
+
+runtime:
+  gpu_id: 0
+  seed: 0
+  deterministic: true
+
+dataloader:
+  num_workers: 0
+
+cf_rpep:
+  fold_checkpoints:
+    - outputs/experiments/ideaN-fgvc-aircraft-crossfit-class-holdout/fold-0/checkpoints/best.pt
+    - outputs/experiments/ideaN-fgvc-aircraft-crossfit-class-holdout/fold-1/checkpoints/best.pt
+    - outputs/experiments/ideaN-fgvc-aircraft-crossfit-class-holdout/fold-2/checkpoints/best.pt
+    - outputs/experiments/ideaN-fgvc-aircraft-crossfit-class-holdout/fold-3/checkpoints/best.pt
+  precision: fp16
+  inference_batch_size: 128
+  heads:
+    epochs: 200
+    batch_size: 512
+    lr: 0.01
+    weight_decay: 0.0001
+    patience: 30
+  temperature:
+    max_iter: 100

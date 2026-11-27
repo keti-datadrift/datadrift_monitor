@@ -1,0 +1,6 @@
+extends: _sacil_ablation_common.yaml
+method:
+  geometry_mode: none
+  lambda_geo: 0.0
+output:
+  run_name: prototype_ce_control_c100_b50_inc5_r32

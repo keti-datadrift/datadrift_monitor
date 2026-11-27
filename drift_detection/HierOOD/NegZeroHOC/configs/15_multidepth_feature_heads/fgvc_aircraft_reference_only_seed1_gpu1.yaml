@@ -1,0 +1,11 @@
+base_config: fgvc_aircraft_reference_only_seed0_gpu0.yaml
+
+experiment:
+  name: multidepth-heads-reference-only-seed1
+
+runtime:
+  gpu_id: 1
+  seed: 1
+
+multidepth_heads:
+  support_checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed1/checkpoints/image-metric.pt

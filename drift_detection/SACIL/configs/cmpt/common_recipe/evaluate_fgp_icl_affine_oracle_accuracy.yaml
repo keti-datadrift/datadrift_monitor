@@ -1,0 +1,12 @@
+extends: evaluate_fgp_icl_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: FGP-ICL-affine-accuracy-oracle
+  output: outputs/cmpt/common_recipe/oracle/fgp_icl_accuracy/seed_1/oracle_accuracy.json
+
+cmpt:
+  prototype_interpolation_alphas: [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
+  oracle_diagnostics:
+    accuracy: true
+    alpha_grid: [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]

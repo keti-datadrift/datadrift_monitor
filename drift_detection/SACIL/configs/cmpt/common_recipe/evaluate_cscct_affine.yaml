@@ -1,0 +1,8 @@
+extends: ../_cmpt_affine_common.yaml
+
+device: cuda:1
+experiment:
+  learner: CSCCT-common-affine
+  expected_checkpoint_method: cscct
+  checkpoints: outputs/cmpt/common_recipe/training/cscct_common_c100_b50_inc5_r32/seed_1/checkpoints
+  output: outputs/cmpt/common_recipe/evaluation/cscct_affine_ridge1e-2/seed_1/cmpt_affine_matched_nme.json

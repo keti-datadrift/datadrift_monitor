@@ -1,0 +1,15 @@
+base_config: idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b256_p32k8_e100_2gpu_gradcache_earlystop.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced
+
+joint_training:
+  loss:
+    sampler: globally_balanced
+  resume:
+    checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced/checkpoints/positive-last.pt
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced/checkpoints/positive.pt
+  validation:
+    last_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced/checkpoints/positive-last.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced/results/positive_metric_terminal.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced/diagnostics/positive.json

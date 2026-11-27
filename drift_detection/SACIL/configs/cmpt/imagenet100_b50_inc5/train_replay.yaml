@@ -1,0 +1,34 @@
+extends: _training_common.yaml
+
+# PyCIL Replay has no separate ImageNet-100 recipe.  This controlled
+# adaptation retains its released base/incremental optimizer schedule while
+# replacing only the CIFAR backbone with the shared ImageNet ResNet-18.
+model:
+  backbone: resnet18_imagenet
+
+method:
+  name: replay
+
+training:
+  batch_size: 128
+  base:
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: multistep
+    milestones: [60, 120, 170]
+    lr_decay: 0.1
+  incremental:
+    epochs: 70
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    nesterov: false
+    scheduler: multistep
+    milestones: [30, 50]
+    lr_decay: 0.1
+
+output:
+  run_name: replay_imagenet100_b50_inc5_r18

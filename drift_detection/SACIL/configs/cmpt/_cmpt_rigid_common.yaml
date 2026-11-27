@@ -1,0 +1,24 @@
+experiment:
+  expected_sessions: 11
+  expected_exemplars_per_class: 20
+  expected_casper_enabled: false
+
+runtime:
+  # Evaluation is commonly run beside a learner on the second GPU.
+  cpu_threads: 6
+
+cmpt:
+  transport: rigid_procrustes
+  full_introduction_prototypes: true
+  # At evaluation, replace old-class means only. Current-session classes use
+  # the exact NME control means, so S0 is identical by construction.
+  replace_old_classes_only: true
+  # All stored NME controls used the iCaRL-style original+mirror mean.
+  # Apply exactly the same convention to CMPT prototypes and landmarks.
+  prototype_horizontal_flip: true
+  support_horizontal_flip: true
+  # Query TTA is intentionally disabled in the primary matched comparison.
+  query_horizontal_flip: false
+  center_strength: 0.0
+  strict_parity: true
+  parity_tolerance: 1.0e-6

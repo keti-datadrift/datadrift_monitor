@@ -1,0 +1,14 @@
+extends: _common_b50_inc5.yaml
+method:
+  name: replay
+training:
+  incremental:
+    epochs: 70
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    scheduler: multistep
+    milestones: [30, 50]
+    lr_decay: 0.1
+output:
+  run_name: replay_reference_hparams_nme_c100_b50_inc5_r32

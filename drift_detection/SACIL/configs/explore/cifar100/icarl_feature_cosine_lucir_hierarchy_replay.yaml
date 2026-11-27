@@ -1,0 +1,28 @@
+extends: icarl_feature_cosine_lucir_cosinehead_bgs.yaml
+
+# SACIL candidate: the total replay mass and optimizer-step count match the
+# uniform dual-stream control. Only replay class probabilities differ: old
+# classes in bounded conflict branches receive twice the class probability.
+# BGS geometry is disabled so the paired difference isolates sampling.
+method:
+  boundary_graph_surgery:
+    branch_source: nearest_leaf_bounded_ancestor
+    max_branch_leaves: 8
+    max_conflict_leaf_coverage: 0.60
+    geometry:
+      lambda: 0.0
+      objective: fixed_anchor_mse
+      inside_weight: 1.0
+      boundary_weight: 1.0
+      denominator: old_sample_count_x_anchor_count
+      use_leaf: true
+      use_internal_without_root: true
+      mask_mode: structured
+  replay_batching:
+    enabled: true
+    replay_fraction: 0.50
+    conflict_multiplier: 2.0
+
+output:
+  directory: outputs/explore/hierarchy_conditioned_replay
+  run_name: icarl_feature_cosine_lucir_hierarchy_replay_c100_b50_inc5_r32

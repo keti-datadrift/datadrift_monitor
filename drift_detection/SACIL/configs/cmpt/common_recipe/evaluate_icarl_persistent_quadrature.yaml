@@ -1,0 +1,12 @@
+extends: evaluate_icarl_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: iCaRL-persistent-exemplar-quadrature
+  output: outputs/cmpt/persistent_quadrature/cifar100/icarl/seed_1/results.json
+
+cmpt:
+  persistent_quadrature:
+    enabled: true
+    uniform_ridge: 0.001
+    max_iterations: 1000

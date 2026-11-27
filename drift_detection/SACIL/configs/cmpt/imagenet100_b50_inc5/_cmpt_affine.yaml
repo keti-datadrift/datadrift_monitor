@@ -1,0 +1,5 @@
+extends: ../_cmpt_affine_common.yaml
+
+experiment:
+  expected_sessions: 11
+  expected_exemplars_per_class: 20

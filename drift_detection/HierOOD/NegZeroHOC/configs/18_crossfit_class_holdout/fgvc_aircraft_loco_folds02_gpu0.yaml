@@ -1,0 +1,10 @@
+base_config: fgvc_aircraft_loco_common.yaml
+
+runtime:
+  gpu_id: 0
+
+crossfit_class_holdout:
+  folds:
+    - 0
+    - 2
+  manifest_path: outputs/experiments/ideaN-fgvc-aircraft-crossfit-class-holdout/manifests/folds-gpu0.json

@@ -1,0 +1,14 @@
+extends: evaluate_cscct_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: CSCCT-low-rank-moment-transport
+  output: outputs/cmpt/moment_transport/cifar100/cscct/seed_1/results.json
+
+cmpt:
+  moment_transport:
+    enabled: true
+    rank: 6
+    affine_ridge: 0.01
+    quadratic_ridge: 1.0
+    residual_covariance_scale: 0.0

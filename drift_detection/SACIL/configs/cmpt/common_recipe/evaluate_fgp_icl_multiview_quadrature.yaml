@@ -1,0 +1,14 @@
+extends: evaluate_fgp_icl_affine.yaml
+
+device: cuda:1
+experiment:
+  learner: FGP-ICL-cross-model-consistent-quadrature
+  output: outputs/cmpt/multiview_quadrature/cifar100/fgp_icl/seed_1/results.json
+
+cmpt:
+  persistent_quadrature:
+    enabled: true
+    uniform_ridge: 0.001
+    max_iterations: 1000
+    multiview: true
+    previous_model_view: true

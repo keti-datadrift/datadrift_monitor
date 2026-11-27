@@ -1,0 +1,15 @@
+extends: icarl_feature_cosine_lucir_balanced_replay.yaml
+
+# Every seen class receives equal expected batch mass. Because new classes have
+# full data and old classes have 20 exemplars, replay samples are drawn with
+# replacement while optimizer-step count remains unchanged.
+method:
+  replay_batching:
+    enabled: true
+    fraction_mode: class_uniform
+    replay_fraction: 0.50
+    conflict_multiplier: 1.0
+
+output:
+  directory: outputs/explore/class_uniform_replay
+  run_name: icarl_feature_cosine_lucir_class_uniform_replay_c100_b50_inc5_r32

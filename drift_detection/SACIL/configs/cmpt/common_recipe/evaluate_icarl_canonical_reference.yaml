@@ -1,0 +1,11 @@
+extends: evaluate_icarl_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: iCaRL-canonical-reference-direct-transport
+  output: outputs/cmpt/canonical_reference/cifar100/icarl/seed_1/results.json
+
+cmpt:
+  canonical_reference:
+    enabled: true
+    affine_ridge: 0.01

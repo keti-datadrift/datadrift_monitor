@@ -1,0 +1,57 @@
+seed: 1
+deterministic: true
+device: cuda:0
+disable_tqdm: false
+
+comparison_contract:
+  name: annotation_1_cifar100_b50_inc5
+  implementation: in_repo_unified
+  reference_code_policy: reference_only
+
+data:
+  name: cifar100
+  root: datasets
+  protocol: experiment_configs/class_orders/cifar100_b50_t10_afc_order1.json
+  download: false
+  color_jitter: true
+
+model:
+  backbone: resnet32
+
+memory:
+  mode: per_class
+  exemplars_per_class: 20
+  capacity: 2000
+  selection: icarl_herding
+
+evaluation:
+  classifier: nme
+  horizontal_flip: true
+
+training:
+  batch_size: 128
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+  base:
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: multistep
+    milestones: [60, 120, 170]
+    lr_decay: 0.1
+  incremental:
+    epochs: 170
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    nesterov: false
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+
+output:
+  directory: outputs/unified/table1
+  run_name: replace_me

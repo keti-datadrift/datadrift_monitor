@@ -1,0 +1,12 @@
+extends: ../../table1/cifar100/fgp_nme_b50_inc5_resnet32.yaml
+debug:
+  train_samples_per_class: 25
+  max_sessions: 2
+training:
+  base:
+    epochs: 2
+  incremental:
+    epochs: 2
+output:
+  directory: outputs/validation/reference_parity
+  run_name: fgp_25spc_2sessions

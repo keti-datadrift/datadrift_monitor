@@ -1,0 +1,8 @@
+extends: evaluate_lucir_natural_affine.yaml
+
+experiment:
+  learner: LUCIR-natural-neighbor-affine-k5
+  output: outputs/cmpt/neighbor_affine_k5/cifar100/lucir_natural/seed_1/results.json
+
+cmpt:
+  neighbor_affine: {enabled: true, classes_per_neighborhood: 5}

@@ -1,0 +1,10 @@
+extends: evaluate_fgp_icl_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: FGP-ICL-full-training-mean-oracle
+  output: outputs/cmpt/full_mean_oracle/cifar100/fgp_icl/seed_1/results.json
+
+cmpt:
+  oracle_diagnostics:
+    full_mean: true

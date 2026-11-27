@@ -1,0 +1,37 @@
+extends: _training_baseline_common.yaml
+
+# Stock PyCIL PODNet objective, multi-proxy head, and optimizer lifecycle.
+model:
+  backbone: resnet32
+  proxies_per_class: 10
+
+method:
+  name: podnet
+  podnet:
+    flat_weight: 1.0
+    spatial_weight: 5.0
+    finetuning:
+      epochs: 20
+      lr: 0.005
+      momentum: 0.9
+      weight_decay: 0.0005
+
+training:
+  batch_size: 128
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+
+output:
+  run_name: podnet_common_c100_b50_inc5_r32

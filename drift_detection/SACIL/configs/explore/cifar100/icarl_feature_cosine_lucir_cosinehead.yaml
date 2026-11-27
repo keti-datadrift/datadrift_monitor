@@ -1,0 +1,17 @@
+extends: icarl_feature_cosine_b6_cosinehead.yaml
+
+# Official-LUCIR-style less-forget coefficient direction.  This remains an
+# iCaRL replay/herding/NME substrate control; hierarchy routing is disabled.
+method:
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 5.0
+    adaptive_mode: old_over_new
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+
+output:
+  run_name: icarl_feature_cosine_lucir_cosinehead_c100_b50_inc5_r32

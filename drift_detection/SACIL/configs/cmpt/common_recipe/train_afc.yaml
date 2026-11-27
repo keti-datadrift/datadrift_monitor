@@ -1,0 +1,38 @@
+extends: _training_baseline_common.yaml
+
+# Author-released AFC CIFAR-100 objective and optimizer lifecycle.
+model:
+  backbone: rebuffi_importance_resnet32
+  proxies_per_class: 10
+  distance_scale: 3.0
+  nca_scale: 1.0
+
+method:
+  name: afc
+  afc:
+    pod_base_factor: 4.0
+    finetuning:
+      epochs: 20
+      lr: 0.05
+      momentum: 0.9
+      weight_decay: 0.0005
+
+training:
+  batch_size: 128
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+
+output:
+  run_name: afc_common_c100_b50_inc5_r32

@@ -1,0 +1,18 @@
+extends: icarl_kdoff_control.yaml
+
+# TPCIL-inspired KD-off representative topology diagnostic.  The sparse
+# interval-10 impulse is explicitly not claimed as an exact TPCIL reproduction.
+method:
+  edge_topology:
+    enabled: true
+    objective: hierarchical_edge_correlation
+    representatives_per_class: 20
+    lambda_edge: 15.0
+    edge_weighting: global
+    update_interval_steps: 10
+    min_edge_weight: 0.1
+    conflict_branches_per_new_class: 1
+    taxonomy_temperature: 0.2
+
+output:
+  run_name: icarl_kdoff_edgecorr_r20_l15_u10_c100_b50_inc5_r32

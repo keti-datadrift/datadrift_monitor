@@ -1,0 +1,14 @@
+base_config: idea8_fgvc_aircraft_b16_image_metric_lora_reference_only_seed0.yaml
+
+experiment:
+  name: idea8-fgvc-aircraft-image-metric-reference-only-seed1
+
+runtime:
+  gpu_id: 1
+  seed: 1
+
+image_metric_training:
+  checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed1/checkpoints/image-metric.pt
+  validation:
+    last_checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed1/checkpoints/image-metric-last.pt
+  diagnostics_path: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed1/diagnostics/image-metric.json

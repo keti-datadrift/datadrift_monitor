@@ -1,0 +1,9 @@
+extends: icarl_feature_cosine_lucir_balanced_replay_e80.yaml
+
+method:
+  feature_cosine_distillation:
+    cosine_scale: 32.0
+
+output:
+  directory: outputs/explore/cosine_scale
+  run_name: icarl_feature_cosine_lucir_balanced_replay_scale32_e80_c100_b50_inc5_r32

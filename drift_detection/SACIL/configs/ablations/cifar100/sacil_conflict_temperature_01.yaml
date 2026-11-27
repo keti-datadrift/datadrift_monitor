@@ -1,0 +1,6 @@
+extends: sacil_full.yaml
+method:
+  conflict:
+    temperature: 0.1
+output:
+  run_name: sacil_trelax01_c100_b50_inc5_r32

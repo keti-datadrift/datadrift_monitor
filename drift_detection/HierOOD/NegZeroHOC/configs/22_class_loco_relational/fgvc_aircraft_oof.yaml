@@ -1,0 +1,11 @@
+base_config: ../19_cf_rpep/fgvc_aircraft_oof_gate_gpu0.yaml
+
+experiment:
+  name: ideaU-fgvc-aircraft-class-loco-relational-oof
+  output_root: outputs
+
+class_loco_relational:
+  input_checkpoint: outputs/experiments/ideaO-fgvc-aircraft-cf-rpep-oof/checkpoints/ideaO-fgvc-aircraft-cf-rpep-oof.pt
+  max_iter: 150
+  l2_weight: 0.001
+  primary_decoder: expected_hdist

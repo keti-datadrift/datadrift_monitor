@@ -1,0 +1,9 @@
+extends: train_afc.yaml
+
+# Full author-batch rerun for a high-memory GPU.  This intentionally starts a
+# new trajectory because the existing AFC S0 checkpoint used batch_size 64.
+training:
+  batch_size: 128
+
+output:
+  run_name: afc_imagenet100_b50_inc5_r18_bs128

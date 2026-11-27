@@ -1,0 +1,11 @@
+extends: icarl_sacil_fixed_lambda_16.yaml
+
+method:
+  lambda_geo: 1.0
+  geometry:
+    anchor_frame: fixed
+    reliability: uniform
+    objective: correlation
+
+output:
+  run_name: icarl_sacil_rank_correlation_l1_c100_b50_inc5_r32

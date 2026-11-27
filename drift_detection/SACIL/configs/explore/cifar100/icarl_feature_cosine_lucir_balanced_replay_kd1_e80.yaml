@@ -1,0 +1,14 @@
+extends: icarl_feature_cosine_lucir_balanced_replay_e80.yaml
+
+# Matched substrate diagnostic: restore the canonical PyCIL old-logit KL at
+# unit weight on top of the cosine-feature control.  This is not SACIL
+# novelty; it tests whether complementary output-space stability is needed.
+method:
+  kd_weight: 1.0
+  kd_temperature: 2.0
+  feature_cosine_distillation:
+    combine_old_logit_kd: true
+
+output:
+  directory: outputs/explore/feature_scope
+  run_name: icarl_feature_cosine_lucir_balanced_replay_kd1_e80_c100_b50_inc5_r32

@@ -1,0 +1,18 @@
+extends: icarl_feature_cosine_lucir_balanced_replay.yaml
+
+# Strong-substrate interaction screen: combine the successful 50:50 replay
+# control with the previously useful lambda-10 feature stability coefficient.
+method:
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 10.0
+    adaptive_mode: old_over_new
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+
+output:
+  directory: outputs/explore/hierarchy_conditioned_replay
+  run_name: icarl_feature_cosine_lucir_l10_balanced_replay_c100_b50_inc5_r32

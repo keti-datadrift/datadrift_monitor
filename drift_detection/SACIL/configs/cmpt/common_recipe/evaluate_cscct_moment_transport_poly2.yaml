@@ -1,0 +1,11 @@
+extends: evaluate_cscct_moment_transport.yaml
+
+device: cuda:0
+experiment:
+  learner: CSCCT-full-space-degree2-kernel-transport
+  output: outputs/cmpt/moment_transport_poly2/cifar100/cscct/seed_1/results.json
+
+cmpt:
+  moment_transport:
+    mode: polynomial_kernel
+

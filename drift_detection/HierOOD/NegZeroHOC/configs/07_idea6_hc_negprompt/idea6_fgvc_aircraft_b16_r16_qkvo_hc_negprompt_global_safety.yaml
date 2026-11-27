@@ -1,0 +1,15 @@
+base_config: idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt_squared_hinge.yaml
+
+experiment:
+  name: idea6-hc-negprompt-global-safety-fgvc-aircraft-b16-r16-qkvo
+
+negative_training:
+  text_gradient_checkpointing: true
+  global_safety_batch_size: 64
+  loss:
+    safety_scope: global_decoder
+  validation:
+    max_id_bacc_drop: 0.08
+  checkpoint: outputs/experiments/idea6-hc-negprompt-global-safety-fgvc-aircraft-b16-r16-qkvo/checkpoints/idea6-hc-negprompt-global-safety-fgvc-aircraft-b16-r16-qkvo.pt
+  result_path: outputs/experiments/idea6-hc-negprompt-global-safety-fgvc-aircraft-b16-r16-qkvo/results/idea6-hc-negprompt-global-safety-fgvc-aircraft-b16-r16-qkvo-global-path.result
+  diagnostics_path: outputs/experiments/idea6-hc-negprompt-global-safety-fgvc-aircraft-b16-r16-qkvo/diagnostics/idea6-hc-negprompt-global-safety-fgvc-aircraft-b16-r16-qkvo-diagnostics.json

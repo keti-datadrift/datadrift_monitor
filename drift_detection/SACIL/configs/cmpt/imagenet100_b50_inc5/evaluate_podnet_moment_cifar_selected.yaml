@@ -1,0 +1,17 @@
+extends: evaluate_podnet_moment_transport.yaml
+
+device: cuda:0
+experiment:
+  learner: PODNet-ImageNet100-CIFAR-selected-moment
+  output: outputs/cmpt/moment_transport_cifar_selected/imagenet100/podnet/seed_1/results.json
+
+cmpt:
+  moment_transport:
+    grid:
+      enabled: true
+      ranks: [8]
+      quadratic_ridges: [1.0]
+      correction_scales: [0.25]
+      validation_folds: 5
+      validation_fold: 0
+

@@ -1,0 +1,12 @@
+extends: icarl_edgecorr_r20_lambda05.yaml
+
+# SACIL-specific boundary-preserving relaxation: only edges whose two
+# endpoints are both inside a conflict subtree receive the relaxed weight.
+# Boundary-cut and outside edges keep unit preservation weight.
+method:
+  edge_topology:
+    edge_weighting: conflict_subtree_inside
+    min_edge_weight: 0.1
+
+output:
+  run_name: icarl_edgecorr_inside_r20_l05_u10_c100_b50_inc5_r32

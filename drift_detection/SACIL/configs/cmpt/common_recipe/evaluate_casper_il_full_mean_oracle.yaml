@@ -1,0 +1,10 @@
+extends: evaluate_casper_il_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: CaSpeR-IL-full-training-mean-oracle
+  output: outputs/cmpt/full_mean_oracle/cifar100/casper_il/seed_1/results.json
+
+cmpt:
+  oracle_diagnostics:
+    full_mean: true

@@ -1,0 +1,15 @@
+feature_generation:
+  enable: true
+  type: pca_projection
+  mode: single
+  selected_depth: 3
+  save_generated_features: true
+
+  output_dim_by_depth:
+    1: 256
+    2: 192
+    3: 128
+
+  pca:
+    per_depth: true
+    whiten: false

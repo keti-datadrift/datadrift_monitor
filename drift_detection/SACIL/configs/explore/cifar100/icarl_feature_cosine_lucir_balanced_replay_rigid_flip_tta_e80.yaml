@@ -1,0 +1,20 @@
+extends: icarl_feature_cosine_lucir_balanced_replay_e80.yaml
+
+# Final exploration candidate: preserve the stored full-data class prototypes
+# in a co-moving rigid frame estimated from paired replay exemplars.  Both the
+# transport fit and NME evaluation use the same original+horizontal-flip view
+# convention.  Query TTA is a matched inference substrate, not SACIL novelty.
+method:
+  prototype_transport:
+    enabled: true
+    mode: procrustes_rigid_flip
+    sigma: 0.2
+
+evaluation:
+  classifier: nme
+  horizontal_flip: true
+  query_horizontal_flip: true
+
+output:
+  directory: outputs/explore/prototype_transport
+  run_name: icarl_feature_cosine_lucir_balanced_replay_rigid_flip_tta_e80_c100_b50_inc5_r32

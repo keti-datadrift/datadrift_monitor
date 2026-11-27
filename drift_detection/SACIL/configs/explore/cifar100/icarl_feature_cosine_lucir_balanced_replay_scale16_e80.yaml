@@ -1,0 +1,12 @@
+extends: icarl_feature_cosine_lucir_balanced_replay_e80.yaml
+
+# Fixed-scale diagnostic for the normalized cosine training head.  Scale 10
+# may yield insufficient angular separation for NME; 16 is a conservative
+# metric-learning value and changes no replay/evaluation contract.
+method:
+  feature_cosine_distillation:
+    cosine_scale: 16.0
+
+output:
+  directory: outputs/explore/cosine_scale
+  run_name: icarl_feature_cosine_lucir_balanced_replay_scale16_e80_c100_b50_inc5_r32

@@ -1,0 +1,10 @@
+extends: evaluate_casper_il_moment_transport.yaml
+
+device: cuda:1
+experiment:
+  learner: CaSpeR-IL-low-rank-moment-transport-rank8
+  output: outputs/cmpt/moment_transport_rank8/cifar100/casper_il/seed_1/results.json
+
+cmpt:
+  moment_transport:
+    rank: 8

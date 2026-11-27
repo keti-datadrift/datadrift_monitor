@@ -1,0 +1,45 @@
+extends: ../../table1/cifar100/_common_b50_inc5.yaml
+
+# Shared B50-Inc5 training contract for the FGP-ICL and CaSpeR-IL CMPT rows.
+# The CIL protocol, data augmentation, memory, main-loader sampling, epoch
+# budget, batch size, momentum, and LR schedule are controlled.  Learning
+# rate and method-required model/loss details remain learner-specific.
+comparison_contract:
+  name: cmpt_topology_common_recipe_v2
+  implementation: src_cmpt_isolated
+  reference_code_policy: reference_only
+
+method:
+  # Both author releases concatenate current-task data and exemplar memory,
+  # then use the ordinary shuffled loader.  The previous fixed 50:50 sampler
+  # was not part of either release and severely changed FGP's optimization.
+  replay_batching:
+    enabled: false
+
+training:
+  batch_size: 128
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+  base:
+    epochs: 200
+    momentum: 0.9
+    nesterov: false
+    scheduler: multistep
+    milestones: [60, 120, 170]
+    lr_decay: 0.1
+  incremental:
+    epochs: 80
+    momentum: 0.9
+    nesterov: false
+    scheduler: multistep
+    milestones: [50, 64]
+    lr_decay: 0.2
+
+evaluation:
+  classifier: nme
+  horizontal_flip: true
+
+output:
+  directory: outputs/cmpt/common_recipe/training
+  run_name: replace_me

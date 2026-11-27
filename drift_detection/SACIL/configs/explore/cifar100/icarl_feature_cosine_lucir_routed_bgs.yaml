@@ -1,0 +1,17 @@
+extends: icarl_feature_cosine_lucir_cosinehead_bgs.yaml
+
+# Opt-in hierarchy-routed LUCIR feature distillation.  The fixed BGS
+# sample_region_ids partition is reused: conflict-branch old rows and incoming
+# new rows are relaxed, while old rows outside the conflict branches retain
+# the full feature-preservation weight.
+method:
+  feature_cosine_distillation:
+    hierarchy_routing:
+      enabled: true
+      old_conflict_weight: 0.1
+      old_outside_weight: 1.0
+      new_weight: 0.1
+
+output:
+  directory: outputs/explore/hierarchy_routed_feature_distillation
+  run_name: icarl_feature_cosine_lucir_routed_bgs_c100_b50_inc5_r32

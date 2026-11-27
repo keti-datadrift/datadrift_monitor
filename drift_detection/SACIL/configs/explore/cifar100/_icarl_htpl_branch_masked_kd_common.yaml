@@ -1,0 +1,20 @@
+extends: icarl_edgecorr_r2_lambda5.yaml
+
+# I2: canonical iCaRL CE + PyCIL old-logit KD, H-TPL global edge
+# correlation, and new-sample-only hierarchy branch masking of KD.
+method:
+  hierarchy:
+    name: griffin_perona_greedy
+    taxonomy_temperature: 0.2
+  edge_topology:
+    enabled: true
+    representatives_per_class: 2
+    lambda_edge: 5.0
+    edge_weighting: global
+  branch_masked_kd:
+    enabled: true
+    v_min: 0.25
+
+output:
+  directory: outputs/explore/branch_masked_kd
+  run_name: replace_me

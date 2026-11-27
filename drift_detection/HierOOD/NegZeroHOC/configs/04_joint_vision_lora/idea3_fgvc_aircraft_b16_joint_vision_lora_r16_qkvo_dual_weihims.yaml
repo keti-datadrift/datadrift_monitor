@@ -1,0 +1,36 @@
+base_config: idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_b16.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims
+
+runtime:
+  gpu_id: 0
+  seed: 0
+
+joint_training:
+  epochs: 50
+  batch_size: 16
+  prompt_lr: 0.001
+  vision_lora_lr: 0.0001
+  train_prompt: true
+  train_vision_lora: true
+  positive_text_variant: learned
+  loss:
+    name: dual_weihims
+    classes_per_batch: 4
+    examples_per_class: 4
+    image_weight: 1.0
+    alignment_weight: 1.0
+    alpha: 2.0
+    beta: 50.0
+    lam: 0.5
+    mining_margin: 0.1
+    minimum_mode: sample
+    dist_scale: 2.0
+    dist_pow: 1.0
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims/checkpoints/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive.pt
+  validation:
+    last_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims/checkpoints/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive-last.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims/results/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims/diagnostics/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive-diagnostics.json
+

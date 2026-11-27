@@ -1,0 +1,11 @@
+base_config: _base_fgvc_aircraft_p64k4.yaml
+
+experiment:
+  name: paper-negprompt-repulsive-npd-p64k4
+
+runtime:
+  gpu_id: 0
+
+negative_training:
+  loss:
+    distance_mode: repulsive

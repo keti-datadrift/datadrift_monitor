@@ -1,0 +1,16 @@
+extends: icarl_feature_cosine_lucir_routed_bounded_bgs.yaml
+
+# Moderate routing after the 0.1/1.0/0.1 screen over-concentrated normalized
+# feature-KD mass on unaffected old rows. The bounded hierarchy partition is
+# unchanged; only the relaxation strength is reduced.
+method:
+  feature_cosine_distillation:
+    hierarchy_routing:
+      enabled: true
+      old_conflict_weight: 0.4
+      old_outside_weight: 1.0
+      new_weight: 0.4
+
+output:
+  directory: outputs/explore/hierarchy_routed_feature_distillation
+  run_name: icarl_feature_cosine_lucir_routed_bounded_moderate_bgs_c100_b50_inc5_r32

@@ -1,0 +1,28 @@
+base_config: idea3_fgvc_aircraft_b16.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-linear
+
+runtime:
+  device: cuda
+  gpu_id: 1
+
+image_adapter:
+  mode: linear
+  residual: true
+  normalize_output: true
+
+positive_training:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-linear/checkpoints/idea3-fgvc-aircraft-b16-linear-positive.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-linear/results/idea3-fgvc-aircraft-b16-linear-positive_child_only.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-linear/diagnostics/idea3-fgvc-aircraft-b16-linear-positive-diagnostics.json
+
+unknown_training:
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-linear/checkpoints/idea3-fgvc-aircraft-b16-linear-positive.pt
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-linear/checkpoints/idea3-fgvc-aircraft-b16-linear-parent_unknown.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-linear/results/idea3-fgvc-aircraft-b16-linear-parent_unknown.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-linear/diagnostics/idea3-fgvc-aircraft-b16-linear-unknown-diagnostics.json
+
+inference:
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-linear/checkpoints/idea3-fgvc-aircraft-b16-linear-positive.pt
+  unknown_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-linear/checkpoints/idea3-fgvc-aircraft-b16-linear-parent_unknown.pt

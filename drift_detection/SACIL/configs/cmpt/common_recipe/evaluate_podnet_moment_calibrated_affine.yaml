@@ -1,0 +1,12 @@
+extends: evaluate_podnet_affine.yaml
+
+experiment:
+  learner: PODNet-moment-calibrated-affine
+  output: outputs/cmpt/moment_calibrated_affine/cifar100/podnet/seed_1/results.json
+
+cmpt:
+  moment_calibrated_affine:
+    enabled: true
+    uniform_ridge: 0.001
+    max_iterations: 1000
+    affine_ridge: 0.01

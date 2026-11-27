@@ -1,0 +1,31 @@
+base_config: idea3_fgvc_aircraft_b16_sparse_path.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-sparse-path-lora
+
+runtime:
+  device: cuda
+  gpu_id: 1
+
+image_adapter:
+  mode: lora
+  rank: 16
+  alpha: 16.0
+  dropout: 0.1
+  residual: true
+  normalize_output: true
+
+positive_training:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-lora-positive.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/results/idea3-fgvc-aircraft-b16-sparse-path-lora-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/diagnostics/idea3-fgvc-aircraft-b16-sparse-path-lora-positive-diagnostics.json
+
+unknown_training:
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-lora-positive.pt
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-lora-parent_unknown.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/results/idea3-fgvc-aircraft-b16-sparse-path-lora-parent_unknown.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/diagnostics/idea3-fgvc-aircraft-b16-sparse-path-lora-unknown-diagnostics.json
+
+inference:
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-lora-positive.pt
+  unknown_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-lora/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-lora-parent_unknown.pt

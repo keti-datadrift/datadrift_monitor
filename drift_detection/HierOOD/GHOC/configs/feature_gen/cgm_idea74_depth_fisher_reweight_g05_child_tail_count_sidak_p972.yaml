@@ -1,0 +1,33 @@
+feature_generation:
+  enable: false
+
+density:
+  covariance_type: shared_full
+  eps: 1.0e-6
+  covariance_shrinkage: 0.5
+  feature_mask_type: depth_fisher_reweight
+  feature_weight_gamma: 0.5
+  feature_weight_min: 0.5
+  feature_weight_max: 2.0
+
+inference:
+  score_type: gaussian_loglik
+  temperature: 1.0
+  prediction_mode: argmax
+  collapse_ood_to_parent: true
+
+cgm:
+  enabled: true
+  strict_pdf: true
+  ood_density: child_tail_mixture
+  mask_type: product
+  membership_type: chi2_ellipsoid
+  membership_probability: 0.972
+  membership_correction: sidak
+  mask_cov_scale: 1.0
+  local_mode: density_joint
+  child_weight: count
+  candidate_prior: uniform
+  ood_prior: 1.0
+  normalize_ood_pdf: true
+  eps: 1.0e-12

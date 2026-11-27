@@ -1,0 +1,9 @@
+extends: ../_cmpt_affine_common.yaml
+
+device: cuda:0
+experiment:
+  learner: CaSpeR-IL-iCaRL-common-v2-LR0.3-affine
+  expected_checkpoint_method: casper
+  expected_casper_enabled: true
+  checkpoints: outputs/cmpt/common_recipe/training/casper_icarl_common_v2_lr03_c100_b50_inc5_r32/seed_1/checkpoints
+  output: outputs/cmpt/common_recipe/evaluation/casper_icarl_common_v2_lr03_affine_ridge1e-2/seed_1/cmpt_affine_matched_nme.json

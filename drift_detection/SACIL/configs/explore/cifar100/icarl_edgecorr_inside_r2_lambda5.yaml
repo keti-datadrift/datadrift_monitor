@@ -1,0 +1,6 @@
+extends: icarl_edgecorr_r2_lambda5.yaml
+method:
+  edge_topology:
+    edge_weighting: conflict_subtree_inside
+output:
+  run_name: icarl_edgecorr_inside_r2_l5_c100_b50_inc5_r32

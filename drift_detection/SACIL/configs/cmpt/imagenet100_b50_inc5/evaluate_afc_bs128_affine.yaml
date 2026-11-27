@@ -1,0 +1,15 @@
+extends: _cmpt_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: AFC-ImageNet100-BS128
+  expected_checkpoint_method: afc
+  checkpoints: outputs/cmpt/imagenet100_b50_inc5/training/afc_imagenet100_b50_inc5_r18_bs128/seed_1/checkpoints
+  output: outputs/cmpt/imagenet100_b50_inc5/evaluation/afc_bs128/seed_1/cmpt_affine_ridge.json
+
+cmpt:
+  # The trajectory was trained on Linux/48-GB CUDA hardware and is evaluated
+  # on Windows/RTX 2080 SUPER.  Keep strict parity enabled, but permit at most
+  # 0.2 percentage points of cross-platform boundary-prediction drift.  The
+  # exact per-session discrepancy remains recorded in the result JSON.
+  parity_tolerance: 0.002

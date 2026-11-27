@@ -1,0 +1,5 @@
+extends: sacil_full.yaml
+method:
+  lambda_geo: 64.0
+output:
+  run_name: sacil_lambda64_c100_b50_inc5_r32

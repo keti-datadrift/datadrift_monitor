@@ -1,0 +1,11 @@
+extends: evaluate_podnet_affine.yaml
+
+device: cuda:1
+experiment:
+  learner: PODNet-common-affine-adaptive-alpha
+  output: outputs/cmpt/common_recipe/evaluation/podnet_affine_adaptive_alpha/seed_1/cmpt_affine_adaptive_alpha.json
+
+cmpt:
+  adaptive_alpha:
+    enabled: true
+    folds: 5

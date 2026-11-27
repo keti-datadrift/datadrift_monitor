@@ -1,0 +1,13 @@
+base_config: fgvc_aircraft_metric_gpu0.yaml
+
+experiment:
+  name: multidepth-heads-reference-only-seed0
+
+runtime:
+  gpu_id: 0
+  seed: 0
+
+multidepth_heads:
+  support_checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed0/checkpoints/image-metric.pt
+  support_lora_enabled: true
+  train_fraction: 0.8

@@ -1,0 +1,46 @@
+seed: 1
+deterministic: true
+device: cuda:0
+
+data:
+  name: cifar100
+  root: datasets
+  protocol: experiment_configs/class_orders/cifar100_b0_t10_seed1993.json
+  download: false
+  color_jitter: false
+
+model:
+  backbone: takp_resnet18
+  stem: cifar
+  mix_scale: 2.0
+
+memory:
+  exemplars_per_class: 20
+  selection: icarl_herding
+
+method:
+  name: takp_base
+
+training:
+  batch_size: 64
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  base:
+    epochs: 80
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 80
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    nesterov: false
+    scheduler: cosine
+
+output:
+  directory: outputs
+  run_name: takp_base_cifar100_b0_inc10_cifarstem_public_lr

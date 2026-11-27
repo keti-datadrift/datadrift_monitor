@@ -1,0 +1,13 @@
+extends: icarl_feature_cosine_lucir_routed_bgs.yaml
+
+# Bounded-local revision: select the nearest old leaf, then climb only while
+# the selected ancestor remains within the session-specific effective cap.
+method:
+  boundary_graph_surgery:
+    branch_source: nearest_leaf_bounded_ancestor
+    max_branch_leaves: 8
+    max_conflict_leaf_coverage: 0.60
+
+output:
+  directory: outputs/explore/hierarchy_routed_feature_distillation
+  run_name: icarl_feature_cosine_lucir_routed_bounded_bgs_c100_b50_inc5_r32

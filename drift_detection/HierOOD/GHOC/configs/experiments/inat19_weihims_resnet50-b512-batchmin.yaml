@@ -1,0 +1,120 @@
+experiment:
+  name: inat19-weihims-resnet50-b512-samplemin-c128
+  seed: 42
+  device: cuda
+  output_root: ./outputs
+  save_every: 1
+  log_every: 50
+
+runtime:
+  multi_gpu: true
+  device_ids: [0, 1]
+
+dataset:
+  name: inat19
+  datadir: D:/HY_Data/HierOOD/inat19
+  hierarchy: ./hierarchies/inat19.json
+  id_split: ./data/inat19-id-labels.csv
+  extraood: null
+  farood_sets: []
+
+hierarchy:
+  use_pruned_for_loss_labels: true
+  save_path_metadata: true
+
+dataloader:
+  batch_size: 512
+  eval_batch_size: 128
+  num_workers: 8
+  shuffle_train: true
+  pin_memory: false
+  drop_last: false
+
+backbone:
+  type: resnet50
+  feat_dim: 256
+  normalize: true
+  freeze_backbone: false
+  weights: IMAGENET1K_V1
+
+optimizer:
+  name: adamw
+  lr: 0.0001
+  weight_decay: 0.0001
+  momentum: 0.9
+  nesterov: false
+
+scheduler:
+  name: cosine
+  epochs: 200
+  warmup_epochs: 0
+  eta_min: 1.0e-6
+
+loss:
+  name: weihims
+  alpha: 2.0
+  beta: 50.0
+  lam: 0.5
+  mining_margin: 0.1
+  dist_scale: 2.0
+  dist_pow: 1.0
+  minimum_mode: sample
+
+training:
+  epochs: 200
+  grad_clip_norm: null
+  amp: false
+  gradient_cache:
+    enabled: true       # true keeps pair mining over the full logical batch
+    chunk_size: 128     # physical backbone batch; reduce if CUDA OOM occurs
+  batch_norm:
+    mode: chunk         # choices: chunk, frozen, standard
+    freeze_affine: false # false keeps BN gamma/beta trainable
+  checkpoint_metric: val_loss
+  checkpoint_mode: min
+  resume_from: null
+
+validation:
+  enable_depth_eval: true
+  depth_eval_every: 1
+  score_batch_size: 128
+
+feature_extraction:
+  include_train: true
+  save_train: true
+  save_val: true
+  save_ood: true
+  save_farood: true
+  save_leaf_path_matrix: true
+  save_index_mappings: true
+
+density:
+  covariance_type: shared_full
+  eps: 1.0e-6
+  min_count_warning: 1
+  save_debug_statistics: false
+
+inference:
+  score_type: gaussian_loglik
+  temperature: [1.0, 3.0, 10.0, 10.0, 10.0, 10.0]
+  kappa: 20.0
+  ood_scale: 1.0
+  prediction_mode: argmax
+  collapse_ood_to_parent: true
+
+cgm:
+  enabled: false
+  mask_type: sum
+  lambda: 0.9
+  child_weight: uniform
+  ood_prior: 1.0
+  child_log_scale: 1.0
+  ood_log_scale: 1.0
+  normalize_ood_pdf: true
+  eps: 1.0e-12
+
+logging:
+  use_tensorboard: true
+  save_train_metrics: true
+  save_val_metrics: true
+  save_config_copy: true

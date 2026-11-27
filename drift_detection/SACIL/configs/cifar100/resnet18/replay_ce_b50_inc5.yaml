@@ -1,0 +1,57 @@
+seed: 1
+deterministic: true
+device: cuda:0
+
+data:
+  name: cifar100
+  root: datasets
+  protocol: experiment_configs/class_orders/cifar100_b50_t10_afc_order1.json
+  download: false
+
+model:
+  backbone: resnet18
+  classifier_scale: 10.0
+  learnable_scale: true
+
+memory:
+  exemplars_per_class: 20
+  selection: herding
+
+method:
+  name: replay_ce
+  lambda_geo: 0.0
+  hierarchy:
+    name: griffin_perona_greedy
+    taxonomy_temperature: 0.20
+  conflict:
+    max_neighbors: 5
+    old_class_ratio: 0.10
+    temperature: 0.05
+    min_preservation_weight: 0.10
+    ancestor_decay: 0.50
+
+training: &training
+  batch_size: 128
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: true
+    milestones: [80, 120]
+    gamma: 0.1
+  incremental:
+    epochs: 80
+    lr: 0.05
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: true
+    milestones: [40, 60]
+    gamma: 0.1
+
+output:
+  directory: outputs
+  run_name: cifar100_resnet18_shared_base_b50_inc5_20260730

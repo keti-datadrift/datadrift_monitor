@@ -1,0 +1,5 @@
+$env:CUDA_VISIBLE_DEVICES="0,1"
+python train_backbone.py --config configs/experiments/fgvc_aircraft_weihims_resnet50-b512-batchmin.yaml
+
+$env:CUDA_VISIBLE_DEVICES="0,1"
+python train_backbone.py --config configs/experiments/inat19_weihims_resnet50-b512-batchmin.yaml

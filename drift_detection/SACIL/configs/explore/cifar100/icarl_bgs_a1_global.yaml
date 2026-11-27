@@ -1,0 +1,9 @@
+extends: _icarl_bgs_a4_common.yaml
+method:
+  boundary_graph_surgery:
+    geometry:
+      inside_weight: 1.0
+      boundary_weight: 1.0
+      mask_mode: global
+output:
+  run_name: icarl_bgs_a1_global_geometry_l16

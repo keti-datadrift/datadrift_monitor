@@ -1,0 +1,22 @@
+extends: ../../table1/cifar100/icarl_nme_b50_inc5_resnet32.yaml
+
+# Exploration-only runtime. Run this config with
+# scripts/train_table1_explore.py, which imports src_explore/.
+# The complete iCaRL CE + old-logit KD substrate is retained; only the
+# incremental representative-edge term is added.
+method:
+  name: icarl
+  edge_topology:
+    enabled: true
+    objective: hierarchical_edge_correlation
+    representatives_per_class: 2
+    lambda_edge: 5.0
+    edge_weighting: global
+    update_interval_steps: 1
+    min_edge_weight: 0.1
+    conflict_branches_per_new_class: 1
+    taxonomy_temperature: 0.2
+
+output:
+  directory: outputs/explore/edge_correlation
+  run_name: replace_me

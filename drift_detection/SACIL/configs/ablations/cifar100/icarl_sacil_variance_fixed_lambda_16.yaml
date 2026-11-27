@@ -1,0 +1,12 @@
+extends: icarl_sacil_fixed_lambda_16.yaml
+
+method:
+  geometry:
+    reliability: inverse_angular_dispersion
+    reliability_power: 1.0
+    reliability_epsilon: 0.0001
+    reliability_min_weight: 0.25
+    reliability_max_weight: 4.0
+
+output:
+  run_name: icarl_sacil_variance_fixed_l16_c100_b50_inc5_r32

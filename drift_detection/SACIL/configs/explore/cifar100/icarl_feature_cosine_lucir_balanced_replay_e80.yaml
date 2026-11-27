@@ -1,0 +1,17 @@
+extends: icarl_feature_cosine_lucir_balanced_replay.yaml
+
+# Diagnostic for replay-exemplar overfitting.  S0 is reused unchanged; only
+# incremental sessions use the shorter public-PyCIL-style 80-epoch schedule.
+training:
+  incremental:
+    epochs: 80
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [40, 70]
+    lr_decay: 0.1
+
+output:
+  directory: outputs/explore/incremental_schedule
+  run_name: icarl_feature_cosine_lucir_balanced_replay_e80_c100_b50_inc5_r32

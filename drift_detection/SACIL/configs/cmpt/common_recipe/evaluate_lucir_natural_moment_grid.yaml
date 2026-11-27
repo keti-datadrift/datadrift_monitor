@@ -1,0 +1,17 @@
+extends: evaluate_lucir_natural_moment_transport.yaml
+
+device: cuda:1
+experiment:
+  learner: LUCIR-natural-moment-hyperparameter-grid
+  output: outputs/cmpt/moment_transport_grid/cifar100/lucir_natural/seed_1/results.json
+
+cmpt:
+  moment_transport:
+    grid:
+      enabled: true
+      ranks: [2, 4, 6, 8, 12, 16]
+      quadratic_ridges: [0.1, 1.0, 10.0]
+      correction_scales: [0.25, 0.5, 0.75, 1.0]
+      validation_folds: 5
+      validation_fold: 0
+

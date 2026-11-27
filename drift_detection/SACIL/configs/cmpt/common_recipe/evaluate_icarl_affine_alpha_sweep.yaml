@@ -1,0 +1,9 @@
+extends: evaluate_icarl_affine.yaml
+
+experiment:
+  learner: iCaRL-common-affine-alpha-sweep
+  output: outputs/cmpt/common_recipe/evaluation/icarl_affine_alpha_sweep/seed_1/cmpt_affine_alpha_sweep.json
+
+cmpt:
+  # alpha=0 is current-memory NME; alpha=1 is pure affine CMPT.
+  prototype_interpolation_alphas: [0.0, 0.25, 0.5, 0.75, 1.0]

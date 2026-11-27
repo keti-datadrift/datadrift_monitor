@@ -1,0 +1,13 @@
+extends: icarl_feature_cosine_lucir_balanced_replay_e80.yaml
+
+# SACIL co-moving variant: every stored introduction-time full prototype is
+# transported by the drift pooled within its immediate learned parent branch.
+method:
+  prototype_transport:
+    enabled: true
+    mode: hierarchy_parent
+    sigma: 0.2
+
+output:
+  directory: outputs/explore/prototype_transport
+  run_name: icarl_feature_cosine_lucir_balanced_replay_hierarchy_transport_e80_c100_b50_inc5_r32

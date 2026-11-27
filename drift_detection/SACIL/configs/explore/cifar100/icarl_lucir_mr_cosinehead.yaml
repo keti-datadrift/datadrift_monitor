@@ -1,0 +1,15 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Complete the LUCIR-style incremental substrate with the official
+# old-ground-truth vs top-k incoming-class margin-ranking objective.
+method:
+  feature_cosine_distillation:
+    margin_ranking:
+      enabled: true
+      margin: 0.5
+      top_k: 2
+      weight: 1.0
+
+output:
+  directory: outputs/explore/lucir_margin
+  run_name: icarl_lucir_mr_cosinehead_c100_b50_inc5_r32

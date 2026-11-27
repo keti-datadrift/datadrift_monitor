@@ -1,0 +1,22 @@
+{
+  "implementation_source": "official_pycil",
+  "prefix": "official_pycil_replay_c100_b50_inc5_r32",
+  "dataset": "cifar100",
+  "data_root": "datasets",
+  "download": false,
+  "class_order_path": "experiment_configs/class_orders/cifar100_b50_t10_afc_order1.json",
+  "memory_size": 2000,
+  "memory_per_class": 20,
+  "fixed_memory": true,
+  "shuffle": false,
+  "init_cls": 50,
+  "increment": 5,
+  "model_name": "replay",
+  "convnet_type": "resnet32",
+  "device": [0],
+  "seed": [1, 2, 3],
+  "seed_policy": "config",
+  "aug": 1,
+  "num_workers": 0,
+  "memory_num_workers": 0
+}

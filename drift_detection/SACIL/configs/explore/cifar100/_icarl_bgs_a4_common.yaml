@@ -1,0 +1,34 @@
+extends: ../../table1/cifar100/icarl_nme_b50_inc5_resnet32.yaml
+method:
+  # Keep the legacy anchor-column SACIL path explicitly disabled. BGS owns
+  # its fixed-anchor pairwise geometry and must be the only geometry term.
+  geometry_mode: none
+  geometry:
+    mode: none
+  boundary_graph_surgery:
+    enabled: true
+    spec_version: bgs_v1
+    branch_source: i2_teacher_internal_top1
+    branches_per_new_class: 1
+    geometry:
+      lambda: 16.0
+      objective: fixed_anchor_mse
+      inside_weight: 0.1
+      boundary_weight: 1.0
+      denominator: old_sample_count_x_anchor_count
+      use_leaf: true
+      use_internal_without_root: true
+      mask_mode: structured
+    insertion:
+      enabled: false
+      lambda: 0.0
+      negatives_per_class: 5
+      temperature: 0.1
+      prototype_refresh: epoch_start_full_new_unaugmented
+      separation_enabled: false
+      parent_weight: 0.0
+      parent_slack: 0.05
+      negative_scope: branch_local
+output:
+  directory: outputs/explore/boundary_graph_surgery
+  run_name: replace_me

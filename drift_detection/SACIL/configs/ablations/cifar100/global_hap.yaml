@@ -1,0 +1,7 @@
+extends: _sacil_ablation_common.yaml
+method:
+  geometry_mode: global
+  local_relaxation: false
+  use_internal_anchors: true
+output:
+  run_name: global_hap_c100_b50_inc5_r32

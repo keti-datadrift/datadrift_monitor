@@ -1,0 +1,8 @@
+extends: _cmpt_affine.yaml
+
+device: cuda:1
+experiment:
+  learner: AFC-ImageNet100
+  expected_checkpoint_method: afc
+  checkpoints: outputs/cmpt/imagenet100_b50_inc5/training/afc_imagenet100_b50_inc5_r18/seed_1/checkpoints
+  output: outputs/cmpt/imagenet100_b50_inc5/evaluation/afc/seed_1/cmpt_affine_ridge.json

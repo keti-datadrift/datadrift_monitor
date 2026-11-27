@@ -1,0 +1,16 @@
+extends: train_lucir.yaml
+
+# Natural-loader control for the CIFAR-100 LUCIR trajectory.  It changes
+# only the incremental current-task + memory sampling from the earlier fixed
+# 50:50 sampler to an ordinary shuffled loader.  LUCIR's objective, optimizer,
+# epoch budget, augmentation, memory, class order, and evaluation stay fixed.
+comparison_contract:
+  name: cmpt_topology_common_recipe_v2
+
+method:
+  replay_batching:
+    enabled: false
+
+output:
+  # Keep the earlier 50:50 LUCIR checkpoints intact.
+  run_name: lucir_natural_common_c100_b50_inc5_r32

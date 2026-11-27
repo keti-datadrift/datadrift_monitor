@@ -1,4 +1,8 @@
 *.ckpt
-checkpoints_step1/
-checkpoints_step2/
-checkpoints_step3/
+/lightning_logs
+/txt
+/results
+*.pt
+/checkpoints_step1
+/__pycache__
+\.vscode

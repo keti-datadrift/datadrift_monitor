@@ -1,0 +1,12 @@
+extends: evaluate_lucir_natural_affine.yaml
+
+experiment:
+  learner: LUCIR-natural-moment-calibrated-affine
+  output: outputs/cmpt/moment_calibrated_affine/cifar100/lucir_natural/seed_1/results.json
+
+cmpt:
+  moment_calibrated_affine:
+    enabled: true
+    uniform_ridge: 0.001
+    max_iterations: 1000
+    affine_ridge: 0.01

@@ -1,0 +1,12 @@
+base_config: _base_fgvc_aircraft_p64k4.yaml
+
+experiment:
+  name: negative-text-mt-p64k4-generic-k1
+
+runtime:
+  gpu_id: 0
+
+negative_training:
+  prompt:
+    count: 1
+    text_variant: generic

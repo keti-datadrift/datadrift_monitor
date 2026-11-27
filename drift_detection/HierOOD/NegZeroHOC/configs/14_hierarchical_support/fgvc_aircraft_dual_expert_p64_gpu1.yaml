@@ -1,0 +1,10 @@
+base_config: fgvc_aircraft_dual_expert_metric_gpu0.yaml
+
+experiment:
+  name: dual-expert-support-pathce-p64
+
+runtime:
+  gpu_id: 1
+
+dual_expert_support:
+  support_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive.pt

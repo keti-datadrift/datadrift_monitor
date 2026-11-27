@@ -1,0 +1,30 @@
+base_config: fgvc_aircraft_metric_gpu0.yaml
+
+experiment:
+  name: probabilistic-support-categorical-reference-only-last-seed0
+
+runtime:
+  gpu_id: 0
+  seed: 0
+  deterministic: true
+
+dataloader:
+  num_workers: 0
+
+probabilistic_support_likelihood:
+  posterior_form: categorical_mixture
+  enforce_id_only_gate: true
+  support_checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed0/checkpoints/image-metric-last.pt
+  split_metadata_checkpoint: outputs/experiments/idea8-fgvc-aircraft-image-metric-reference-only-seed0/checkpoints/image-metric.pt
+  multidepth_checkpoint: null
+  support_lora_enabled: true
+  epochs: 1000
+  patience: 100
+  lr: 0.05
+  weight_decay: 0.0
+  initial_concentration: 5.0
+  initial_base_energy: 2.5
+  precision: fp16
+
+inference:
+  batch_size: 128

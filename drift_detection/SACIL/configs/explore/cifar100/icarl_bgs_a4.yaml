@@ -1,0 +1,3 @@
+extends: _icarl_bgs_a4_common.yaml
+output:
+  run_name: icarl_bgs_a4_structured_geometry_l16

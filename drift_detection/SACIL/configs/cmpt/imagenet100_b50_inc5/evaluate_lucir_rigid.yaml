@@ -1,0 +1,8 @@
+extends: _cmpt_rigid.yaml
+
+device: cuda:0
+experiment:
+  learner: LUCIR-ImageNet100
+  expected_checkpoint_method: icarl
+  checkpoints: outputs/cmpt/imagenet100_b50_inc5/training/lucir_imagenet100_b50_inc5_r18/seed_1/checkpoints
+  output: outputs/cmpt/imagenet100_b50_inc5/evaluation/lucir/seed_1/cmpt_rigid.json

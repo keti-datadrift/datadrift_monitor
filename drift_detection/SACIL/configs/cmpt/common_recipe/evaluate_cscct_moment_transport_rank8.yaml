@@ -1,0 +1,10 @@
+extends: evaluate_cscct_moment_transport.yaml
+
+device: cuda:0
+experiment:
+  learner: CSCCT-low-rank-moment-transport-rank8
+  output: outputs/cmpt/moment_transport_rank8/cifar100/cscct/seed_1/results.json
+
+cmpt:
+  moment_transport:
+    rank: 8

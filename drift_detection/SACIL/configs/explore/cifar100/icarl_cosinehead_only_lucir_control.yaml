@@ -1,0 +1,20 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Matched classifier-only control for the strong LUCIR-direction substrate.
+# Keeping the feature-distillation branch enabled with lambda=0 preserves the
+# normalized-cosine classifier, new-class imprinting, and old-row freeze while
+# removing the feature-preservation gradient exactly.
+method:
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 0.0
+    adaptive_mode: old_over_new
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+
+output:
+  directory: outputs/explore/feature_cosine_controls
+  run_name: icarl_cosinehead_only_lucir_control_c100_b50_inc5_r32

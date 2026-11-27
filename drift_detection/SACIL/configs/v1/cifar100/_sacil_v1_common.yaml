@@ -1,0 +1,32 @@
+extends: ../../table1/cifar100/icarl_nme_b50_inc5_resnet32.yaml
+
+method:
+  name: icarl
+  kd_temperature: 2.0
+  geometry_mode: sacil
+  lambda_geo: 1.0
+  hierarchy:
+    taxonomy_temperature: 0.2
+  geometry:
+    anchor_frame: co_moving
+    refresh_interval_epochs: 1
+  sacil_v1:
+    enabled: true
+    hierarchy_source: visual_confusion
+    initial_hierarchy_data: full
+    path_scope: all_ancestors
+    path_normalization: relation_mean
+    relaxation_mode: local_margin
+    radius_quantile: 0.9
+    minimum_radius: 0.0
+    radius_slack: 0.05
+    minimum_overlap: 0.0
+    max_conflict_leaf_ratio: 0.1
+    relaxation_margin: 0.05
+    margin_ancestor_decay: 0.7
+    include_root: false
+    random_seed_offset: 9107
+
+output:
+  directory: outputs/v1
+  run_name: replace_me

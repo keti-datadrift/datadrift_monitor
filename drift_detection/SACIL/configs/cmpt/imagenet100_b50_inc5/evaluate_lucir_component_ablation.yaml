@@ -1,0 +1,9 @@
+extends: evaluate_lucir_affine.yaml
+
+experiment:
+  learner: LUCIR-ImageNet100-CMPT-component-ablation
+  output: outputs/cmpt/component_ablation/imagenet100/lucir/seed_1/results.json
+
+cmpt:
+  component_ablation:
+    enabled: true

@@ -1,0 +1,18 @@
+feature_generation:
+  enable: true
+  type: variance_mask
+  mode: single
+  selected_depth: 3
+  save_generated_features: true
+
+  output_dim_by_depth:
+    1: 256
+    2: 256
+    3: 256
+
+  mask:
+    type: binary
+    topk: 128
+    threshold: null
+    normalize_scores: true
+    eps: 1.0e-6

@@ -1,0 +1,45 @@
+extends: ../../table1/cifar100/_common_b50_inc5.yaml
+
+# Controlled nuisance-variable recipe inherited from the earlier successful
+# LUCIR-like CMPT trajectory. Method-specific objectives, required model
+# architectures, and incremental LR schedules remain native to each learner.
+comparison_contract:
+  name: cmpt_geometry_common_recipe_v1
+  implementation: src_cmpt_isolated
+  reference_code_policy: reference_only
+
+method:
+  replay_batching:
+    enabled: true
+    fraction_mode: fixed
+    replay_fraction: 0.50
+    conflict_multiplier: 1.0
+
+training:
+  batch_size: 128
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+  base:
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: multistep
+    milestones: [60, 120, 170]
+    lr_decay: 0.1
+  incremental:
+    epochs: 80
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: multistep
+
+evaluation:
+  classifier: nme
+  horizontal_flip: true
+
+output:
+  directory: outputs/cmpt/common_recipe/training
+  run_name: replace_me

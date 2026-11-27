@@ -1,0 +1,32 @@
+extends: _training_baseline_common.yaml
+
+# Stock PyCIL Replay optimizer schedule and replay CE objective.
+model:
+  backbone: resnet32
+
+method:
+  name: replay
+
+training:
+  batch_size: 128
+  base:
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: multistep
+    milestones: [60, 120, 170]
+    lr_decay: 0.1
+  incremental:
+    epochs: 70
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0002
+    nesterov: false
+    scheduler: multistep
+    milestones: [30, 50]
+    lr_decay: 0.1
+
+output:
+  run_name: replay_common_c100_b50_inc5_r32

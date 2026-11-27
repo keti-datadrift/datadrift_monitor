@@ -1,0 +1,8 @@
+base_config: ../17_probabilistic_mixture/fgvc_aircraft_metric_gpu0.yaml
+
+experiment:
+  name: probabilistic-reference-sample-mixture-image-metric
+
+probabilistic_support_likelihood:
+  prototype_mode: reference_samples
+

@@ -1,0 +1,25 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Train S0 with the same normalized-cosine classifier used incrementally.
+# This avoids reusing the canonical linear-head S0 and is the closest local
+# control to LUCIR's less-forget path.  It is not a SACIL contribution.
+training:
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+
+output:
+  run_name: icarl_feature_cosine_lucir_full_cosinehead_c100_b50_inc5_r32

@@ -1,0 +1,19 @@
+feature_generation:
+  enable: true
+  type: umap_projection
+  mode: single
+  selected_depth: 3
+  save_generated_features: true
+
+  output_dim_by_depth:
+    1: 64
+    2: 64
+    3: 64
+
+  umap:
+    supervised: true
+    n_components: 64
+    n_neighbors: 15
+    min_dist: 0.1
+    metric: cosine
+    random_state: 42

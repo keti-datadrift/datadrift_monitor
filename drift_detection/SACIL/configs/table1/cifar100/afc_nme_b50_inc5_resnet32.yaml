@@ -1,0 +1,30 @@
+extends: _common_b50_inc5.yaml
+model:
+  backbone: rebuffi_importance_resnet32
+  proxies_per_class: 10
+  distance_scale: 3.0
+  nca_scale: 1.0
+method:
+  name: afc
+  afc:
+    pod_base_factor: 4.0
+    finetuning:
+      epochs: 20
+      lr: 0.05
+      momentum: 0.9
+      weight_decay: 0.0005
+training:
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: cosine
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: cosine
+output:
+  run_name: afc_nme_c100_b50_inc5_r32

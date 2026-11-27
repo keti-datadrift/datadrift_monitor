@@ -1,0 +1,6 @@
+extends: sacil_full.yaml
+method:
+  hierarchy:
+    taxonomy_temperature: 0.5
+output:
+  run_name: sacil_ttax05_c100_b50_inc5_r32

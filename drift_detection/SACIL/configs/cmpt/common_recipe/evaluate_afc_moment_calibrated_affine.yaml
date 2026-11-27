@@ -1,0 +1,12 @@
+extends: evaluate_afc_affine.yaml
+
+experiment:
+  learner: AFC-moment-calibrated-affine
+  output: outputs/cmpt/moment_calibrated_affine/cifar100/afc/seed_1/results.json
+
+cmpt:
+  moment_calibrated_affine:
+    enabled: true
+    uniform_ridge: 0.001
+    max_iterations: 1000
+    affine_ridge: 0.01

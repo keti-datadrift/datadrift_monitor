@@ -1,0 +1,10 @@
+extends: _icarl_bgs_a4_common.yaml
+method:
+  boundary_graph_surgery:
+    insertion:
+      enabled: true
+      lambda: 1.0
+      separation_enabled: true
+      parent_weight: 1.0
+output:
+  run_name: icarl_bgs_a7_structured_insert_l16_l1

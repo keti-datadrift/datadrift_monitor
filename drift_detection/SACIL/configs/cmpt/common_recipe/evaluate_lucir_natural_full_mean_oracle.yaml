@@ -1,0 +1,10 @@
+extends: evaluate_lucir_natural_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: LUCIR-natural-full-training-mean-oracle
+  output: outputs/cmpt/full_mean_oracle/cifar100/lucir_natural/seed_1/results.json
+
+cmpt:
+  oracle_diagnostics:
+    full_mean: true

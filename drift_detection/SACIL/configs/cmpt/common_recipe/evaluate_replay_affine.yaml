@@ -1,0 +1,8 @@
+extends: ../_cmpt_affine_common.yaml
+
+device: cuda:0
+experiment:
+  learner: Replay-common-affine
+  expected_checkpoint_method: replay
+  checkpoints: outputs/cmpt/common_recipe/training/replay_common_c100_b50_inc5_r32/seed_1/checkpoints
+  output: outputs/cmpt/common_recipe/evaluation/replay_affine_ridge1e-2/seed_1/cmpt_affine_matched_nme.json

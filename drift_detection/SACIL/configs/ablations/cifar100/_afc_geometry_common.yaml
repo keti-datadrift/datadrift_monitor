@@ -1,0 +1,18 @@
+extends: ../../table1/cifar100/afc_nme_b50_inc5_resnet32.yaml
+
+method:
+  geometry_mode: sacil
+  lambda_geo: 1.0
+  hierarchy:
+    name: griffin_perona_greedy
+    taxonomy_temperature: 0.2
+  conflict:
+    max_neighbors: 5
+    old_class_ratio: 0.1
+    temperature: 0.05
+    min_preservation_weight: 0.1
+    ancestor_decay: 0.5
+
+output:
+  directory: outputs/unified/ablations
+  run_name: replace_me

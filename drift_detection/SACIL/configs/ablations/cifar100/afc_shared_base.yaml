@@ -1,0 +1,3 @@
+extends: afc_sacil.yaml
+output:
+  run_name: shared_base_afc_c100_b50_inc5_r32

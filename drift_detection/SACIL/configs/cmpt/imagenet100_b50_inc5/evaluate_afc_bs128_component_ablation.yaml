@@ -1,0 +1,9 @@
+extends: evaluate_afc_bs128_affine.yaml
+
+experiment:
+  learner: AFC-ImageNet100-BS128-CMPT-component-ablation
+  output: outputs/cmpt/component_ablation/imagenet100/afc_bs128/seed_1/results.json
+
+cmpt:
+  component_ablation:
+    enabled: true

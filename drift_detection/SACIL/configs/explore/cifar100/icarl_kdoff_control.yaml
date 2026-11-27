@@ -1,0 +1,11 @@
+extends: ../../table1/cifar100/icarl_nme_b50_inc5_resnet32.yaml
+
+# Matched diagnostic: retain the canonical iCaRL incremental recipe,
+# memory/herding, NME, and shared S0, but remove old-logit KD after S0.
+method:
+  name: icarl
+  kd_weight: 0.0
+
+output:
+  directory: outputs/explore/kd_off_tpl
+  run_name: icarl_kdoff_control_c100_b50_inc5_r32

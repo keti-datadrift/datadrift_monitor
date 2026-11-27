@@ -1,0 +1,8 @@
+extends: evaluate_casper_il_affine.yaml
+
+experiment:
+  learner: CaSpeR-IL-neighbor-affine-k5
+  output: outputs/cmpt/neighbor_affine_k5/cifar100/casper_il/seed_1/results.json
+
+cmpt:
+  neighbor_affine: {enabled: true, classes_per_neighborhood: 5}

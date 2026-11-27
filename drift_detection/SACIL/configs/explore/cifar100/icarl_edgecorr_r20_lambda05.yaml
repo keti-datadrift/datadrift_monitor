@@ -1,0 +1,8 @@
+extends: _icarl_hierarchical_edge_correlation_common.yaml
+method:
+  edge_topology:
+    representatives_per_class: 20
+    lambda_edge: 0.5
+    update_interval_steps: 10
+output:
+  run_name: icarl_edgecorr_r20_l05_u10_c100_b50_inc5_r32

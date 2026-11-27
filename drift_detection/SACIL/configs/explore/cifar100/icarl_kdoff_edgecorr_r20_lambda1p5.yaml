@@ -1,0 +1,19 @@
+extends: icarl_kdoff_control.yaml
+
+# Calibrated follow-up after lambda=15/u10 collapsed S1.  Keeping the same
+# topology object and cadence while reducing the sparse impulse by 10x makes
+# its observed average component approximately 0.05 instead of 0.5.
+method:
+  edge_topology:
+    enabled: true
+    objective: hierarchical_edge_correlation
+    representatives_per_class: 20
+    lambda_edge: 1.5
+    edge_weighting: global
+    update_interval_steps: 10
+    min_edge_weight: 0.1
+    conflict_branches_per_new_class: 1
+    taxonomy_temperature: 0.2
+
+output:
+  run_name: icarl_kdoff_edgecorr_r20_l1p5_u10_c100_b50_inc5_r32

@@ -1,0 +1,37 @@
+seed: 42
+device: cuda  # options: cpu, cuda
+multi_gpu:
+  enabled: false  # options: true, false
+  backend: data_parallel  # options: data_parallel
+  device_ids: [0, 1]
+
+dataset:
+  name: USPS  # options: FashionMNIST, USPS, Reuters-10k, Reuters
+  root: dataset
+  val_ratio: 0.2
+
+model:
+  type: resnet18  # options: cnn, resnet18, mlp, tfidf_mlp, clip_text
+  embedding_dim: 16
+
+training:
+  batch_size: 256
+  num_workers: 0
+  lr: 0.0001
+  weight_decay: 0.00001
+  epochs: 1
+  patience: 1
+  progress_bar: true  # options: true, false
+
+tensorboard:
+  enabled: true  # options: true, false
+  log_dir: tensorboard
+
+model_selection:
+  metric: val_ood_auroc  # options: val_ood_auroc
+  ood_score: knn  # options: knn, mahalanobis, gaussian
+  default_checkpoint: auroc  # options: train_loss, val_loss, auroc
+
+ood:
+  k: 1
+  cov_reg: 0.001

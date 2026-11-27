@@ -1,0 +1,14 @@
+extends: icarl_feature_cosine_lucir_balanced_replay_e80.yaml
+
+# Moderate stability diagnostic.  Batch composition and optimizer steps stay
+# fixed; replay rows receive twice the CE mass without drawing more duplicate
+# exemplars.
+method:
+  classification_reweighting:
+    enabled: true
+    old_weight: 2.0
+    new_weight: 1.0
+
+output:
+  directory: outputs/explore/classification_reweighting
+  run_name: icarl_feature_cosine_lucir_balanced_replay_oldce2_e80_c100_b50_inc5_r32

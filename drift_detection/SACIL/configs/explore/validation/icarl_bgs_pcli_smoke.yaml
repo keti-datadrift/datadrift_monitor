@@ -1,0 +1,8 @@
+extends: icarl_bgs_a7_smoke.yaml
+method:
+  boundary_graph_surgery:
+    insertion:
+      gradient_projection: true
+      projection_epsilon: 1.0e-12
+output:
+  run_name: icarl_bgs_pcli_smoke

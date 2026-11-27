@@ -1,0 +1,7 @@
+extends: _sacil_v1_common.yaml
+
+method:
+  lambda_geo: 4.0
+
+output:
+  run_name: sacil_v1_local_margin_l4

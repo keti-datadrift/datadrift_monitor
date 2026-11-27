@@ -1,0 +1,101 @@
+experiment:
+  name: fgvc-aircraft-weihims-resnet50  # choices: any experiment tag string
+  seed: 42                              # choices: any int
+  device: cuda                          # choices: cuda, cpu
+  output_root: ./outputs                # choices: any writable directory
+  save_every: 1                         # choices: any positive int
+  log_every: 50                         # choices: any positive int
+
+runtime:
+  multi_gpu: true                       # choices: true, false
+  device_ids: [0, 1]                    # choices: null or list[int], e.g. [0,1,2,3]
+
+dataset:
+  name: fgvc-aircraft                   # choices: any dataset alias string
+  datadir: D:/HY_Data/HierOOD/fgvc-aircraft      # choices: dataset root path
+  hierarchy: ./hierarchies/fgvc-aircraft.json  # choices: hierarchy json path
+  id_split: ./data/fgvc-aircraft-id-labels.csv # choices: id split csv path
+  extraood: null                        # choices: null or custom split name/path
+  farood_sets: []                       # choices: [] or list[str]
+
+hierarchy:
+  use_pruned_for_loss_labels: true      # choices: true, false
+  save_path_metadata: true              # choices: true, false
+
+dataloader:
+  batch_size: 128                       # choices: any positive int
+  eval_batch_size: 64                   # choices: any positive int
+  num_workers: 8                        # choices: any nonnegative int
+  shuffle_train: true                   # choices: true, false
+  pin_memory: false                     # choices: true, false
+  drop_last: false                      # choices: true, false
+
+backbone:
+  type: resnet50                        # choices: resnet50, clip
+  feat_dim: 256                         # choices: any positive int
+  normalize: true                       # choices: true, false
+  freeze_backbone: false                # choices: true, false
+  weights: IMAGENET1K_V1                # choices: null, IMAGENET1K_V1
+
+optimizer:
+  name: adamw                           # choices: adamw, sgd
+  lr: 0.0001                            # choices: any positive float
+  weight_decay: 0.0001                  # choices: any nonnegative float
+  momentum: 0.9                         # choices: any float, used by sgd
+  nesterov: false                       # choices: true, false, used by sgd
+
+scheduler:
+  name: cosine                          # choices: cosine, none
+  epochs: 200                           # choices: any positive int
+  warmup_epochs: 0                      # choices: any nonnegative int
+  eta_min: 1.0e-6                       # choices: any nonnegative float
+
+loss:
+  name: weihims                         # choices: weihims, himsmin, ms
+  alpha: 2.0                            # choices: any positive float
+  beta: 50.0                            # choices: any positive float
+  lam: 0.5                              # choices: any float
+  mining_margin: 0.1                    # choices: any nonnegative float
+  dist_scale: 2.0                       # choices: any positive float, weihims only
+  dist_pow: 1.0                         # choices: any positive float, weihims only
+
+training:
+  epochs: 200                           # choices: any positive int
+  grad_clip_norm: null                  # choices: null or positive float
+  amp: false                            # choices: true, false
+  checkpoint_metric: val_loss           # choices: val_loss
+  checkpoint_mode: min                  # choices: min
+  resume_from: null                     # choices: null or checkpoint path
+
+validation:
+  enable_depth_eval: true               # choices: true, false
+  depth_eval_every: 1                   # choices: any positive int, larger is faster
+
+feature_extraction:
+  include_train: true                   # choices: true, false
+  save_train: true                      # choices: true, false
+  save_val: true                        # choices: true, false
+  save_ood: true                        # choices: true, false
+  save_farood: true                     # choices: true, false
+  save_leaf_path_matrix: true           # choices: true, false
+  save_index_mappings: true             # choices: true, false
+
+density:
+  covariance_type: diag                 # choices: diag
+  eps: 1.0e-6                           # choices: any positive float
+  min_count_warning: 1                  # choices: any nonnegative int
+  save_debug_statistics: false          # choices: true, false
+
+inference:
+  score_type: raw_gaussian              # choices: gaussian_loglik, raw_gaussian, mahalanobis
+  temperature: 1.0                      # choices: any positive float
+  alpha: 1.0                            # choices: any float
+  beta: 1.0                             # choices: any float
+  prediction_mode: argmax               # choices: argmax, min_hdist
+  collapse_ood_to_parent: true          # choices: true, false
+
+logging:
+  use_tensorboard: true                 # choices: true, false
+  save_train_metrics: true              # choices: true, false
+  save_val_metrics: true                # choices: true, false
+  save_config_copy: true                # choices: true, false

@@ -1,0 +1,18 @@
+extends: _sacil_v1_common.yaml
+
+disable_tqdm: true
+training:
+  base:
+    epochs: 1
+    milestones: []
+  incremental:
+    epochs: 1
+    milestones: []
+debug:
+  max_sessions: 2
+  train_samples_per_class: 2
+  test_samples_per_class: 2
+  max_batches_per_epoch: 1
+output:
+  directory: outputs/smoke_v1
+  run_name: sacil_v1_smoke

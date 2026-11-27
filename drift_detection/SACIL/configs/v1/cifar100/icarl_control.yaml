@@ -1,0 +1,5 @@
+extends: ../../table1/cifar100/icarl_nme_b50_inc5_resnet32.yaml
+
+output:
+  directory: outputs/v1
+  run_name: icarl_control_c100_b50_inc5_r32

@@ -1,0 +1,11 @@
+extends: icarl_feature_cosine_lucir_l10_cosinehead.yaml
+
+# Runtime-only stability mitigation for recurring Windows nvlddmkm Event 153.
+# Synchronize and idle briefly after each optimizer update.  This changes wall
+# time, not batches, gradients, optimizer state, LR schedule, or evaluation.
+runtime:
+  gpu_throttle_ms: 50
+
+output:
+  directory: outputs/explore/feature_cosine_controls
+  run_name: icarl_feature_cosine_lucir_l10_cosinehead_throttled_c100_b50_inc5_r32

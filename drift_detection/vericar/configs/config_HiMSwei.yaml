@@ -1,0 +1,28 @@
+seed: 1234
+
+data:
+  data_root: "F:/IPIU2026/dataset_final/step0"
+  num_workers: 4
+  flip_p: 0.5
+
+training:
+  pretrained: True
+  model_name: "openai/clip-vit-base-patch32"
+  exemplar_k: 50
+  knn: 1
+  batch_size: 128
+  epochs: 1
+  save_path: "best.pt"
+  loss: "HiMSwei"
+  dist_scale: 2
+  dist_pow: 1.0
+  lr: 0.00001
+  weight_decay: 0.0001
+
+logging:
+  log_dir: "./lightning_logs"
+  exp_name: "vericar_experiment_seed1234"
+
+test:
+  data_root: "F:/IPIU2026/dataset_final/step1"
+  ood_k: 1

@@ -1,0 +1,15 @@
+base_config: ../19_cf_rpep/fgvc_aircraft_oof_gate_gpu0.yaml
+
+experiment:
+  name: ideaR-fgvc-aircraft-hierarchical-hazard-oof
+  output_root: outputs
+
+runtime:
+  seed: 0
+  deterministic: true
+
+hierarchical_hazard:
+  input_checkpoint: outputs/experiments/ideaO-fgvc-aircraft-cf-rpep-oof/checkpoints/ideaO-fgvc-aircraft-cf-rpep-oof.pt
+  scalar_max_iter: 100
+  primary_decoder: expected_hdist
+  primary_row: coherent_raw_hazard/expected_hdist

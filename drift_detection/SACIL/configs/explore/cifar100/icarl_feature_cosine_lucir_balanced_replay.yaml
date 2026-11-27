@@ -1,0 +1,13 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Sampling control: preserve the ordinary number of optimizer steps while
+# fixing every incremental batch to 50% new data and 50% old exemplars.
+method:
+  replay_batching:
+    enabled: true
+    replay_fraction: 0.50
+    conflict_multiplier: 1.0
+
+output:
+  directory: outputs/explore/hierarchy_conditioned_replay
+  run_name: icarl_feature_cosine_lucir_balanced_replay_c100_b50_inc5_r32

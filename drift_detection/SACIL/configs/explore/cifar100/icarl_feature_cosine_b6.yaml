@@ -1,0 +1,27 @@
+extends: icarl_kdoff_control.yaml
+
+# LUCIR-style cosine feature-distillation control on the iCaRL
+# replay/herding/NME scaffold.  It remains an independent in-repo control;
+# the shared S0 retains the canonical linear training head.
+method:
+  name: icarl
+  kd_weight: 0.0
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 6.0
+    adaptive_new_over_old: true
+    epsilon: 1.0e-12
+
+training:
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+
+output:
+  directory: outputs/explore/feature_cosine_distillation
+  run_name: icarl_feature_cosine_b6_c100_b50_inc5_r32

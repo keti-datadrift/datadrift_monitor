@@ -1,0 +1,18 @@
+extends: icarl_feature_cosine_lucir_hierarchy_replay.yaml
+
+# SACIL counterpart to the global prototype control. Sampling remains uniform;
+# only prototype consolidation is relaxed inside learned conflict branches.
+method:
+  replay_batching:
+    enabled: true
+    replay_fraction: 0.50
+    conflict_multiplier: 1.0
+  prototype_consolidation:
+    enabled: true
+    lambda: 1.0
+    conflict_weight: 0.25
+    outside_weight: 1.0
+
+output:
+  directory: outputs/explore/prototype_consolidation
+  run_name: icarl_feature_cosine_lucir_hierarchy_proto_c100_b50_inc5_r32

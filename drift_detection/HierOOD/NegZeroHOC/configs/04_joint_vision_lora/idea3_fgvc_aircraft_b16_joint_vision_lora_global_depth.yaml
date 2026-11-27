@@ -1,0 +1,15 @@
+base_config: idea3_fgvc_aircraft_b16_joint_vision_lora.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-joint-vision-lora-global-depth
+
+runtime:
+  gpu_id: 1
+
+prompt:
+  ablation: global_depth
+
+joint_training:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-global-depth/checkpoints/idea3-fgvc-aircraft-b16-joint-vision-lora-global-depth-positive.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-global-depth/results/idea3-fgvc-aircraft-b16-joint-vision-lora-global-depth-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-global-depth/diagnostics/idea3-fgvc-aircraft-b16-joint-vision-lora-global-depth-positive-diagnostics.json

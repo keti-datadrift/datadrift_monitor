@@ -1,0 +1,33 @@
+extends: _training_common.yaml
+
+# Author-release ImageNet FGP recipe from parser.py: ResNet-18 without the
+# final ReLU, LR 2, 60 epochs, [20,30,40,50] x0.2, WD 1e-5.
+model:
+  backbone: fgp_resnet18_imagenet_no_last_relu
+
+method:
+  name: fgp
+  fgp_weight: 0.1
+
+training:
+  base:
+    epochs: 60
+    lr: 2.0
+    momentum: 0.9
+    weight_decay: 0.00001
+    nesterov: false
+    scheduler: multistep
+    milestones: [20, 30, 40, 50]
+    lr_decay: 0.2
+  incremental:
+    epochs: 60
+    lr: 2.0
+    momentum: 0.9
+    weight_decay: 0.00001
+    nesterov: false
+    scheduler: multistep
+    milestones: [20, 30, 40, 50]
+    lr_decay: 0.2
+
+output:
+  run_name: fgp_icl_imagenet100_b50_inc5_r18

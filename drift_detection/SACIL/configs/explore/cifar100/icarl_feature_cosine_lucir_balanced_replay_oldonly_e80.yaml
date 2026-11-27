@@ -1,0 +1,15 @@
+extends: icarl_feature_cosine_lucir_balanced_replay_oldonly.yaml
+
+training:
+  incremental:
+    epochs: 80
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [40, 70]
+    lr_decay: 0.1
+
+output:
+  directory: outputs/explore/feature_scope
+  run_name: icarl_feature_cosine_lucir_balanced_replay_oldonly_e80_c100_b50_inc5_r32

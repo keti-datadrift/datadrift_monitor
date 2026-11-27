@@ -1,0 +1,14 @@
+extends: _common_b50_inc5.yaml
+method:
+  name: joint
+training:
+  incremental:
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [60, 120, 170]
+    lr_decay: 0.1
+output:
+  run_name: joint_nme_c100_b50_inc5_r32

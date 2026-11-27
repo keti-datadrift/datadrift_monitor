@@ -1,0 +1,22 @@
+extends: _training_topology_common.yaml
+
+# FGP-ICL keeps the released no-last-ReLU backbone, rectified cosine
+# classifier, BCE objective, graph-preservation equation and SGD weight decay.
+model:
+  backbone: fgp_resnet32_no_last_relu
+
+method:
+  name: fgp
+  fgp_weight: 0.1
+
+training:
+  base:
+    lr: 2.0
+    # Official FGP parser default.
+    weight_decay: 0.00001
+  incremental:
+    lr: 2.0
+    weight_decay: 0.00001
+
+output:
+  run_name: fgp_icl_common_v2_lr2_c100_b50_inc5_r32

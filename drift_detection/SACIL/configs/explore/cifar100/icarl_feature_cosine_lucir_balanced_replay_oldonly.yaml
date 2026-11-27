@@ -1,0 +1,21 @@
+extends: icarl_feature_cosine_lucir_balanced_replay.yaml
+
+# Stability/plasticity diagnostic: teacher-feature matching is applied only to
+# replay exemplars.  New inputs remain supervised solely by normalized-cosine
+# CE, while the effective old-row feature constraint is no longer diluted by
+# the 50:50 batch composition.
+method:
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 5.0
+    adaptive_mode: old_over_new
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+    sample_scope: replay_only
+
+output:
+  directory: outputs/explore/feature_scope
+  run_name: icarl_feature_cosine_lucir_balanced_replay_oldonly_c100_b50_inc5_r32

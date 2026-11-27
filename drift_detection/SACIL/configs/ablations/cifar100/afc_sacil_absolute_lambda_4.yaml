@@ -1,0 +1,12 @@
+extends: afc_sacil.yaml
+
+method:
+  lambda_geo: 4.0
+  geometry:
+    anchor_frame: fixed
+    reliability: uniform
+    objective: mse
+    weight_normalization: anchor_count
+
+output:
+  run_name: afc_sacil_absolute_l4_c100_b50_inc5_r32

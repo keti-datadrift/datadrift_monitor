@@ -1,0 +1,18 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Matched loss-only control: use the same 5*sqrt(N_old/N_new) feature cosine
+# coefficient while retaining the canonical expandable linear training head.
+method:
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 5.0
+    adaptive_mode: old_over_new
+    epsilon: 1.0e-12
+    training_classifier: linear
+    cosine_scale: 10.0
+    imprint_new_weights: false
+    freeze_old_weights: false
+
+output:
+  directory: outputs/explore/feature_cosine_controls
+  run_name: icarl_feature_cosine_lucir_linearhead_control_c100_b50_inc5_r32

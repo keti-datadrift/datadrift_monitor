@@ -1,0 +1,15 @@
+base_config: idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_b16.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-prompt-only-training-ablation
+
+runtime:
+  gpu_id: 0
+
+joint_training:
+  train_prompt: true
+  train_vision_lora: false
+  positive_text_variant: learned
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-prompt-only-training-ablation/checkpoints/idea3-fgvc-aircraft-b16-prompt-only-training-ablation-positive.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-prompt-only-training-ablation/results/idea3-fgvc-aircraft-b16-prompt-only-training-ablation-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-prompt-only-training-ablation/diagnostics/idea3-fgvc-aircraft-b16-prompt-only-training-ablation-positive-diagnostics.json

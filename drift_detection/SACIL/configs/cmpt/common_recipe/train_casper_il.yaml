@@ -1,0 +1,29 @@
+extends: _training_topology_common.yaml
+
+# CaSpeR is a plug-in in the release.  This row follows ICarl(CasperModel):
+# sigmoid BCE targets, frozen-old-network probabilities, explicit L2, an
+# ordinary current+memory main loader, and a separate balanced spectral batch.
+
+method:
+  name: casper
+  casper:
+    weight: 0.001
+    knn: 8
+    classes_per_graph: 8
+    # Official rep_minibatch defaults to the main batch size.
+    replay_batch_size: 128
+    solver: xitorch
+    wd_reg: 0.00001
+
+training:
+  base:
+    lr: 0.3
+    # The release applies wd_reg explicitly inside ICarl.get_loss.
+    weight_decay: 0.0
+  incremental:
+    lr: 0.3
+    weight_decay: 0.0
+
+output:
+  directory: outputs/cmpt/common_recipe/training
+  run_name: casper_icarl_common_v2_lr03_c100_b50_inc5_r32

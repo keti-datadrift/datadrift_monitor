@@ -1,0 +1,40 @@
+extends: _training_baseline_common.yaml
+
+# Author-aligned iCaRL+CSCCT recipe under the shared CIFAR-100 B50-Inc5
+# protocol. The modified ResNet-32, split cosine classifier, CSC/CT losses,
+# balanced fusion update, and scheduler ordering are implemented in src_cmpt.
+model:
+  backbone: cscct_modified_resnet32
+
+method:
+  name: cscct
+  kd_weight: 0.25
+  kd_temperature: 2.0
+  csc_weight: 3.0
+  ct_weight: 1.5
+  ct_temperature: 2.0
+  fusion_lr: 0.00000001
+
+training:
+  batch_size: 128
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+
+output:
+  run_name: cscct_common_c100_b50_inc5_r32

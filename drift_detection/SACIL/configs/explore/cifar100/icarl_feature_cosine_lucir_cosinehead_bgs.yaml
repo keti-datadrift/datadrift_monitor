@@ -1,0 +1,37 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Strong LUCIR-direction substrate plus the flagship boundary-preserving
+# hierarchy-local graph surgery.  Insertion remains disabled so this is a
+# one-component paired comparison against the strong substrate.
+method:
+  geometry_mode: none
+  geometry:
+    mode: none
+  boundary_graph_surgery:
+    enabled: true
+    spec_version: bgs_v1
+    branch_source: i2_teacher_internal_top1
+    branches_per_new_class: 1
+    geometry:
+      lambda: 16.0
+      objective: fixed_anchor_mse
+      inside_weight: 0.1
+      boundary_weight: 1.0
+      denominator: old_sample_count_x_anchor_count
+      use_leaf: true
+      use_internal_without_root: true
+      mask_mode: structured
+    insertion:
+      enabled: false
+      lambda: 0.0
+      negatives_per_class: 5
+      temperature: 0.1
+      prototype_refresh: epoch_start_full_new_unaugmented
+      separation_enabled: false
+      parent_weight: 0.0
+      parent_slack: 0.05
+      negative_scope: branch_local
+
+output:
+  directory: outputs/explore/feature_cosine_bgs
+  run_name: icarl_feature_cosine_lucir_cosinehead_bgs_c100_b50_inc5_r32

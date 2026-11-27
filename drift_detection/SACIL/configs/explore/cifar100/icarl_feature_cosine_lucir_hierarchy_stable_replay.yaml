@@ -1,0 +1,15 @@
+extends: icarl_feature_cosine_lucir_hierarchy_replay.yaml
+
+# Complementary SACIL hypothesis: conflict branches are explicitly relaxed,
+# while unaffected old branches are the stable topology. Give conflict classes
+# half the replay-class probability so fixed total replay mass is concentrated
+# on the stable outside region.
+method:
+  replay_batching:
+    enabled: true
+    replay_fraction: 0.50
+    conflict_multiplier: 0.50
+
+output:
+  directory: outputs/explore/hierarchy_conditioned_replay
+  run_name: icarl_feature_cosine_lucir_hierarchy_stable_replay_c100_b50_inc5_r32

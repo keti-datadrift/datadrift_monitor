@@ -1,0 +1,9 @@
+extends: evaluate_podnet_affine.yaml
+
+experiment:
+  learner: PODNet-ImageNet100-CMPT-component-ablation
+  output: outputs/cmpt/component_ablation/imagenet100/podnet/seed_1/results.json
+
+cmpt:
+  component_ablation:
+    enabled: true

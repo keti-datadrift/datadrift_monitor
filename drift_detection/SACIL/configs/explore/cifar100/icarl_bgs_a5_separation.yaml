@@ -1,0 +1,7 @@
+extends: icarl_bgs_a7.yaml
+method:
+  boundary_graph_surgery:
+    insertion:
+      parent_weight: 0.0
+output:
+  run_name: icarl_bgs_a5_separation_only

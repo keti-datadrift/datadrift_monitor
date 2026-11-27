@@ -1,0 +1,7 @@
+extends: _icarl_bgs_a4_common.yaml
+method:
+  boundary_graph_surgery:
+    geometry:
+      mask_mode: incident
+output:
+  run_name: icarl_bgs_a2_incident_l16

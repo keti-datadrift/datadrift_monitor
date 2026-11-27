@@ -1,0 +1,12 @@
+base_config: _base_fgvc_aircraft_p64k4.yaml
+
+experiment:
+  name: negative-text-mt-p64k4-unseen-child-k4
+
+runtime:
+  gpu_id: 1
+
+negative_training:
+  prompt:
+    count: 4
+    text_variant: unseen_child

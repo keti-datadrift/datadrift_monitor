@@ -1,0 +1,71 @@
+experiment:
+  name: idea4-fgvc-aircraft-b16-r16-qkvo-hide50-k1
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 1
+  seed: 0
+
+dataset:
+  name: fgvc-aircraft
+  datadir: D:/HY_Data/HierOOD/fgvc-aircraft
+  hierarchy: hierarchies/fgvc-aircraft.json
+  id_split: data/fgvc-aircraft-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch16
+  tokenizer_model: openai/clip-vit-base-patch32
+  local_files_only: true
+
+dataloader:
+  num_workers: 4
+
+augmentation:
+  image_size: 224
+  eval_resize: 224
+  random_resized_crop_scale: [0.7, 1.0]
+  horizontal_flip_probability: 0.5
+  color_jitter:
+    probability: 0.5
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.1
+    hue: 0.0
+
+positive:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16/checkpoints/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16-positive.pt
+
+unknown_training:
+  epochs: 100
+  parents_per_step: 4
+  max_examples_per_parent: 64
+  vision_batch_size: 16
+  lr: 0.001
+  weight_decay: 0.0001
+  tau: 0.07
+  precision: fp16
+  gradient_clip_norm: 1.0
+  hide_strategy: hide_ratio_50
+  prompt:
+    count: 1
+    prototype_ctx_tokens: 0
+    aggregation: logmeanexp
+  unknown_target_weight: 1.0
+  lambda_anchor: 0.1
+  lambda_child_sep: 0.1
+  lambda_prototype_diversity: 0.0
+  prototype_diversity_margin: 0.2
+  validation:
+    start_epoch: 1
+    every_n_epochs: 1
+    batch_size: 64
+    max_id_bacc_drop: 0.04
+    pseudo_max_examples_per_child: 0
+
+inference:
+  mode: parent_unknown_global_path
+  batch_size: 64
+  tau: 14.285714
+  allow_root_unknown: false
+  greedy_ablation: true

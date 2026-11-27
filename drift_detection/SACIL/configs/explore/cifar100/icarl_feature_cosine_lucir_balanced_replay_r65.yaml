@@ -1,0 +1,14 @@
+extends: icarl_feature_cosine_lucir_balanced_replay.yaml
+
+# Stability stress control: keep the same optimizer-step count but assign 65%
+# of each incremental batch to old exemplars. This is a substrate diagnostic,
+# not a SACIL novelty claim.
+method:
+  replay_batching:
+    enabled: true
+    replay_fraction: 0.65
+    conflict_multiplier: 1.0
+
+output:
+  directory: outputs/explore/hierarchy_conditioned_replay
+  run_name: icarl_feature_cosine_lucir_balanced_replay_r65_c100_b50_inc5_r32

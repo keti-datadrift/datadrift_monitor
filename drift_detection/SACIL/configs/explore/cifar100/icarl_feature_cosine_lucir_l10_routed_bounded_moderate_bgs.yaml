@@ -1,0 +1,13 @@
+extends: icarl_feature_cosine_lucir_routed_bounded_moderate_bgs.yaml
+
+# Stability-plasticity combination selected from paired S1-S2 evidence:
+# lambda=10 improves overall/old accuracy, while bounded moderate routing
+# recovers new-class plasticity.  All other protocol and BGS settings remain
+# identical to the lambda=5 hierarchy candidate.
+method:
+  feature_cosine_distillation:
+    lambda: 10.0
+
+output:
+  directory: outputs/explore/hierarchy_routed_feature_distillation
+  run_name: icarl_feature_cosine_lucir_l10_routed_bounded_moderate_bgs_c100_b50_inc5_r32

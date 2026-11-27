@@ -1,0 +1,7 @@
+extends: _replay_hierarchical_edge_correlation_common.yaml
+method:
+  edge_topology:
+    representatives_per_class: 4
+    lambda_edge: 15.0
+output:
+  run_name: replay_edgecorr_r4_l15_c100_b50_inc5_r32

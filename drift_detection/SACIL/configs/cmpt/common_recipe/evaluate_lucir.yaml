@@ -1,0 +1,8 @@
+extends: ../_cmpt_rigid_common.yaml
+
+device: cuda:0
+experiment:
+  learner: LUCIR-common
+  expected_checkpoint_method: icarl
+  checkpoints: outputs/cmpt/common_recipe/training/lucir_common_c100_b50_inc5_r32/seed_1/checkpoints
+  output: outputs/cmpt/common_recipe/evaluation/lucir/seed_1/cmpt_rigid_matched_nme.json

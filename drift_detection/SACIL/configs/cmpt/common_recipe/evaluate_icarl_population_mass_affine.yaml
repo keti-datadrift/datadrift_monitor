@@ -1,0 +1,15 @@
+extends: evaluate_icarl_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: iCaRL-population-mass-affine-transport
+  output: outputs/cmpt/population_mass_affine/cifar100/icarl/seed_1/results.json
+
+cmpt:
+  persistent_quadrature:
+    enabled: true
+    uniform_ridge: 0.001
+    max_iterations: 1000
+  population_mass_transport:
+    enabled: true
+    affine_ridge: 0.01

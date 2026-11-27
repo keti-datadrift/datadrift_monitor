@@ -1,0 +1,42 @@
+base_config: idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es
+
+runtime:
+  gpu_id: 0
+  gpu_ids:
+    - 0
+    - 1
+  seed: 0
+
+joint_training:
+  epochs: 100
+  batch_size: 256
+  resume:
+    enabled: true
+    checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive-last.pt
+  grad_cache:
+    mode: always
+    micro_batch_size: 64
+  loss:
+    name: dual_weihims
+    classes_per_batch: 64
+    examples_per_class: 4
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive.pt
+  validation:
+    mode: positive_metric_terminal
+    terminal_weight: 1.0
+    bottleneck_temperature: 0.5
+    early_stopping:
+      enabled: true
+      patience: 15
+      min_delta: 0.0
+    last_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive-last.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/results/positive_metric_terminal.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/diagnostics/positive.json
+
+inference:
+  mode: positive_metric_terminal
+  terminal_weight: 1.0
+  bottleneck_temperature: 0.5

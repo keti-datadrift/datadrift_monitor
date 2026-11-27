@@ -1,0 +1,25 @@
+extends: ../../table1/cifar100/_common_b50_inc5.yaml
+
+# Shared comparison variables for the non-topology CMPT learners.  Training
+# objectives, classifiers, and optimizer schedules remain method-native.
+comparison_contract:
+  name: cmpt_cifar100_shared_protocol_native_learner_v1
+  implementation: src_cmpt_isolated
+  reference_code_policy: reference_only
+
+method:
+  replay_batching:
+    enabled: false
+
+training:
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+
+evaluation:
+  classifier: nme
+  horizontal_flip: true
+
+output:
+  directory: outputs/cmpt/common_recipe/training
+  run_name: replace_me

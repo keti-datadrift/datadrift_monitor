@@ -1,0 +1,15 @@
+extends: _cmpt_affine.yaml
+
+device: cuda:1
+experiment:
+  learner: CSCCT-ImageNet100
+  expected_checkpoint_method: cscct
+  checkpoints: outputs/cmpt/imagenet100_b50_inc5/training/cscct_imagenet100_b50_inc5_r18/seed_1/checkpoints
+  output: outputs/cmpt/imagenet100_b50_inc5/evaluation/cscct/seed_1/cmpt_affine_ridge.json
+
+cmpt:
+  # This Linux-trained trajectory is evaluated on Windows/RTX hardware.
+  # Preserve strict parity auditing while allowing at most 0.2 percentage
+  # points of cross-platform boundary-prediction drift.  Every actual error
+  # remains recorded per session and summarized in the result JSON.
+  parity_tolerance: 0.002

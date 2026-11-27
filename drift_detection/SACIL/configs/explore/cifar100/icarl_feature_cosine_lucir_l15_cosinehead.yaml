@@ -1,0 +1,11 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Upper stability stress control after lambda=10 improved S2 but reduced S1
+# new-class accuracy.  Promote only if session-level overall accuracy improves.
+method:
+  feature_cosine_distillation:
+    lambda: 15.0
+
+output:
+  directory: outputs/explore/feature_cosine_controls
+  run_name: icarl_feature_cosine_lucir_l15_cosinehead_c100_b50_inc5_r32

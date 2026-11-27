@@ -1,0 +1,5 @@
+extends: _afc_geometry_common.yaml
+method:
+  geometry_mode: sacil
+output:
+  run_name: afc_sacil_c100_b50_inc5_r32

@@ -1,0 +1,13 @@
+base_config: idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16
+
+runtime:
+  gpu_id: 0
+
+joint_training:
+  batch_size: 16
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16/checkpoints/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16-positive.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16/results/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16/diagnostics/idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-batch16-positive-diagnostics.json

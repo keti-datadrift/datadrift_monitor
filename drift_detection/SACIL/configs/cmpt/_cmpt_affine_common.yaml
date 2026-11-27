@@ -1,0 +1,7 @@
+extends: _cmpt_rigid_common.yaml
+
+# Relax the rotation-only CMPT assumption.  The linear part may express
+# anisotropic scaling and shear; ridge regularization controls overfitting.
+cmpt:
+  transport: affine_ridge
+  affine_ridge: 0.01

@@ -1,0 +1,21 @@
+extends: ../../table1/cifar100/replay_nme_b50_inc5_resnet32.yaml
+
+# Diagnostic-only exploration runtime: use scripts/train_table1_explore.py.
+# These configs are not part of the primary iCaRL screen.  Their matched
+# control is plain Replay-CE and they isolate whether H-EdgeCorr depends on KD.
+method:
+  name: replay
+  edge_topology:
+    enabled: true
+    objective: hierarchical_edge_correlation
+    representatives_per_class: 2
+    lambda_edge: 5.0
+    edge_weighting: global
+    update_interval_steps: 1
+    min_edge_weight: 0.1
+    conflict_branches_per_new_class: 1
+    taxonomy_temperature: 0.2
+
+output:
+  directory: outputs/explore/edge_correlation
+  run_name: replace_me

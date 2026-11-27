@@ -1,0 +1,243 @@
+# Cached CLIP feature extraction and probes
+python scripts\extract_clip_features.py --config configs\02_idea3_cached_prompt\idea3_fgvc_aircraft.yaml
+python scripts\train_feature_probe.py --config configs\01_feature_probes\fgvc_aircraft_clip_feature_probe.yaml
+
+# Idea 3 cached-feature prompt learning
+python scripts\train_idea3_positive_prompts.py --config configs\02_idea3_cached_prompt\idea3_fgvc_aircraft.yaml
+python scripts\infer_idea3.py --config configs\02_idea3_cached_prompt\idea3_fgvc_aircraft.yaml --mode positive_child_only
+
+# Sparse-path cached-feature experiments
+python scripts\train_idea3_positive_prompts.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path.yaml
+python scripts\infer_idea3.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path.yaml --mode positive_global_path
+python scripts\train_idea3_positive_prompts.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path_linear.yaml
+python scripts\train_idea3_positive_prompts.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path_mlp.yaml
+python scripts\train_idea3_positive_prompts.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path_lora.yaml
+python scripts\infer_idea3.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path_linear.yaml --mode positive_global_path
+python scripts\infer_idea3.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path_mlp.yaml --mode positive_global_path
+python scripts\infer_idea3.py --config configs\03_sparse_path\idea3_fgvc_aircraft_b16_sparse_path_lora.yaml --mode positive_global_path
+python scripts\train_idea3_positive_prompts.py --config configs\03_sparse_path\idea3_inat19_sparse_path.yaml
+python scripts\infer_idea3.py --config configs\03_sparse_path\idea3_inat19_sparse_path.yaml --mode positive_global_path
+
+# Main direct joint experiment: raw images + true CLIP Vision LoRA + positive prompts
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora.yaml
+
+# GPU 1 parent-context ablation: global + depth prompts only
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_global_depth.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_global_depth.yaml
+
+# Two-GPU follow-up: weak fine-grained augmentation on GPU 0
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_weak_aug.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_weak_aug.yaml
+
+# Two-GPU follow-up: higher-capacity Vision LoRA on GPU 1
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo.yaml
+
+# Controlled follow-up: higher-capacity Vision LoRA with batch 16 on GPU 0
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_b16.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_b16.yaml
+
+# iNaturalist19: same Rank-16 q/k/v/out joint setting with batch 16 on GPU 0
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_inat19_b16_joint_vision_lora_r16_qkvo_b16.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_inat19_b16_joint_vision_lora_r16_qkvo_b16.yaml
+
+# LoRA 2x2 ablation, GPU 0: isolate the effect of increasing rank to 16
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qv_b16.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qv_b16.yaml
+
+# LoRA 2x2 ablation, GPU 1: isolate the effect of expanding targets to q/k/v/out
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r8_qkvo_b16.yaml
+python scripts\infer_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r8_qkvo_b16.yaml
+
+# Idea 4: freeze the best positive Vision LoRA model and learn parent-local unknown prompts
+python scripts\train_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_parent_unknown.yaml
+python scripts\infer_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_parent_unknown.yaml
+
+# Idea 4 follow-up phase A: isolate pseudo-OOD hidden-child ratio (K=1)
+# GPU 0
+python scripts\train_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide25_k1.yaml
+# GPU 1
+python scripts\train_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide50_k1.yaml
+
+# Idea 4 follow-up phase B: repeat each ratio with four unknown prototypes
+# GPU 0
+python scripts\train_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide25_k4.yaml
+# GPU 1
+python scripts\train_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide50_k4.yaml
+
+# Optional inference-only reruns from each selected checkpoint
+python scripts\infer_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide25_k1.yaml
+python scripts\infer_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide50_k1.yaml
+python scripts\infer_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide25_k4.yaml
+python scripts\infer_idea4_unknown_prompts.py --config configs\05_idea4_negative_prompt\idea4_fgvc_aircraft_b16_r16_qkvo_hide50_k4.yaml
+
+# Idea 5 Hierarchical NegPrompt without leave-one-child-out, GPU 0: original NIS + NPD + NND
+python scripts\train_hier_negprompt.py --config configs\06_idea5_hier_negprompt\idea5_hnp_paper_fgvc_aircraft_b16_r16_qkvo.yaml
+python scripts\infer_hier_negprompt.py --config configs\06_idea5_hier_negprompt\idea5_hnp_paper_fgvc_aircraft_b16_r16_qkvo.yaml
+
+# Idea 5 Hierarchical NegPrompt without leave-one-child-out, GPU 1: paper losses + stop CE + parent anchor
+python scripts\train_hier_negprompt.py --config configs\06_idea5_hier_negprompt\idea5_hnp_stop_fgvc_aircraft_b16_r16_qkvo.yaml
+python scripts\infer_hier_negprompt.py --config configs\06_idea5_hier_negprompt\idea5_hnp_stop_fgvc_aircraft_b16_r16_qkvo.yaml
+
+# Idea 6: hierarchy-constrained NegPrompt without pseudo-OOD targets, GPU 0
+python scripts\train_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt.yaml
+python scripts\infer_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt.yaml
+
+# Idea 6 safety ablation: stronger ID separation, 30 epochs, GPU 0
+python scripts\train_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt_safety.yaml
+python scripts\infer_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt_safety.yaml
+
+# Idea 6 constrained safety: squared hinge stops pushing after the ID margin is met
+python scripts\train_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt_squared_hinge.yaml
+python scripts\infer_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt_squared_hinge.yaml
+
+# Idea 6 global decoder-aligned safety: inference also saves oracle-parent diagnostics
+python scripts\train_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt_global_safety.yaml
+python scripts\infer_hier_negprompt.py --config configs\07_idea6_hc_negprompt\idea6_fgvc_aircraft_b16_r16_qkvo_hc_negprompt_global_safety.yaml
+
+# Idea 7: sibling virtual open-space features; only parent-local negative prompts are trainable
+python scripts\train_idea7_virtual_open_negprompt.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml
+python scripts\infer_idea7_virtual_open_negprompt.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml
+
+# Idea 7 refinement ablation, GPU 0: raw sibling SLERP without refinement
+python scripts\train_idea7_virtual_open_negprompt.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_raw_slerp.yaml
+
+# Idea 7 refinement ablation, GPU 1: one mild refinement step with step size 0.05
+python scripts\train_idea7_virtual_open_negprompt.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_mild_refine.yaml
+
+# Positive CLIP+LoRA feature diagnostic: leaf positive max-cosine OOD separation
+python scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml
+
+# Positive leaf cosine 2x2 ablation: base/LoRA image encoder x plain/learned text
+python scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision base --text plain --gpu-id 0
+python scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision base --text learned --gpu-id 1
+python scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text plain --gpu-id 0
+python scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 1
+
+# Proper positive 2x2 training ablation: train the two previously transplanted conditions
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_prompt_only_training_ablation.yaml
+python scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_lora_only_plain_training_ablation.yaml
+python scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision base --text learned --gpu-id 0 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-prompt-only-training-ablation\checkpoints\idea3-fgvc-aircraft-b16-prompt-only-training-ablation-positive.pt --out outputs\experiments\ablate-positive-leaf-cosine-fgvc-aircraft-b16-r16-qkvo\diagnostics\positive-leaf-cosine-base-learned-trained-separately.json
+python scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text plain --gpu-id 1 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-lora-only-plain-training-ablation\checkpoints\idea3-fgvc-aircraft-b16-lora-only-plain-training-ablation-positive.pt --out outputs\experiments\ablate-positive-leaf-cosine-fgvc-aircraft-b16-r16-qkvo\diagnostics\positive-leaf-cosine-lora-plain-trained-separately.json
+
+# Idea 8: image-only metric Vision LoRA, then frozen-vision joint positive/negative prompts
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\train_image_metric_vision_lora.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text plain --gpu-id 0 --positive-checkpoint outputs\experiments\idea8-fgvc-aircraft-b16-image-metric-lora\checkpoints\idea8-fgvc-aircraft-b16-image-metric-lora.pt --out outputs\experiments\idea8-fgvc-aircraft-b16-image-metric-lora\diagnostics\positive-leaf-cosine-plain.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --gpu-id 0 --knn-k 20 --out outputs\experiments\idea8-fgvc-aircraft-b16-image-metric-lora\diagnostics\image-density-ood.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\train_metric_vision_joint_prompts.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_metric_lora_joint_prompts.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 1 --positive-checkpoint outputs\experiments\idea8-fgvc-aircraft-b16-metric-lora-joint-prompts\checkpoints\idea8-fgvc-aircraft-b16-metric-lora-joint-prompts.pt --out outputs\experiments\idea8-fgvc-aircraft-b16-metric-lora-joint-prompts\diagnostics\positive-leaf-cosine-learned.json
+
+# Positive Stage 1: no path CE; joint image-image WeiHiMS + image-prompt WeiHiMS
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 0 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\checkpoints\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive.pt --out outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\diagnostics\positive-leaf-cosine-learned.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\checkpoints\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive.pt --gpu-id 0 --knn-k 20 --out outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\diagnostics\image-density-ood.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 0 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\checkpoints\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive-last.pt --out outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\diagnostics\positive-leaf-cosine-learned-last.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\checkpoints\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive-last.pt --gpu-id 0 --knn-k 20 --out outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\diagnostics\image-density-ood-last.json
+
+# Negative-ready global metric-terminal decoder, positive-only ID inference
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\infer_metric_terminal_positive.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims\checkpoints\idea3-fgvc-aircraft-b16-joint-vision-lora-r16-qkvo-dual-weihims-positive-last.pt --gpu-id 0
+
+# Dual WeiHiMS logical batch 128: GPU 0+1 DataParallel with GradCache on 8 GB GPUs
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b128_2gpu_gradcache.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 0 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b128-2gpu-gc\checkpoints\positive.pt --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b128-2gpu-gc\diagnostics\positive-leaf-cosine.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b128-2gpu-gc\checkpoints\positive.pt --gpu-id 1 --knn-k 20 --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b128-2gpu-gc\diagnostics\image-density-ood.json
+
+# Dual WeiHiMS logical batch 256 (P64 K4), max 100 epochs, val-BAcc early stopping
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b256_p64k4_e100_2gpu_gradcache_earlystop.yaml
+
+# Dual WeiHiMS logical batch 256 (P32 K8), max 100 epochs, automatic resume and val-BAcc early stopping
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b256_p32k8_e100_2gpu_gradcache_earlystop.yaml
+
+# P32 K8 sampler ablation 1/2: official Multi-Similarity queue policy
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b256_p32k8_ms_sampler_e100_2gpu_gradcache_earlystop.yaml
+
+# P32 K8 sampler ablation 2/2: globally balanced cumulative sample exposure
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b256_p32k8_globally_balanced_e100_2gpu_gradcache_earlystop.yaml
+
+# P32 K8 sampler ablation diagnostics
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 0 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-ms-sampler\checkpoints\positive.pt --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-ms-sampler\diagnostics\positive-leaf-cosine.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-ms-sampler\checkpoints\positive.pt --gpu-id 0 --knn-k 20 --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-ms-sampler\diagnostics\image-density-ood.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 0 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced\checkpoints\positive.pt --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced\diagnostics\positive-leaf-cosine.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced\checkpoints\positive.pt --gpu-id 0 --knn-k 20 --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b256-p32k8-globally-balanced\diagnostics\image-density-ood.json
+
+# Maximum leaf-class diversity ablation 1/2: all 80 ID leaves, K4, logical batch 320
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b320_p80k4_e100_2gpu_gradcache_earlystop.yaml
+
+# Maximum leaf-class diversity ablation 2/2: all 80 ID leaves, K3, logical batch 240
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_idea3_joint_vision_lora.py --config configs\04_joint_vision_lora\idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_dual_weihims_b240_p80k3_e100_2gpu_gradcache_earlystop.yaml
+
+# P80K4 positive-only OOD diagnostics
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 0 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b320-p80k4-es\checkpoints\positive.pt --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b320-p80k4-es\diagnostics\positive-leaf-cosine.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b320-p80k4-es\checkpoints\positive.pt --gpu-id 0 --knn-k 20 --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b320-p80k4-es\diagnostics\image-density-ood.json
+
+# P80K3 positive-only OOD diagnostics
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_leaf_cosine_ood.py --config configs\08_idea7_virtual_open_negprompt\idea7_fgvc_aircraft_b16_r16_qkvo_virtual_open.yaml --vision lora --text learned --gpu-id 1 --positive-checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b240-p80k3-es\checkpoints\positive.pt --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b240-p80k3-es\diagnostics\positive-leaf-cosine.json
+C:\Users\user\anaconda3\envs\hoyoung\python.exe scripts\diagnose_image_density_ood.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora.yaml --checkpoint outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b240-p80k3-es\checkpoints\positive.pt --gpu-id 1 --knn-k 20 --out outputs\experiments\idea3-fgvc-aircraft-b16-dual-weihims-b240-p80k3-es\diagnostics\image-density-ood.json
+
+# Literature NegPrompt ablation, GPU 0/1
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_paper_negprompt_ablation.py --config configs\11_paper_negprompt\repulsive_npd_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_paper_negprompt_ablation.py --config configs\11_paper_negprompt\published_npd_gpu1.yaml
+
+# Tree-Consistent Virtual-Sibling loss + threshold-free complement-terminal decoder
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_tree_virtual_unknown.py --config configs\12_tree_virtual_unknown\fgvc_aircraft_p64k4_pilot.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_tree_loco_multiprompt.py --config configs\13_tree_loco_multiprompt\fgvc_aircraft_p64k4_k4.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\evaluate_tree_loco_calibration.py --config configs\13_tree_loco_multiprompt\fgvc_aircraft_p64k4_k4.yaml
+
+# Negative-prompt-free dual-expert support pilots (GPU 0/1)
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\evaluate_dual_expert_support.py --config configs\14_hierarchical_support\fgvc_aircraft_dual_expert_metric_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\evaluate_dual_expert_support.py --config configs\14_hierarchical_support\fgvc_aircraft_dual_expert_p64_gpu1.yaml
+
+# Frozen-feature multi-depth CompProb/EntCompProb pilots (GPU 0/1)
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_multidepth_feature_heads.py --config configs\15_multidepth_feature_heads\fgvc_aircraft_metric_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_multidepth_feature_heads.py --config configs\15_multidepth_feature_heads\fgvc_aircraft_p64_gpu1.yaml
+
+# Calibration-safe frozen CLIP controls (two deterministic train splits)
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_multidepth_feature_heads.py --config configs\15_multidepth_feature_heads\fgvc_aircraft_base_clip_seed0_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_multidepth_feature_heads.py --config configs\15_multidepth_feature_heads\fgvc_aircraft_base_clip_seed1_gpu1.yaml
+
+# End-to-end calibration-safe metric LoRA: encoder never sees calibration split
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_image_metric_vision_lora.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora_reference_only_seed0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_image_metric_vision_lora.py --config configs\09_image_metric_joint_prompts\idea8_fgvc_aircraft_b16_image_metric_lora_reference_only_seed1.yaml
+
+# Multi-depth/Fisher inference on the end-to-end held-out representations
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_multidepth_feature_heads.py --config configs\15_multidepth_feature_heads\fgvc_aircraft_reference_only_seed0_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_multidepth_feature_heads.py --config configs\15_multidepth_feature_heads\fgvc_aircraft_reference_only_seed1_gpu1.yaml
+
+# Threshold-free shared masked-support likelihood pilots (GPU 0/1)
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\16_probabilistic_support\fgvc_aircraft_metric_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\16_probabilistic_support\fgvc_aircraft_p64_gpu1.yaml
+
+# Threshold-free coherent K+1 prototype-mixture pilots (GPU 0/1)
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\17_probabilistic_mixture\fgvc_aircraft_metric_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\17_probabilistic_mixture\fgvc_aircraft_p64_gpu1.yaml
+
+# Threshold-free reference-image vMF mixture pilots (GPU 0/1)
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\18_reference_sample_mixture\fgvc_aircraft_metric_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\18_reference_sample_mixture\fgvc_aircraft_p64_gpu1.yaml
+
+# Reference-only final-epoch K+1 mixture with split-lineage checks and pre-OOD ID gate
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\16_probabilistic_support\fgvc_aircraft_reference_only_last_seed0_categorical_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_probabilistic_support_likelihood.py --config configs\16_probabilistic_support\fgvc_aircraft_reference_only_last_seed1_categorical_gpu1.yaml
+
+# Idea N / CF-HCH stage 1: topology-only LOCO representation cross-fit
+# Audited feasible heldout folds are 13/13/12/12 (50 eligible leaves), not 4x16.
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_crossfit_class_holdout_lora.py --config configs\18_crossfit_class_holdout\fgvc_aircraft_loco_folds02_gpu0.yaml
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_crossfit_class_holdout_lora.py --config configs\18_crossfit_class_holdout\fgvc_aircraft_loco_folds13_gpu1.yaml
+
+# Idea O/P / CF-RPEP stage 2: non-nested screen plus strict nested class/image OOF gate
+# This stage never loads actual OOD; only its nested gate may unlock the transfer evaluation.
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_cf_rpep_oof.py --config configs\19_cf_rpep\fgvc_aircraft_oof_gate_gpu0.yaml
+
+# Idea V / CF-FSHP: nested class/image OOF method-development screen
+# Reuses the actual-OOD-free CF-RPEP OOF bundles; a pass cannot unlock official OOD.
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\train_cf_fshp_oof.py --config configs\22_cf_fshp\fgvc_aircraft_oof_screen_gpu0.yaml
+
+# Idea R / HHP: nested class-disjoint hierarchical stopping posterior (cached OOF only)
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\analyze_cf_hierarchical_hazard.py --config configs\20_hierarchical_hazard\fgvc_aircraft_oof.yaml
+
+# Idea T / SRHC: shared linear relational hazard, strict nested OOF
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\analyze_cf_relational_hazard.py --config configs\21_relational_hazard\fgvc_aircraft_oof.yaml
+
+# Idea U / CLRM: retained-class LOCO relational meta-head, outer-class OOF gate
+C:\Users\user\anaconda3\envs\hoyoung\python.exe -u scripts\analyze_cf_class_loco_relational.py --config configs\22_class_loco_relational\fgvc_aircraft_oof.yaml

@@ -1,0 +1,25 @@
+extends: _common_b50_inc5.yaml
+model:
+  backbone: fgp_resnet32_no_last_relu
+method:
+  name: fgp
+  fgp_weight: 0.1
+training:
+  base:
+    epochs: 70
+    lr: 2.0
+    momentum: 0.9
+    weight_decay: 0.00001
+    scheduler: multistep
+    milestones: [50, 64]
+    lr_decay: 0.2
+  incremental:
+    epochs: 70
+    lr: 2.0
+    momentum: 0.9
+    weight_decay: 0.00001
+    scheduler: multistep
+    milestones: [50, 64]
+    lr_decay: 0.2
+output:
+  run_name: fgp_nme_c100_b50_inc5_r32

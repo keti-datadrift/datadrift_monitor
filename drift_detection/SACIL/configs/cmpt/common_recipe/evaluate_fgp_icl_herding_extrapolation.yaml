@@ -1,0 +1,12 @@
+extends: evaluate_fgp_icl_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: FGP-ICL-herding-extrapolation
+  output: outputs/cmpt/herding_extrapolation/cifar100/fgp_icl/seed_1/results.json
+
+cmpt:
+  herding_extrapolation:
+    enabled: true
+    full_prefix: 20
+    reference_prefix: 10

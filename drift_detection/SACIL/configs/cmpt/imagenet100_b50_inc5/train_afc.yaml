@@ -1,0 +1,41 @@
+extends: _training_common.yaml
+
+# Author-released AFC ImageNet-100 backbone, objective, and optimizer.
+model:
+  backbone: afc_resnet18_imagenet_importance
+  proxies_per_class: 10
+  distance_scale: 3.0
+  nca_scale: 1.0
+
+method:
+  name: afc
+  afc:
+    pod_base_factor: 10.0
+    finetuning:
+      epochs: 20
+      lr: 0.02
+      momentum: 0.9
+      weight_decay: 0.0001
+
+training:
+  # The AFC release uses 128, but its ImageNet ResNet-18 activations exceed
+  # the 8 GiB capacity of the local RTX 2080 SUPER even during S0.  Use the
+  # largest standard physical batch that fits this hardware.
+  batch_size: 64
+  base:
+    epochs: 90
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0001
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 90
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0001
+    nesterov: false
+    scheduler: cosine
+
+output:
+  run_name: afc_imagenet100_b50_inc5_r18

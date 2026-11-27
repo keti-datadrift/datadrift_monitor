@@ -1,0 +1,13 @@
+extends: ../../table1/cifar100/sacil_nme_b50_inc5_resnet32.yaml
+
+method:
+  name: sacil
+  geometry_mode: sacil
+  prototype_temperature: 0.1
+  lambda_geo: 1.0
+  local_relaxation: true
+  use_internal_anchors: true
+
+output:
+  directory: outputs/unified/ablations
+  run_name: replace_me

@@ -1,0 +1,10 @@
+extends: evaluate_fgp_icl_moment_transport.yaml
+
+device: cuda:1
+experiment:
+  learner: FGP-ICL-low-rank-moment-transport-rank8
+  output: outputs/cmpt/moment_transport_rank8/cifar100/fgp_icl/seed_1/results.json
+
+cmpt:
+  moment_transport:
+    rank: 8

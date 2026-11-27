@@ -1,0 +1,11 @@
+extends: evaluate_fgp_icl_affine.yaml
+
+device: cuda:1
+experiment:
+  learner: FGP-ICL-canonical-reference-direct-transport
+  output: outputs/cmpt/canonical_reference/cifar100/fgp_icl/seed_1/results.json
+
+cmpt:
+  canonical_reference:
+    enabled: true
+    affine_ridge: 0.01

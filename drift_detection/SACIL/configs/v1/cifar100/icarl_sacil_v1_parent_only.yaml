@@ -1,0 +1,8 @@
+extends: _sacil_v1_common.yaml
+
+method:
+  sacil_v1:
+    path_scope: parent_only
+
+output:
+  run_name: sacil_v1_parent_only

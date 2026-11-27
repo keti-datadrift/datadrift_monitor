@@ -1,0 +1,26 @@
+extends: ../../table1/cifar100/icarl_nme_b50_inc5_resnet32.yaml
+
+# Primary absolute-local relaxation screen. The complete canonical iCaRL
+# substrate is inherited unchanged; geometry is inactive in S0 and therefore
+# compatible with the shared canonical iCaRL base checkpoint.
+method:
+  geometry_mode: sacil
+  lambda_geo: 4.0
+  hierarchy:
+    name: griffin_perona_greedy
+    taxonomy_temperature: 0.2
+  conflict:
+    max_neighbors: 5
+    old_class_ratio: 0.1
+    temperature: 0.05
+    min_preservation_weight: 0.1
+    ancestor_decay: 0.5
+  geometry:
+    anchor_frame: fixed
+    reliability: uniform
+    objective: mse
+    weight_normalization: anchor_count
+
+output:
+  directory: outputs/explore/absolute_relaxation
+  run_name: replace_me

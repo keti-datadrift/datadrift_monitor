@@ -1,0 +1,35 @@
+extends: _training_common.yaml
+
+# iCaRL objective with the released ImageNet-100 optimizer recipe distributed
+# alongside PODNet: SGD, LR 1.0, WD 1e-5, 60 epochs, and x0.2 milestones.
+model:
+  backbone: resnet18_imagenet
+
+method:
+  name: icarl
+  kd_temperature: 2.0
+  kd_weight: 1.0
+
+training:
+  batch_size: 64
+  base:
+    epochs: 60
+    lr: 1.0
+    momentum: 0.9
+    weight_decay: 0.00001
+    nesterov: false
+    scheduler: multistep
+    milestones: [20, 30, 40, 50]
+    lr_decay: 0.2
+  incremental:
+    epochs: 60
+    lr: 1.0
+    momentum: 0.9
+    weight_decay: 0.00001
+    nesterov: false
+    scheduler: multistep
+    milestones: [20, 30, 40, 50]
+    lr_decay: 0.2
+
+output:
+  run_name: icarl_imagenet100_b50_inc5_r18

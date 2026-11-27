@@ -1,0 +1,11 @@
+extends: evaluate_afc_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: AFC-common-affine-adaptive-alpha
+  output: outputs/cmpt/common_recipe/evaluation/afc_affine_adaptive_alpha/seed_1/cmpt_affine_adaptive_alpha.json
+
+cmpt:
+  adaptive_alpha:
+    enabled: true
+    folds: 5

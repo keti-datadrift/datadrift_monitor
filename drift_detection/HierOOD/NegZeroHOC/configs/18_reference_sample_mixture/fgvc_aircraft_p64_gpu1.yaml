@@ -1,0 +1,12 @@
+base_config: fgvc_aircraft_metric_gpu0.yaml
+
+experiment:
+  name: probabilistic-reference-sample-mixture-p64
+
+runtime:
+  gpu_id: 1
+
+probabilistic_support_likelihood:
+  support_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive.pt
+  multidepth_checkpoint: outputs/experiments/multidepth-heads-p64/checkpoints/multidepth-heads-p64.pt
+

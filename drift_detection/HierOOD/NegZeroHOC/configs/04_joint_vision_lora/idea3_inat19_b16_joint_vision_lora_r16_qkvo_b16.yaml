@@ -1,0 +1,18 @@
+base_config: idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_b16.yaml
+
+experiment:
+  name: idea3-inat19-b16-joint-vision-lora-r16-qkvo-batch16
+
+runtime:
+  gpu_id: 1
+
+dataset:
+  name: inat19
+  datadir: D:/HY_Data/HierOOD/inat19
+  hierarchy: hierarchies/inat19.json
+  id_split: data/inat19-id-labels.csv
+
+joint_training:
+  checkpoint: outputs/experiments/idea3-inat19-b16-joint-vision-lora-r16-qkvo-batch16/checkpoints/idea3-inat19-b16-joint-vision-lora-r16-qkvo-batch16-positive.pt
+  result_path: outputs/experiments/idea3-inat19-b16-joint-vision-lora-r16-qkvo-batch16/results/idea3-inat19-b16-joint-vision-lora-r16-qkvo-batch16-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-inat19-b16-joint-vision-lora-r16-qkvo-batch16/diagnostics/idea3-inat19-b16-joint-vision-lora-r16-qkvo-batch16-positive-diagnostics.json

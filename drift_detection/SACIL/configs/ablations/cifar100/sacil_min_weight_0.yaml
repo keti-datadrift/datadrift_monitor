@@ -1,0 +1,6 @@
+extends: sacil_full.yaml
+method:
+  conflict:
+    min_preservation_weight: 0.0
+output:
+  run_name: sacil_wmin0_c100_b50_inc5_r32

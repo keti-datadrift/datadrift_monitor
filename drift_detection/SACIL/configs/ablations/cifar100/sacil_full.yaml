@@ -1,0 +1,3 @@
+extends: _sacil_ablation_common.yaml
+output:
+  run_name: sacil_full_c100_b50_inc5_r32

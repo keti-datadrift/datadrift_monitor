@@ -1,0 +1,5 @@
+extends: icarl_sacil.yaml
+method:
+  lambda_geo: 64.0
+output:
+  run_name: icarl_sacil_lambda64_c100_b50_inc5_r32

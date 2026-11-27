@@ -1,0 +1,8 @@
+extends: ../_cmpt_rigid_common.yaml
+
+device: cuda:1
+experiment:
+  learner: AFC-common
+  expected_checkpoint_method: afc
+  checkpoints: outputs/cmpt/common_recipe/training/afc_common_c100_b50_inc5_r32/seed_1/checkpoints
+  output: outputs/cmpt/common_recipe/evaluation/afc/seed_1/cmpt_rigid_matched_nme.json

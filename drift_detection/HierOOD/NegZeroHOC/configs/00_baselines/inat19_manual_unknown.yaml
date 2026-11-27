@@ -1,0 +1,42 @@
+experiment:
+  name: inat19-manual-unknown
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+
+dataset:
+  name: inat19
+  datadir: D:/HY_Data/HierOOD/inat19
+  hierarchy: hierarchies/inat19.json
+  id_split: data/inat19-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch32
+  local_files_only: true
+
+dataloader:
+  batch_size: 128
+  num_workers: 4
+
+prompt_inspection:
+  nodes:
+    - nat0001
+    - nat0002
+    - nat0003
+  parents:
+    - root
+    - Amanita
+    - Magnoliopsida
+
+feature_extraction:
+  skip_train: true
+
+inference:
+  mode: manual_unknown
+  features_dir: outputs/shared/features/inat19/clip_openai_clip-vit-base-patch32
+  batch_size: 1024
+  allow_root_unknown: false
+  tau: 1.0
+  save_trace: false

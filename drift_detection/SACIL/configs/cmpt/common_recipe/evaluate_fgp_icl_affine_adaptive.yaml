@@ -1,0 +1,11 @@
+extends: evaluate_fgp_icl_affine.yaml
+
+device: cuda:0
+experiment:
+  learner: FGP-ICL-common-affine-adaptive-alpha
+  output: outputs/cmpt/common_recipe/evaluation/fgp_icl_affine_adaptive_alpha/seed_1/cmpt_affine_adaptive_alpha.json
+
+cmpt:
+  adaptive_alpha:
+    enabled: true
+    folds: 5

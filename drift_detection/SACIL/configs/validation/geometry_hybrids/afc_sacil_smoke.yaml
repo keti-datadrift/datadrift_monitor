@@ -1,0 +1,19 @@
+extends: ../../ablations/cifar100/afc_sacil.yaml
+seed: 994
+debug:
+  train_samples_per_class: 20
+  test_samples_per_class: 2
+  max_sessions: 2
+  max_batches_per_epoch: 1
+training:
+  base:
+    epochs: 1
+  incremental:
+    epochs: 1
+method:
+  afc:
+    finetuning:
+      epochs: 0
+output:
+  directory: outputs/validation/geometry_hybrids
+  run_name: afc_sacil_smoke

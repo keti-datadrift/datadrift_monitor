@@ -1,0 +1,40 @@
+base_config: ../04_joint_vision_lora/idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_b16.yaml
+
+experiment:
+  name: idea8-fgvc-aircraft-b16-image-metric-lora
+
+runtime:
+  gpu_id: 0
+  seed: 0
+
+image_metric_training:
+  epochs: 30
+  classes_per_batch: 4
+  examples_per_class: 4
+  resume:
+    enabled: false
+    checkpoint: null
+  lora_lr: 0.0001
+  proxy_lr: 0.001
+  weight_decay: 0.0001
+  precision: fp16
+  gradient_checkpointing: true
+  gradient_clip_norm: 1.0
+
+  loss:
+    supcon_temperature: 0.1
+    proxy_temperature: 0.07
+    proxy_margin: 0.05
+    triplet_base_margin: 0.1
+    triplet_hierarchy_margin: 0.1
+    lambda_supcon: 1.0
+    lambda_triplet: 0.5
+    lambda_proxy: 1.0
+    lambda_retention: 0.5
+
+  validation:
+    every_n_epochs: 1
+    batch_size: 64
+
+  checkpoint: outputs/experiments/idea8-fgvc-aircraft-b16-image-metric-lora/checkpoints/idea8-fgvc-aircraft-b16-image-metric-lora.pt
+  diagnostics_path: outputs/experiments/idea8-fgvc-aircraft-b16-image-metric-lora/diagnostics/idea8-fgvc-aircraft-b16-image-metric-lora-diagnostics.json

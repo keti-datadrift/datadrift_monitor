@@ -1,0 +1,40 @@
+extends: icarl_feature_cosine_lucir_hierarchy_replay.yaml
+
+# Paired SACIL candidate for the replay-only feature-KD control.  New examples
+# receive no teacher-feature penalty in either arm.  Within old replay rows,
+# bounded conflict branches are relaxed to 0.5 while stable outside branches
+# retain weight 1.  Replay sampling itself remains uniform.
+method:
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 5.0
+    adaptive_mode: old_over_new
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+    sample_scope: all
+    hierarchy_routing:
+      enabled: true
+      old_conflict_weight: 0.5
+      old_outside_weight: 1.0
+      new_weight: 0.0
+  replay_batching:
+    enabled: true
+    replay_fraction: 0.50
+    conflict_multiplier: 1.0
+
+training:
+  incremental:
+    epochs: 80
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [40, 70]
+    lr_decay: 0.1
+
+output:
+  directory: outputs/explore/feature_scope
+  run_name: icarl_feature_cosine_lucir_balanced_replay_hierarchy_oldonly_e80_c100_b50_inc5_r32

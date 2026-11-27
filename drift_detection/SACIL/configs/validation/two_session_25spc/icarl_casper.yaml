@@ -1,0 +1,16 @@
+extends: ../../table1/cifar100/icarl_casper_nme_b50_inc5_resnet32.yaml
+
+training:
+  base:
+    epochs: 2
+  incremental:
+    epochs: 2
+
+debug:
+  max_sessions: 2
+  train_samples_per_class: 25
+
+output:
+  directory: outputs/validation/reference_parity
+  run_name: icarl_casper_25spc_2sessions
+

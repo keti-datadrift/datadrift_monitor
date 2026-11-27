@@ -1,0 +1,30 @@
+feature_generation:
+  enable: false
+
+density:
+  covariance_type: shared_full
+  eps: 1.0e-6
+  covariance_shrinkage: 0.5
+
+inference:
+  score_type: gaussian_loglik
+  temperature: 1.0
+  prediction_mode: argmax
+  collapse_ood_to_parent: true
+
+cgm:
+  enabled: true
+  strict_pdf: false
+  ood_density: conformal_logpdf_stop
+  mask_type: sum
+  membership_type: chi2_survival
+  membership_probability: 0.95
+  membership_correction: none
+  mask_cov_scale: 1.0
+  local_mode: density_joint
+  child_weight: count
+  candidate_prior: uniform
+  ood_prior: 1.0
+  normalize_ood_pdf: true
+  conformal_coverage: 0.90
+  eps: 1.0e-12

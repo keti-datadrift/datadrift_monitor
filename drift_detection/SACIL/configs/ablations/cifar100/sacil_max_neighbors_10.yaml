@@ -1,0 +1,6 @@
+extends: sacil_full.yaml
+method:
+  conflict:
+    max_neighbors: 10
+output:
+  run_name: sacil_kmax10_c100_b50_inc5_r32

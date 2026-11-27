@@ -1,0 +1,10 @@
+extends: icarl_sacil_fixed_lambda_16.yaml
+
+method:
+  geometry:
+    anchor_frame: co_moving
+    reliability: uniform
+    refresh_interval_epochs: 1
+
+output:
+  run_name: icarl_sacil_co_moving_l16_c100_b50_inc5_r32

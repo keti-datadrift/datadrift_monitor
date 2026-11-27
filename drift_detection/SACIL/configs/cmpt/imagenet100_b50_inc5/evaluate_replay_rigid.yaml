@@ -1,0 +1,8 @@
+extends: _cmpt_rigid.yaml
+
+device: cuda:0
+experiment:
+  learner: Replay-ImageNet100
+  expected_checkpoint_method: replay
+  checkpoints: outputs/cmpt/imagenet100_b50_inc5/training/replay_imagenet100_b50_inc5_r18/seed_1/checkpoints
+  output: outputs/cmpt/imagenet100_b50_inc5/evaluation/replay/seed_1/cmpt_rigid.json

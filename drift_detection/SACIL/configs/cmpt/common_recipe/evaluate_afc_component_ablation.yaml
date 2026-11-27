@@ -1,0 +1,9 @@
+extends: evaluate_afc_affine.yaml
+
+experiment:
+  learner: AFC-CMPT-component-ablation
+  output: outputs/cmpt/component_ablation/cifar100/afc/seed_1/results.json
+
+cmpt:
+  component_ablation:
+    enabled: true

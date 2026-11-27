@@ -1,0 +1,22 @@
+extends: ../cifar100/icarl_lucir_mr_cosinehead.yaml
+
+device: cpu
+
+training:
+  base:
+    epochs: 1
+    milestones: []
+  incremental:
+    epochs: 1
+    milestones: []
+
+debug:
+  max_sessions: 2
+  max_batches_per_epoch: 1
+  max_eval_batches: 1
+  max_train_samples_per_class: 2
+  max_test_samples_per_class: 2
+
+output:
+  directory: outputs/explore/validation
+  run_name: icarl_lucir_mr_cosinehead_smoke

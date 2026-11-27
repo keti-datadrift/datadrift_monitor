@@ -1,0 +1,19 @@
+base_config: idea5_hnp_paper_fgvc_aircraft_b16_r16_qkvo.yaml
+
+experiment:
+  name: idea5-hnp-stop-fgvc-aircraft-b16-r16-qkvo
+
+runtime:
+  gpu_id: 1
+
+negative_training:
+  method: hnp_stop
+  loss:
+    lambda_nis: 1.0
+    lambda_npd: 0.1
+    lambda_nnd: 0.05
+    lambda_stop: 1.0
+    lambda_parent: 0.1
+  checkpoint: outputs/experiments/idea5-hnp-stop-fgvc-aircraft-b16-r16-qkvo/checkpoints/idea5-hnp-stop-fgvc-aircraft-b16-r16-qkvo.pt
+  result_path: outputs/experiments/idea5-hnp-stop-fgvc-aircraft-b16-r16-qkvo/results/idea5-hnp-stop-fgvc-aircraft-b16-r16-qkvo-global-path.result
+  diagnostics_path: outputs/experiments/idea5-hnp-stop-fgvc-aircraft-b16-r16-qkvo/diagnostics/idea5-hnp-stop-fgvc-aircraft-b16-r16-qkvo-diagnostics.json

@@ -1,0 +1,31 @@
+base_config: ../09_image_metric_joint_prompts/idea8_fgvc_aircraft_b16_image_metric_lora.yaml
+
+experiment:
+  name: ideaN-fgvc-aircraft-crossfit-class-holdout
+  output_root: outputs
+
+runtime:
+  seed: 0
+  deterministic: true
+
+dataloader:
+  num_workers: 0
+
+image_metric_training:
+  epochs: 30
+  classes_per_batch: 4
+  examples_per_class: 4
+  resume:
+    enabled: false
+
+crossfit_class_holdout:
+  num_folds: 4
+  requested_fold_size: 16
+  manifest_seed: 0
+  retained_split_fractions:
+    - 0.6
+    - 0.2
+    - 0.2
+  fold_output_root: outputs/experiments/ideaN-fgvc-aircraft-crossfit-class-holdout
+  resume:
+    enabled: true

@@ -1,0 +1,30 @@
+extends: _common_b50_inc5.yaml
+model:
+  backbone: cscct_modified_resnet32
+method:
+  name: cscct
+  kd_weight: 0.25
+  kd_temperature: 2.0
+  csc_weight: 3.0
+  ct_weight: 1.5
+  ct_temperature: 2.0
+  fusion_lr: 0.00000001
+training:
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [80, 120]
+    lr_decay: 0.1
+output:
+  run_name: cscct_nme_c100_b50_inc5_r32

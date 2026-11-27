@@ -1,0 +1,10 @@
+base_config: fgvc_aircraft_metric_gpu0.yaml
+
+experiment:
+  name: multidepth-heads-p64
+
+runtime:
+  gpu_id: 1
+
+multidepth_heads:
+  support_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive.pt

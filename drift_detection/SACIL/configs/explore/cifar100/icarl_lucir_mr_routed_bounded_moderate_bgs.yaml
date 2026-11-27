@@ -1,0 +1,16 @@
+extends: icarl_feature_cosine_lucir_routed_bounded_moderate_bgs.yaml
+
+# Focused combined candidate.  The hierarchy partition and moderate feature-KD
+# routing are unchanged; official-LUCIR-style margin ranking is added to guard
+# old-vs-new class separation while conflict subtrees are relaxed.
+method:
+  feature_cosine_distillation:
+    margin_ranking:
+      enabled: true
+      margin: 0.5
+      top_k: 2
+      weight: 1.0
+
+output:
+  directory: outputs/explore/hierarchy_routed_feature_distillation
+  run_name: icarl_lucir_mr_routed_bounded_moderate_bgs_c100_b50_inc5_r32

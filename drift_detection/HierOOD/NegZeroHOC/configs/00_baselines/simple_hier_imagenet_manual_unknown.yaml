@@ -1,0 +1,42 @@
+experiment:
+  name: simple-hier-imagenet-manual-unknown
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+
+dataset:
+  name: simple-hier-imagenet
+  datadir: D:/HY_Data/HierOOD/imagenet
+  hierarchy: hierarchies/simple-hier-imagenet.json
+  id_split: data/simple-tiered-imagenet-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch32
+  local_files_only: true
+
+dataloader:
+  batch_size: 128
+  num_workers: 4
+
+prompt_inspection:
+  nodes:
+    - n01440764
+    - n01443537
+    - n01484850
+  parents:
+    - root
+    - n02512053
+    - n00003553
+
+feature_extraction:
+  skip_train: true
+
+inference:
+  mode: manual_unknown
+  features_dir: outputs/shared/features/simple-hier-imagenet/clip_openai_clip-vit-base-patch32
+  batch_size: 1024
+  allow_root_unknown: false
+  tau: 1.0
+  save_trace: false

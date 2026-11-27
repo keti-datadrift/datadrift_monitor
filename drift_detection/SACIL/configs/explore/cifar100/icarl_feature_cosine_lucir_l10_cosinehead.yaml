@@ -1,0 +1,12 @@
+extends: icarl_feature_cosine_lucir_cosinehead.yaml
+
+# Stability stress control: keep the official old/new adaptation direction,
+# but double the base less-forget coefficient after the LF=5 full trajectory
+# fell below the AIA-60 late-session gate.
+method:
+  feature_cosine_distillation:
+    lambda: 10.0
+
+output:
+  directory: outputs/explore/feature_cosine_controls
+  run_name: icarl_feature_cosine_lucir_l10_cosinehead_c100_b50_inc5_r32

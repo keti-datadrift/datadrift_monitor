@@ -1,0 +1,69 @@
+seed: 1
+deterministic: true
+device: cuda:0
+
+data:
+  name: cifar100
+  root: datasets
+  protocol: experiment_configs/class_orders/cifar100_b50_t10_afc_order1.json
+  download: false
+  color_jitter: true
+
+model:
+  backbone: afc_resnet32
+  proxies_per_class: 10
+  classifier_scale: 1.0
+
+memory:
+  exemplars_per_class: 20
+  selection: icarl_herding
+
+method:
+  name: afc_sacil_v0
+  hierarchy:
+    name: griffin_perona_greedy
+    taxonomy_temperature: 0.20
+  use_internal_anchors: true
+  local_relaxation: true
+  freeze_reference_anchors: true
+  trainable_anchor: false
+  lambda_geo: 1.0
+  afc:
+    nca_margin: 0.6
+    pod_base_factor: 4.0
+    finetuning:
+      epochs: 20
+      lr: 0.05
+      momentum: 0.9
+      weight_decay: 0.0005
+      nesterov: false
+  conflict:
+    max_neighbors: 5
+    old_class_ratio: 0.10
+    temperature: 0.05
+    min_preservation_weight: 0.10
+    ancestor_decay: 0.50
+
+training:
+  batch_size: 128
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  base:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 160
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    nesterov: false
+    scheduler: cosine
+
+output:
+  directory: outputs
+  run_name: cifar100_afc_sacil_v0_b50_inc5

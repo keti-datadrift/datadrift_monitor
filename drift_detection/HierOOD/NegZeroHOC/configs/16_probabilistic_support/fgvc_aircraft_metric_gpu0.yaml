@@ -1,0 +1,30 @@
+base_config: ../04_joint_vision_lora/idea3_fgvc_aircraft_b16_joint_vision_lora_r16_qkvo_b16.yaml
+
+experiment:
+  name: probabilistic-support-likelihood-image-metric
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+  seed: 0
+  deterministic: true
+
+probabilistic_support_likelihood:
+  support_checkpoint: outputs/experiments/idea8-fgvc-aircraft-b16-image-metric-lora/checkpoints/idea8-fgvc-aircraft-b16-image-metric-lora.pt
+  multidepth_checkpoint: outputs/experiments/multidepth-heads-image-metric/checkpoints/multidepth-heads-image-metric.pt
+  split_fractions:
+    - 0.6
+    - 0.2
+    - 0.1
+    - 0.1
+  epochs: 1000
+  patience: 100
+  lr: 0.05
+  weight_decay: 0.0
+  initial_concentration: 5.0
+  initial_base_energy: 2.5
+  precision: fp16
+
+inference:
+  batch_size: 128

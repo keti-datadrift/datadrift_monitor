@@ -1,0 +1,8 @@
+extends: _sacil_v1_common.yaml
+
+method:
+  sacil_v1:
+    hierarchy_source: random
+
+output:
+  run_name: sacil_v1_random_hierarchy

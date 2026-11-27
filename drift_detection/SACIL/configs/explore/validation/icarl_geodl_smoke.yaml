@@ -1,0 +1,18 @@
+extends: ../cifar100/icarl_geodl_equation.yaml
+device: cpu
+disable_tqdm: true
+training:
+  batch_size: 128
+  num_workers: 0
+  pin_memory: false
+  persistent_workers: false
+  base: {epochs: 1, lr: 0.01, momentum: 0.0, weight_decay: 0.0, scheduler: multistep, milestones: [], lr_decay: 0.1}
+  incremental: {epochs: 2, lr: 0.01, momentum: 0.0, weight_decay: 0.0, scheduler: multistep, milestones: [], lr_decay: 0.1}
+debug:
+  max_sessions: 2
+  max_batches_per_epoch: 1
+  train_samples_per_class: 2
+  test_samples_per_class: 2
+output:
+  directory: outputs/explore/validation
+  run_name: icarl_geodl_smoke

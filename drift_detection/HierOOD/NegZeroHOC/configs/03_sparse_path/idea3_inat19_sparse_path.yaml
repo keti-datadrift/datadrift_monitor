@@ -1,0 +1,38 @@
+base_config: ../02_idea3_cached_prompt/idea3_inat19.yaml
+
+experiment:
+  name: idea3-inat19-b16-sparse-path
+
+positive_training:
+  batch_size: 512
+  loss:
+    name: sparse_path_bottleneck
+    prompt_scope: path_local
+    execution: parent_stream
+    bottleneck_weight: 0.5
+    bottleneck_temperature: 0.5
+    route_margin: 0.05
+    margin_weight: 0.25
+  eval_mode: positive_global_path
+  validation:
+    enabled: true
+    every_n_epochs: 1
+    start_epoch: 1
+    mode: positive_global_path
+    metric: balanced_acc
+    save_best: true
+  checkpoint: outputs/experiments/idea3-inat19-b16-sparse-path/checkpoints/idea3-inat19-b16-sparse-path-positive.pt
+  result_path: outputs/experiments/idea3-inat19-b16-sparse-path/results/idea3-inat19-b16-sparse-path-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-inat19-b16-sparse-path/diagnostics/idea3-inat19-b16-sparse-path-positive-diagnostics.json
+
+unknown_training:
+  positive_checkpoint: outputs/experiments/idea3-inat19-b16-sparse-path/checkpoints/idea3-inat19-b16-sparse-path-positive.pt
+  checkpoint: outputs/experiments/idea3-inat19-b16-sparse-path/checkpoints/idea3-inat19-b16-sparse-path-parent_unknown.pt
+  result_path: outputs/experiments/idea3-inat19-b16-sparse-path/results/idea3-inat19-b16-sparse-path-parent_unknown.result
+  diagnostics_path: outputs/experiments/idea3-inat19-b16-sparse-path/diagnostics/idea3-inat19-b16-sparse-path-unknown-diagnostics.json
+
+inference:
+  mode: positive_global_path
+  positive_checkpoint: outputs/experiments/idea3-inat19-b16-sparse-path/checkpoints/idea3-inat19-b16-sparse-path-positive.pt
+  unknown_checkpoint: outputs/experiments/idea3-inat19-b16-sparse-path/checkpoints/idea3-inat19-b16-sparse-path-parent_unknown.pt
+  tau: 14.285714

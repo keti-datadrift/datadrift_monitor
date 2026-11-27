@@ -1,0 +1,50 @@
+seed: 1
+deterministic: true
+device: cuda:0
+disable_tqdm: false
+
+runtime:
+  # Keep two concurrent ImageNet jobs from each claiming PyTorch's default
+  # 12-thread intra-op pool. DataLoader workers remain disabled on Windows.
+  cpu_threads: 6
+
+comparison_contract:
+  name: cmpt_imagenet100_b50_inc5_seed1
+  implementation: src_cmpt_isolated
+  reference_code_policy: reference_only
+
+data:
+  name: imagenet100
+  root: datasets/ImageNet100
+  protocol: experiment_configs/class_orders/imagenet100_b50_inc5_afc_order1.json
+  download: false
+  color_jitter: false
+
+model:
+  backbone: resnet18_imagenet
+
+memory:
+  mode: per_class
+  exemplars_per_class: 20
+  capacity: 2000
+  selection: icarl_herding
+
+method:
+  # Natural shuffled current-task + memory loader, as in the ImageNet LUCIR
+  # and FGP releases. No hidden fixed-ratio replay sampler is used.
+  replay_batching:
+    enabled: false
+
+training:
+  batch_size: 128
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+
+evaluation:
+  classifier: nme
+  horizontal_flip: true
+
+output:
+  directory: outputs/cmpt/imagenet100_b50_inc5/training
+  run_name: replace_me

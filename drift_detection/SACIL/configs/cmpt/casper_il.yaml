@@ -1,0 +1,9 @@
+extends: _cmpt_rigid_common.yaml
+
+device: cuda:1
+experiment:
+  learner: CaSpeR-IL
+  expected_checkpoint_method: icarl
+  expected_casper_enabled: true
+  checkpoints: outputs/unified/table1/icarl_casper_nme_c100_b50_inc5_r32/seed_1/checkpoints
+  output: outputs/cmpt/cifar100_b50_inc5_r32/casper_il/seed_1/cmpt_rigid_matched_nme.json

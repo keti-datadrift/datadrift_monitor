@@ -1,0 +1,9 @@
+extends: evaluate_fgp_icl_affine.yaml
+
+experiment:
+  learner: FGP-ICL-ImageNet100-CMPT-component-ablation
+  output: outputs/cmpt/component_ablation/imagenet100/fgp_icl/seed_1/results.json
+
+cmpt:
+  component_ablation:
+    enabled: true

@@ -1,0 +1,13 @@
+extends: icarl_sacil_fixed_lambda_16.yaml
+
+method:
+  lambda_geo: 1.0
+  geometry:
+    anchor_frame: fixed
+    reliability: uniform
+    objective: triplet_rank
+    triplet_margin_scale: 1.0
+    rank_tolerance: 0.0001
+
+output:
+  run_name: icarl_sacil_rank_triplet_l1_c100_b50_inc5_r32

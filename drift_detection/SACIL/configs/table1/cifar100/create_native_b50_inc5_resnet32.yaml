@@ -1,0 +1,37 @@
+extends: _common_b50_inc5.yaml
+model:
+  backbone: resnet32
+  hidden_layers: []
+  latent_features: 32
+  reconstruction_scale: 0.1
+method:
+  name: create
+  create:
+    confidence_alpha: 2.0
+    contrastive_weight: 1.0
+    kd_weight: 1.0
+    kd_temperature: 2.0
+    finetuning:
+      epochs: 20
+      lr: 0.005
+      momentum: 0.9
+      weight_decay: 0.0005
+evaluation:
+  classifier: native
+  horizontal_flip: false
+training:
+  base:
+    epochs: 200
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: cosine
+  incremental:
+    epochs: 120
+    lr: 0.001
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: cosine
+    eta_min: 0.00000001
+output:
+  run_name: create_native_c100_b50_inc5_r32

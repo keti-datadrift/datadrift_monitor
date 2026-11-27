@@ -1,0 +1,6 @@
+extends: _icarl_htpl_branch_masked_kd_common.yaml
+method:
+  branch_masked_kd:
+    v_min: 0.25
+output:
+  run_name: icarl_htpl_branch_kd_v025_c100_b50_inc5_r32

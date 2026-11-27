@@ -1,0 +1,31 @@
+feature_generation:
+  enable: false
+
+density:
+  covariance_type: shared_full
+  eps: 1.0e-6
+  covariance_shrinkage: 0.5
+
+inference:
+  score_type: gaussian_loglik
+  temperature: 1.0
+  prediction_mode: argmax
+  collapse_ood_to_parent: true
+
+cgm:
+  enabled: true
+  strict_pdf: true
+  ood_density: random_effects_parent
+  between_cov_estimator: empirical_child_means
+  between_cov_scale: 1.0
+  mask_type: product
+  membership_type: chi2_ellipsoid
+  membership_probability: 0.95
+  mask_cov_scale: 1.0
+  local_mode: density_joint
+  child_weight: uniform
+  candidate_prior: uniform
+  ood_prior: 1.0
+  normalize_ood_pdf: true
+  product_mask_samples: 4096
+  eps: 1.0e-12

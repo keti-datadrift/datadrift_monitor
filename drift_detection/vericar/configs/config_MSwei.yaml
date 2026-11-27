@@ -1,0 +1,28 @@
+seed: 42
+
+data:
+  data_root: "C:/vehicle/step0"
+  num_workers: 4
+  flip_p: 0.5
+
+training:
+  pretrained: True
+  model_name: "openai/clip-vit-base-patch32"
+  exemplar_k: 50
+  knn: 1
+  batch_size: 128
+  epochs: 1
+  save_path: "best.pt"
+  loss: "MSwei"
+  dist_scale: 2
+  dist_pow: 1.0
+  lr: 0.00001
+  weight_decay: 0.0001
+
+logging:
+  log_dir: "./lightning_logs"
+  exp_name: "vericar_experiment_seed42"
+
+test:
+  data_root: "C:/vehicle/step1"
+  ood_k: 1

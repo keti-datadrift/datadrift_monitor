@@ -1,0 +1,8 @@
+extends: _cmpt_rigid_common.yaml
+
+device: cuda:1
+experiment:
+  learner: PODNet
+  expected_checkpoint_method: podnet
+  checkpoints: outputs/unified/table1/podnet_nme_c100_b50_inc5_r32/seed_1/checkpoints
+  output: outputs/cmpt/cifar100_b50_inc5_r32/podnet/seed_1/cmpt_rigid_matched_nme.json

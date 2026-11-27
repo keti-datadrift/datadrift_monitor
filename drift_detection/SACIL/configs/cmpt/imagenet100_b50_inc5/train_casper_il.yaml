@@ -1,0 +1,40 @@
+extends: _training_common.yaml
+
+# CaSpeR has no author-provided ImageNet-100 recipe. This controlled
+# adaptation keeps its released iCaRL(CasperModel) objective and native LR,
+# while using the FGP ImageNet epoch/schedule budget.
+model:
+  backbone: resnet18_imagenet
+
+method:
+  name: casper
+  casper:
+    weight: 0.001
+    knn: 8
+    classes_per_graph: 8
+    replay_batch_size: 128
+    solver: xitorch
+    wd_reg: 0.00001
+
+training:
+  base:
+    epochs: 60
+    lr: 0.3
+    momentum: 0.9
+    weight_decay: 0.0
+    nesterov: false
+    scheduler: multistep
+    milestones: [20, 30, 40, 50]
+    lr_decay: 0.2
+  incremental:
+    epochs: 60
+    lr: 0.3
+    momentum: 0.9
+    weight_decay: 0.0
+    nesterov: false
+    scheduler: multistep
+    milestones: [20, 30, 40, 50]
+    lr_decay: 0.2
+
+output:
+  run_name: casper_il_imagenet100_b50_inc5_r18

@@ -1,0 +1,28 @@
+base_config: idea3_fgvc_aircraft_b16_sparse_path.yaml
+
+experiment:
+  name: idea3-fgvc-aircraft-b16-sparse-path-linear
+
+runtime:
+  device: cuda
+  gpu_id: 1
+
+image_adapter:
+  mode: linear
+  residual: true
+  normalize_output: true
+
+positive_training:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-linear-positive.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/results/idea3-fgvc-aircraft-b16-sparse-path-linear-positive_global_path.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/diagnostics/idea3-fgvc-aircraft-b16-sparse-path-linear-positive-diagnostics.json
+
+unknown_training:
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-linear-positive.pt
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-linear-parent_unknown.pt
+  result_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/results/idea3-fgvc-aircraft-b16-sparse-path-linear-parent_unknown.result
+  diagnostics_path: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/diagnostics/idea3-fgvc-aircraft-b16-sparse-path-linear-unknown-diagnostics.json
+
+inference:
+  positive_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-linear-positive.pt
+  unknown_checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-sparse-path-linear/checkpoints/idea3-fgvc-aircraft-b16-sparse-path-linear-parent_unknown.pt

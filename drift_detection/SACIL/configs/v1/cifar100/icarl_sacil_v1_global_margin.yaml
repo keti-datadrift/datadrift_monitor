@@ -1,0 +1,8 @@
+extends: _sacil_v1_common.yaml
+
+method:
+  sacil_v1:
+    relaxation_mode: global_margin
+
+output:
+  run_name: sacil_v1_global_margin

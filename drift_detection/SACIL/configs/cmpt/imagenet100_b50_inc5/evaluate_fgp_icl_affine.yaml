@@ -1,0 +1,8 @@
+extends: _cmpt_affine.yaml
+
+device: cuda:1
+experiment:
+  learner: FGP-ICL-ImageNet100
+  expected_checkpoint_method: fgp
+  checkpoints: outputs/cmpt/imagenet100_b50_inc5/training/fgp_icl_imagenet100_b50_inc5_r18/seed_1/checkpoints
+  output: outputs/cmpt/imagenet100_b50_inc5/evaluation/fgp_icl/seed_1/cmpt_affine_ridge.json

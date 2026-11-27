@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "protocol_id": "cmpt-imagenet100-b50-inc5-afc-order1",
+  "dataset": "ImageNet-100",
+  "purpose": "CMPT ImageNet-100 cross-dataset validation",
+  "protocol": "B50 + 10x5",
+  "num_classes": 100,
+  "initial_size": 50,
+  "increment_size": 5,
+  "num_sessions": 11,
+  "class_id_base": 0,
+  "label_mapping": "datasets/ImageNet100/metadata/class_index.csv",
+  "dataset_split_source": "PODNet train_100.txt and val_100.txt",
+  "order_type": "published_explicit",
+  "order_source": "AFC/PODNet/R-DFCIL ImageNet-100 order; NumPy seed-1993 permutation",
+  "source_file": "ref_codes/02_stability_plasticity_selective_preservation/AFC/options/data/imagenet100_1order.yaml",
+  "memory_policy": {
+    "type": "fixed_exemplars_per_class",
+    "exemplars_per_class": 20,
+    "selection": "herding"
+  },
+  "class_order": [
+    68, 56, 78, 8, 23, 84, 90, 65, 74, 76,
+    40, 89, 3, 92, 55, 9, 26, 80, 43, 38,
+    58, 70, 77, 1, 85, 19, 17, 50, 28, 53,
+    13, 81, 45, 82, 6, 59, 83, 16, 15, 44,
+    91, 41, 72, 60, 79, 52, 20, 10, 31, 54,
+    37, 95, 14, 71, 96, 98, 97, 2, 64, 66,
+    42, 22, 35, 86, 24, 34, 87, 21, 99, 0,
+    88, 27, 18, 94, 11, 12, 47, 25, 30, 46,
+    62, 69, 36, 61, 7, 63, 75, 5, 32, 4,
+    51, 48, 73, 93, 39, 67, 29, 49, 57, 33
+  ],
+  "session_slices": [
+    {"session_id": 0, "kind": "base", "start": 0, "stop": 50},
+    {"session_id": 1, "kind": "incremental", "start": 50, "stop": 55},
+    {"session_id": 2, "kind": "incremental", "start": 55, "stop": 60},
+    {"session_id": 3, "kind": "incremental", "start": 60, "stop": 65},
+    {"session_id": 4, "kind": "incremental", "start": 65, "stop": 70},
+    {"session_id": 5, "kind": "incremental", "start": 70, "stop": 75},
+    {"session_id": 6, "kind": "incremental", "start": 75, "stop": 80},
+    {"session_id": 7, "kind": "incremental", "start": 80, "stop": 85},
+    {"session_id": 8, "kind": "incremental", "start": 85, "stop": 90},
+    {"session_id": 9, "kind": "incremental", "start": 90, "stop": 95},
+    {"session_id": 10, "kind": "incremental", "start": 95, "stop": 100}
+  ]
+}

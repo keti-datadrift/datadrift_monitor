@@ -1,0 +1,99 @@
+experiment:
+  name: negative-text-mt-p64k4-base
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+  seed: 0
+  deterministic: true
+
+dataset:
+  name: fgvc-aircraft
+  datadir: D:/HY_Data/HierOOD/fgvc-aircraft
+  hierarchy: hierarchies/fgvc-aircraft.json
+  id_split: data/fgvc-aircraft-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch16
+  tokenizer_model: openai/clip-vit-base-patch16
+  local_files_only: true
+
+dataloader:
+  num_workers: 4
+
+augmentation:
+  image_size: 224
+  eval_resize: 224
+  random_resized_crop_scale:
+    - 0.7
+    - 1.0
+  horizontal_flip_probability: 0.5
+  color_jitter:
+    probability: 0.5
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.1
+    hue: 0.0
+
+positive:
+  checkpoint: outputs/experiments/idea3-fgvc-aircraft-b16-dual-weihims-b256-p64k4-es/checkpoints/positive.pt
+
+negative_training:
+  epochs: 50
+  parents_per_step: 4
+  max_examples_per_parent: 64
+  feature_batch_size: 64
+  lr: 0.0003
+  weight_decay: 0.0001
+  precision: fp16
+  gradient_clip_norm: 1.0
+
+  prompt:
+    count: 1
+    prototype_ctx_tokens: 2
+    text_variant: parent_conditioned
+
+  virtual_features:
+    samples_per_parent: 32
+    mix_min: 0.35
+    mix_max: 0.65
+
+  loss:
+    temperature: 0.07
+    terminal_weight: 1.0
+    bottleneck_temperature: 0.1
+    unknown_temperature: 0.07
+    lambda_virtual: 1.0
+    lambda_id_teacher: 1.0
+    lambda_coverage: 0.2
+    lambda_diversity: 0.05
+    diversity_margin: 0.2
+    depth_balanced: true
+
+  validation:
+    every_n_epochs: 5
+    batch_size: 128
+    max_id_bacc_drop: 0.03
+
+  resume:
+    automatic: true
+
+metric_terminal_decoder:
+  allow_root_unknown: false
+  terminal_weights:
+    - 0.75
+    - 1.0
+  bottleneck_temperatures:
+    - 0.1
+  unknown_thresholds:
+    - -0.1
+    - -0.075
+    - -0.05
+    - -0.025
+    - 0.0
+    - 0.025
+    - 0.05
+    - 0.075
+    - 0.1
+    - 0.15

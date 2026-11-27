@@ -1,0 +1,23 @@
+experiment:
+  name: inat19-child-only
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+
+dataset:
+  name: inat19
+  hierarchy: hierarchies/inat19.json
+  id_split: data/inat19-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch32
+  local_files_only: true
+
+inference:
+  mode: child_only
+  features_dir: outputs/shared/features/inat19/clip_openai_clip-vit-base-patch32
+  batch_size: 1024
+  tau: 1.0
+  save_trace: false

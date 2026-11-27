@@ -1,0 +1,17 @@
+extends: icarl_feature_cosine_lucir_balanced_replay.yaml
+
+# More aggressive exemplar-overfitting diagnostic.  The learning-rate phase
+# proportions match the successful 80-epoch control.
+training:
+  incremental:
+    epochs: 40
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0005
+    scheduler: multistep
+    milestones: [20, 35]
+    lr_decay: 0.1
+
+output:
+  directory: outputs/explore/incremental_schedule
+  run_name: icarl_feature_cosine_lucir_balanced_replay_e40_c100_b50_inc5_r32

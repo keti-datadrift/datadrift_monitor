@@ -1,0 +1,8 @@
+base_config: fgvc_aircraft_base_clip_seed0_gpu0.yaml
+
+experiment:
+  name: multidepth-heads-base-clip-seed1
+
+runtime:
+  gpu_id: 1
+  seed: 1

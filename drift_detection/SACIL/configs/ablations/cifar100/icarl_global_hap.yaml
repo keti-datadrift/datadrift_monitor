@@ -1,0 +1,5 @@
+extends: _icarl_geometry_common.yaml
+method:
+  geometry_mode: global
+output:
+  run_name: icarl_global_hap_c100_b50_inc5_r32

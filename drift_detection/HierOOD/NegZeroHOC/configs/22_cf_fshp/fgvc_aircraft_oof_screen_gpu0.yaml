@@ -1,0 +1,19 @@
+base_config: ../18_crossfit_class_holdout/fgvc_aircraft_loco_common.yaml
+
+experiment:
+  name: ideaV-fgvc-aircraft-cf-fshp-oof-screen
+  output_root: outputs
+
+runtime:
+  gpu_id: 0
+  seed: 0
+  deterministic: true
+
+cf_fshp:
+  cf_rpep_checkpoint: outputs/experiments/ideaO-fgvc-aircraft-cf-rpep-oof/checkpoints/ideaO-fgvc-aircraft-cf-rpep-oof.pt
+  primary_decoder: map
+  loss: augmented_tree_brier
+  optimizer:
+    name: LBFGS
+    line_search: strong_wolfe
+    max_iter: 100

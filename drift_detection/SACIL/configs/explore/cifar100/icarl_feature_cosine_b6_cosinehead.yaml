@@ -1,0 +1,19 @@
+extends: icarl_feature_cosine_b6.yaml
+
+# Paper-aligned incremental classifier: normalized cosine templates, new-class
+# mean-feature imprinting, and frozen old classifier rows.  The reused S0 was
+# trained with the canonical linear head, so this is still not an official
+# LUCIR/GeoDL reproduction.
+method:
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 6.0
+    adaptive_new_over_old: true
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+
+output:
+  run_name: icarl_feature_cosine_b6_cosinehead_c100_b50_inc5_r32

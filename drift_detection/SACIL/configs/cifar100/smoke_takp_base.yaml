@@ -1,0 +1,51 @@
+seed: 1
+deterministic: true
+device: cpu
+
+data:
+  name: cifar100
+  root: datasets
+  protocol: experiment_configs/class_orders/cifar100_b0_t10_seed1993.json
+  download: false
+  color_jitter: false
+
+model:
+  backbone: takp_resnet18
+  stem: cifar
+  mix_scale: 2.0
+
+memory:
+  exemplars_per_class: 2
+  selection: icarl_herding
+
+method:
+  name: takp_base
+
+training:
+  batch_size: 4
+  num_workers: 0
+  pin_memory: false
+  persistent_workers: false
+  base:
+    epochs: 1
+    lr: 0.001
+    momentum: 0.9
+    weight_decay: 0.0002
+    nesterov: false
+    scheduler: cosine
+  incremental:
+    epochs: 1
+    lr: 0.001
+    momentum: 0.9
+    weight_decay: 0.0002
+    nesterov: false
+    scheduler: cosine
+
+debug:
+  train_samples_per_class: 2
+  test_samples_per_class: 2
+  max_batches_per_epoch: 1
+
+output:
+  directory: outputs
+  run_name: smoke_takp_base

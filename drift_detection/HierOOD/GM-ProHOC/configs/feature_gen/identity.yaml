@@ -1,0 +1,30 @@
+feature_generation:
+  enable: true
+  type: identity
+  mode: single
+  selected_depth: 3
+  save_generated_features: true
+
+  output_dim_by_depth:
+    1: 256
+    2: 256
+    3: 256
+
+  mask:
+    type: binary
+    topk: 128
+    threshold: null
+    normalize_scores: true
+    eps: 1.0e-6
+
+  pca:
+    per_depth: true
+    whiten: false
+
+  umap:
+    supervised: true
+    n_components: 64
+    n_neighbors: 15
+    min_dist: 0.1
+    metric: cosine
+    random_state: 42

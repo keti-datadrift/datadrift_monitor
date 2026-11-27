@@ -1,0 +1,11 @@
+extends: evaluate_cscct_affine.yaml
+
+device: cuda:1
+experiment:
+  learner: CSCCT-common-affine-adaptive-alpha
+  output: outputs/cmpt/common_recipe/evaluation/cscct_affine_adaptive_alpha/seed_1/cmpt_affine_adaptive_alpha.json
+
+cmpt:
+  adaptive_alpha:
+    enabled: true
+    folds: 5

@@ -1,0 +1,20 @@
+extends: _icarl_hierarchical_edge_correlation_common.yaml
+
+# P2: independent Pearson normalization within hierarchy-fixed stable,
+# boundary-cut, and conflict-inside edge strata.
+method:
+  edge_topology:
+    enabled: true
+    objective: stratified_hierarchical_edge_correlation
+    representatives_per_class: 20
+    lambda_edge: 0.5
+    edge_weighting: stratified_hierarchy
+    update_interval_steps: 10
+    conflict_branches_per_new_class: 1
+    taxonomy_temperature: 0.2
+    beta_boundary: 1.0
+    gamma_conflict: 0.1
+
+output:
+  directory: outputs/explore/stratified_edge_correlation
+  run_name: icarl_stratified_edgecorr_r20_l05_u10_c100_b50_inc5_r32

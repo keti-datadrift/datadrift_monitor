@@ -1,0 +1,42 @@
+experiment:
+  name: fgvc-aircraft-manual-unknown
+  output_root: outputs
+
+runtime:
+  device: cuda
+  gpu_id: 0
+
+dataset:
+  name: fgvc-aircraft
+  datadir: D:/HY_Data/HierOOD/fgvc-aircraft
+  hierarchy: hierarchies/fgvc-aircraft.json
+  id_split: data/fgvc-aircraft-id-labels.csv
+
+clip:
+  model: openai/clip-vit-base-patch32
+  local_files_only: true
+
+dataloader:
+  batch_size: 128
+  num_workers: 4
+
+prompt_inspection:
+  nodes:
+    - m-Boeing
+    - f-Boeing_737
+    - v-737-300
+  parents:
+    - root
+    - m-Boeing
+    - f-Boeing_737
+
+feature_extraction:
+  skip_train: true
+
+inference:
+  mode: manual_unknown
+  features_dir: outputs/shared/features/fgvc-aircraft/clip_openai_clip-vit-base-patch32
+  batch_size: 1024
+  allow_root_unknown: false
+  tau: 1.0
+  save_trace: false

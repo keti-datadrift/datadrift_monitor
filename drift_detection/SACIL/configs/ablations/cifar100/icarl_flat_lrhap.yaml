@@ -1,0 +1,5 @@
+extends: _icarl_geometry_common.yaml
+method:
+  geometry_mode: flat
+output:
+  run_name: icarl_flat_lrhap_c100_b50_inc5_r32

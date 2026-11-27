@@ -1,0 +1,5 @@
+extends: sacil_full.yaml
+method:
+  prototype_temperature: 0.05
+output:
+  run_name: sacil_tproto005_c100_b50_inc5_r32

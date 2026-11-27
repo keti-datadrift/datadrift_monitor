@@ -1,0 +1,51 @@
+extends: _training_common.yaml
+
+# Author-release ImageNet LUCIR recipe: ResNet-18 with the final residual
+# ReLU removed, 90 epochs, LR 0.1, milestones 30/60, WD 1e-4, and the
+# adaptive LF + margin-ranking objective from run.sh.
+model:
+  backbone: resnet18_imagenet_no_last_relu
+
+method:
+  name: icarl
+  kd_temperature: 2.0
+  kd_weight: 0.0
+  feature_cosine_distillation:
+    enabled: true
+    lambda: 10.0
+    adaptive_mode: seen_over_new
+    epsilon: 1.0e-12
+    training_classifier: normalized_cosine
+    cosine_scale: 10.0
+    imprint_new_weights: true
+    freeze_old_weights: true
+    sample_scope: all
+    combine_old_logit_kd: false
+    margin_ranking:
+      enabled: true
+      margin: 0.5
+      top_k: 2
+      weight: 1.0
+
+training:
+  base:
+    epochs: 90
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0001
+    nesterov: false
+    scheduler: multistep
+    milestones: [30, 60]
+    lr_decay: 0.1
+  incremental:
+    epochs: 90
+    lr: 0.1
+    momentum: 0.9
+    weight_decay: 0.0001
+    nesterov: false
+    scheduler: multistep
+    milestones: [30, 60]
+    lr_decay: 0.1
+
+output:
+  run_name: lucir_imagenet100_b50_inc5_r18

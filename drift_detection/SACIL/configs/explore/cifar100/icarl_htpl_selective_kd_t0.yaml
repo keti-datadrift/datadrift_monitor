@@ -1,0 +1,17 @@
+extends: icarl_edgecorr_r2_lambda05.yaml
+
+# I3: canonical iCaRL + global H-TPL and detached analytic
+# CE/KD embedding-gradient alignment routing on new rows only.
+method:
+  edge_topology:
+    enabled: true
+    representatives_per_class: 2
+    lambda_edge: 0.5
+    edge_weighting: global
+  selective_kd:
+    enabled: true
+    alignment_threshold: 0.0
+
+output:
+  directory: outputs/explore/selective_kd
+  run_name: icarl_htpl_selective_kd_t0_c100_b50_inc5_r32
